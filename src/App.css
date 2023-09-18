@@ -1,5 +1,11 @@
 main {
   text-align: center;
   vertical-align: center;
-  line-height: 100vh
+  /*line-height: 100vh;*/
+  border-style: solid;
+}
+
+table, th, td {
+  margin: auto;
+  border: 1px solid;
 }
