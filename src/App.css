@@ -8,4 +8,18 @@ main {
 table, th, td {
   margin: auto;
   border: 1px solid;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}
+
+th, td {
+  width: auto;
+}
+
+pre {
+  margin: auto;
+  font-family: Times, Monospace;
 }

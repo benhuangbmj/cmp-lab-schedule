@@ -1,15 +1,18 @@
-import './App.css'
+import './App.css';
+import {useState, useEffect} from 'react';
 const days = ['Monday', 'Tuesday','Wednesday','Thursday'];
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 function Tutors(props) {
   return (
     <td>
-      {props.day}
+      <pre>
+        {props.info}
+      </pre>
     </td>
   )
 }
-function Schedule() {
+function Schedule({shift}) {
   return (
     <table>
       <thead>
@@ -23,9 +26,9 @@ function Schedule() {
           }
         </tr>
         <tr>
-          {days.map(e => {
+          {days.map((e, i) => {
             return (
-              <Tutors key={e} day = {e}/>
+              <Tutors key={e} info={shift[i]}/>
             )
           })}
         </tr>
@@ -35,26 +38,49 @@ function Schedule() {
 }
 
 export default function App() {
-  const query = `{
-    tutorsCollection {
-      items {
-        tutorInfo
+  const [info, setInfo] = useState(null);
+  
+  useEffect(() => {
+    const query = `{
+      tutorsCollection {
+        items {
+          tutorInfo
+        }
       }
-    }
-  }`
-  fetch(`https://graphql.contentful.com/content/v1/spaces/${spaceId}/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ query }),
-      })
+    }`  
+    fetch(`https://graphql.contentful.com/content/v1/spaces/${spaceId}/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ query }),
+    })
     .then(res => res.json())
-    .then(res => console.log(res.data.tutorsCollection.items[0].tutorInfo));
-  return (
-    <main>
-      <Schedule />
-    </main>
-  )
+    .then(res => {
+       const tutorInfo = res.data.tutorsCollection.items[0].tutorInfo;
+       const shift = Array(4).fill(""); 
+       for(let student in tutorInfo) {
+        const day = tutorInfo[student].day;
+        const index = days.indexOf(day);
+        shift[index] += tutorInfo[student].name + '\n' + tutorInfo[student].time + '\n';
+       }
+       setInfo(shift); 
+    });    
+  }, []);
+  
+  if (!info) {
+    return (
+      <main>
+        Loading ...
+      </main>
+    )
+  } else {
+    return (
+      <main>
+        <Schedule shift={info}/>
+      </main>
+    )
+  }
+  
 }
