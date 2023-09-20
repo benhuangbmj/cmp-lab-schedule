@@ -1,22 +1,22 @@
 main {
   text-align: center;
-  vertical-align: center;
-  /*line-height: 100vh;*/
-  border-style: solid;
+  /*vertical-align: center;*/  
 }
 
 table, th, td {
   margin: auto;
-  border: 1px solid;
   width: 100%;
 }
 
 table {
   width: 100%;
+  border: solid;
 }
 
 th, td {
   width: auto;
+  border: 1px solid;
+
 }
 
 pre {
