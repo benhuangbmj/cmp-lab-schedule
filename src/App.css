@@ -23,3 +23,16 @@ pre {
   margin: auto;
   font-family: Times, Monospace;
 }
+
+li pre {
+}
+
+ul {
+  text-align: left;
+}
+
+.select {
+  margin: auto;
+  margin-top: 1rem;
+  width: 50%;
+}
