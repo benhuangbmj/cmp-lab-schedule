@@ -2,11 +2,12 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { Route, Routes, Link, NavLink } from "react-router-dom";
 import Select from "react-select";
-import {useForm} from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
+const cmaToken = import.meta.env.VITE_CMA_TOKEN;
 function Tutors(props) {
   return (
     <td>
@@ -61,29 +62,66 @@ function Personnel({ courses }) {
 }
 
 function Management({ info }) {
+
   const options = [];
   Object.entries(info).forEach(e => {
-    options.push({value: e[0], label: e[1].name});
+    options.push({ value: e[0], label: e[1].name });
   });
   const infoKeys = Array.from(Object.keys(Object.values(info)[0]));
   infoKeys.unshift('username');
-  const {register,reset} = useForm();
+  const { register, reset } = useForm();
   const [tutor, setTutor] = useState({});
 
   const handleSelect = (selected) => {
-    reset(Object.assign({}, {username: selected.value}, info[selected.value]));
+    reset(Object.assign({}, { username: selected.value }, info[selected.value]));
   }
-  
+  /*
+  useEffect(() => {
+    fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/UIushXQv9bsjZ5hAWxmUz`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${cmaToken}`
+      }
+    })
+      .then(res => res.json())
+      .then(res => {
+        const currVersion = res.sys.version;
+        console.log("Current Version: ", res.sys.version);
+        console.log(res.fields.tutorInfo['en-US'].bhuang.name);
+        res.fields.tutorInfo['en-US'].bhuang.name = 'Ben Wong';
+        fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/UIushXQv9bsjZ5hAWxmUz`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${cmaToken}`,
+            "Content-Type": 'application/vnd.contentful.management.v1+json',
+            "X-Contentful-Version": currVersion,
+          },
+          body: JSON.stringify(res),
+        })
+          .then(res => res.json())
+          .then(res => {
+            const newVersion = res.sys.version;
+            fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/UIushXQv9bsjZ5hAWxmUz/published`, {
+              method: 'PUT',
+              headers: {
+                Authorization: `Bearer ${cmaToken}`,
+                "X-Contentful-Version": newVersion,
+              },
+            });
+          });
+      })
+  }, []);
+  */
   return (
     <main>
-      <Select className = "select" options={options} onChange={handleSelect}/>
+      <Select className="select" options={options} onChange={handleSelect} />
       <form>
-        {infoKeys.map(e => 
-      <p>
-        <label>{e}: </label>
-        <input type='text' name={e} {...register(e)}/>
-      </p>
-        )}      
+        {infoKeys.map(e =>
+          <p>
+            <label>{e}: </label>
+            <input type='text' name={e} {...register(e)} />
+          </p>
+        )}
       </form>
     </main>
   )
@@ -161,14 +199,14 @@ export default function App() {
     return (
       <>
         <nav>
-          <NavLink to="/">Schedule</NavLink> | <NavLink to="/management">Manage</NavLink> 
+          <NavLink to="/">Schedule</NavLink> | <NavLink to="/management">Manage</NavLink>
         </nav>
         <Routes>
           <Route path='/' element={<Schedule shift={shifts} courses={courseTutor} />} />
-          <Route path='/management' element={<Management info ={info} />}/>
-        </Routes>      
+          <Route path='/management' element={<Management info={info} />} />
+        </Routes>
       </>
-      
+
     )
   }
 }
