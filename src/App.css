@@ -1,6 +1,6 @@
 main {
-  text-align: center;
-  /*vertical-align: center;*/  
+  text-align: center;  
+  vertical-align: center;
 }
 
 table, th, td {
@@ -16,15 +16,13 @@ table {
 th, td {
   width: auto;
   border: 1px solid;
-
 }
 
-pre {
-  margin: auto;
+pre {  
   font-family: Times, Monospace;
-}
-
-li pre {
+  display: inline-block;
+  margin: auto;
+  font-size: 1.5rem
 }
 
 ul {
@@ -34,5 +32,26 @@ ul {
 .select {
   margin: auto;
   margin-top: 1rem;
-  width: 50%;
+  width: 20rem;
+  display: inline-block;
 }
+
+.small-label {
+  font-size: 0.75rem;
+  text-align: left;
+  vertical-align: center;
+}
+
+.profile-pic-small {
+  height: 3rem;
+  display: inline-block;
+  margin-right: .5rem;
+  text-align: left;
+}
+
+.left-align{
+  text-align: left;    
+  width: 16rem;
+  margin: 1rem auto;
+}
+
