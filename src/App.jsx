@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Route, Routes, Link, NavLink } from "react-router-dom";
 import Select from "react-select";
 import { useForm } from 'react-hook-form';
+import { getSingleAsset } from './api-operations';
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const spaceId = import.meta.env.VITE_SPACE_ID;
@@ -65,7 +66,7 @@ function Personnel({ courses }) {
   )
 }
 
-function Management({ info, fetchInfo }) {
+function Management({ info, fetchInfo, setRerender, update }) {
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState('Upload');
   useEffect(() => {
@@ -162,21 +163,28 @@ function Management({ info, fetchInfo }) {
               }
             });
             if (published.ok) {
-              alert("Change profile picture sucessfully!");              
+              alert("Change profile picture sucessfully!");            
             } else {
               alert("Change profile picture failed");
             }
             setUploadStatus('Upload');
+            const currAsset = await getSingleAsset(createdId);
+            const currUrl = currAsset.fields.file['en-US'].url;
+            const newProfile = {
+              url: currUrl,
+              id: createdId,
+            }
+            update('profilePic', [selected], newProfile);
           }, 1000);
         }
       }
       const tutor = info[selected];
       if (tutor.profilePic) {
-        //deleteAsset(tutor.profilePic.id);
-        createAsset(newPic, selected);
+        deleteAsset(tutor.profilePic.id);        
       } else {
-        console.log('No');
+        tutor.profilePic = {};
       }
+      createAsset(newPic, selected);
     }
     return (
       <span>
@@ -213,49 +221,10 @@ function Management({ info, fetchInfo }) {
       }
     }
     const username = data.username;
-    delete data.username;
-
-    const update = () => {
-      fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/UIushXQv9bsjZ5hAWxmUz`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${cmaToken}`
-        }
-      })
-        .then(res => res.json())
-        .then(res => {
-          const currVersion = res.sys.version;
-          res.fields.tutorInfo['en-US'][username] = data;
-          fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/UIushXQv9bsjZ5hAWxmUz`, {
-            method: 'PUT',
-            headers: {
-              Authorization: `Bearer ${cmaToken}`,
-              "Content-Type": 'application/vnd.contentful.management.v1+json',
-              "X-Contentful-Version": currVersion,
-            },
-            body: JSON.stringify(res),
-          })
-            .then(res => res.json())
-            .then(res => {
-              const newVersion = res.sys.version;
-              fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/UIushXQv9bsjZ5hAWxmUz/published`, {
-                method: 'PUT',
-                headers: {
-                  Authorization: `Bearer ${cmaToken}`,
-                  "X-Contentful-Version": newVersion,
-                },
-              }).then(res => {
-                if (res.ok) {
-                  fetchInfo();
-                  alert('Update tutor information successfully!');
-                } else {
-                  alert('Update failed.')
-                }
-              });
-            });
-        });
-    };
-    update();
+    delete data.username;    
+    update(username, [], data);
+    setSelected(null);
+    setRerender(prev => prev+1);
   }
   const handleSelect = (selected) => {
     setProfile();
@@ -267,18 +236,18 @@ function Management({ info, fetchInfo }) {
     reset(initialVal);
   }
   const testFunc = function() {
-    fetch(`https://api.contentful.com/spaces/${spaceId}/environments/master/assets/2XM90i0ghRTEiQIXHl7V6G`, {
+    fetch(`https://api.contentful.com/spaces/${spaceId}/environments/master/assets/3YEEPT914X0B8vi6RGkBnc`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${cmaToken}`,
       }
-    }).then(res => res.json()).then(res => console.log(res));
+    }).then(res => res.json()).then(res => console.log(res.fields.file['en-US'].url));
   }
 
   return (
     <main>
       <label>Select tutor </label>
-      <Select className="select" options={options} onChange={handleSelect} />
+      <Select className="select" options={options} onChange={handleSelect}/>
       <div className='profile-container'>{profile ? <img className="profilePic" src={profile} /> : <div style={{ marginTop: "35px" }}>profile picture</div>}</div>
       <ChangeProfile />
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -305,9 +274,55 @@ function Management({ info, fetchInfo }) {
 }
 
 export default function App() {
+  const update = (targetKey, keys, value) => {      
+    fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/UIushXQv9bsjZ5hAWxmUz`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${cmaToken}`
+      }
+    })
+      .then(res => res.json())
+      .then(res => {
+        const currVersion = res.sys.version;
+        let currLevel = res.fields.tutorInfo['en-US'];
+        keys.forEach(e => {
+          currLevel = currLevel[e];
+        });
+        currLevel[targetKey] = value;
+        fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/UIushXQv9bsjZ5hAWxmUz`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${cmaToken}`,
+            "Content-Type": 'application/vnd.contentful.management.v1+json',
+            "X-Contentful-Version": currVersion,
+          },
+          body: JSON.stringify(res),
+        })
+          .then(res => res.json())
+          .then(res => {
+            const newVersion = res.sys.version;
+            fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/UIushXQv9bsjZ5hAWxmUz/published`, {
+              method: 'PUT',
+              headers: {
+                Authorization: `Bearer ${cmaToken}`,
+                "X-Contentful-Version": newVersion,
+              },
+            }).then(res => {
+              if (res.ok) {
+                fetchInfo();
+                alert('Update tutor information successfully!');                
+              } else {
+                alert('Update failed.')
+              }
+            });
+          });
+      });
+  };
+  
   const [info, setInfo] = useState(null);
   const [courseTutor, setCourseTutor] = useState(null);
   const [shifts, setShifts] = useState(null);
+  const [rerender, setRerender] = useState(0);
 
   const fetchInfo = () => {
     const query = `{
@@ -374,18 +389,6 @@ export default function App() {
       fetchInfo();
     }
   }, []);
-  /*
-    useEffect(() => {
-      fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/assets/N9gEB61AGIwayN76JMl1x`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${cmaToken}`,
-        }
-      })
-      .then(res => res.json())
-      .then(res => console.log(res));
-    }, []);
-  */
   if (!info) {
     return (
       <main>
@@ -401,7 +404,7 @@ export default function App() {
         </nav>
         <Routes>
           <Route path='/' element={<Schedule shift={shifts} courses={courseTutor} />} />
-          <Route path='/management' element={<Management info={info} fetchInfo={fetchInfo} />} />
+          <Route path='/management' element={<Management info={info} fetchInfo={fetchInfo} update={update} key={rerender} setRerender={setRerender} />} />
         </Routes>
       </>
 
