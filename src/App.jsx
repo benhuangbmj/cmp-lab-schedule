@@ -4,6 +4,7 @@ import { Route, Routes, Link, NavLink } from "react-router-dom";
 import Select from "react-select";
 import { useForm } from 'react-hook-form';
 import { getSingleAsset } from './api-operations';
+import {sortByLastName} from './util';
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const spaceId = import.meta.env.VITE_SPACE_ID;
@@ -61,8 +62,6 @@ function Personnel({ courses }) {
       ))}
       </ul>
     </div>
-
-
   )
 }
 
@@ -195,13 +194,14 @@ function Management({ info, fetchInfo, setRerender, update }) {
     )
   }
 
-  const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH190', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT292', 'STAT281'];
+  const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH190', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT291', 'STAT292', 'STAT281'];
   const options = [];
   const skip = ['courses', 'profilePic'];
 
   Object.entries(info).forEach(e => {
     options.push({ value: e[0], label: e[1].name });
   });
+  sortByLastName(options, ['label']);
   const isFieldArray = (key) => {
     return Array.isArray(Object.values(info)[0][key]);
   };
@@ -222,9 +222,10 @@ function Management({ info, fetchInfo, setRerender, update }) {
     }
     const username = data.username;
     delete data.username;    
-    update(username, [], data);
-    setSelected(null);
-    setRerender(prev => prev+1);
+    update(username, [], data).then(() => {
+      setSelected(null);
+      setRerender(prev => prev+1); 
+    });     
   }
   const handleSelect = (selected) => {
     setProfile();
@@ -268,7 +269,7 @@ function Management({ info, fetchInfo, setRerender, update }) {
         </p>
         <button type='submit'>Update</button>
       </form>
-      <button onClick={testFunc}>Test</button>
+      <button onClick={testFunc} style={{display: 'none'}}>Test</button>
     </main>
   )
 }
@@ -365,15 +366,7 @@ export default function App() {
         }
         const courses = [];
         courseMap.forEach((val, key) => {
-          val.sort((a, b) => {
-            a = a.split(" ")[1];
-            b = b.split(" ")[1];
-            if (a <= b) {
-              return -1;
-            } else {
-              return 1;
-            }
-          });
+          sortByLastName(val, []);
           const str = key + ":  " + val.join(",  ");
           courses.push(str);
         })
