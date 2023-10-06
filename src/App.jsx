@@ -5,6 +5,7 @@ import { Route, Routes, Link, NavLink } from "react-router-dom";
 
 import Schedule from './Schedule';
 import Management from './Management';
+import FrontendLab from './FrontendLab';
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
@@ -131,11 +132,12 @@ export default function App() {
     return (
       <>
         <nav>
-          <NavLink to="/">Schedule</NavLink> | <NavLink to="/management">Manage</NavLink>
+          <NavLink to="/">Schedule</NavLink> | <NavLink to="/management">Manage</NavLink> | <NavLink to="/experimental">Experimental</NavLink>
         </nav>
         <Routes>
           <Route path='/' element={<Schedule shift={shifts} courses={courseTutor} />} />
           <Route path='/management' element={<Management info={info} update={update} key={rerender} setRerender={setRerender} />} />
+          <Route path='/experimental' element={< FrontendLab />}/>
         </Routes>
       </>
     )
