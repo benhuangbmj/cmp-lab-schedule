@@ -8,6 +8,11 @@ import {sortByLastName} from './util';
 export default function Management({ info, fetchInfo, setRerender, update }) {
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState('Upload');
+
+  const spaceId = import.meta.env.VITE_SPACE_ID;
+  const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
+  const cmaToken = import.meta.env.VITE_CMA_TOKEN;
+  
   useEffect(() => {
     if (newPic) {
       const newPicURL = URL.createObjectURL(newPic);
