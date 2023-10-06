@@ -1,3 +1,5 @@
+import './App.css';
+
 export default function Schedule({ shift, courses }) {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
   const currDate = new Date();
