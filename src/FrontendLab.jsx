@@ -1,3 +1,9 @@
-export default function FrontendLab() {
+import Scheduling from './scheduling/Scheduling'
   
+export default function FrontendLab() {
+  return(
+    <>
+      <Scheduling />
+    </>
+  )
 }
