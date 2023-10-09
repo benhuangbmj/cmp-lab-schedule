@@ -17,6 +17,8 @@ export default function Schedule({ shift, courses }) {
               })
             }
           </tr>
+        </thead>
+        <tbody>
           <tr>
             {days.map((e, i) => {
               return (
@@ -24,7 +26,7 @@ export default function Schedule({ shift, courses }) {
               )
             })}
           </tr>
-        </thead>
+        </tbody>
       </table>
       <Personnel courses={courses} />
     </main>
@@ -36,8 +38,10 @@ function Tutors({ info }) {
     <td>
       {info[0].map((e, i) =>
         <div className="left-align" key={e}>
-          <img className='profile-pic-small' src={info[1][i]} />
-          <pre>{e}</pre>
+          <div className='profile-pic-small'>
+            <img  className="profilePic" src={info[1][i]} />
+          </div>          
+          <pre>{e}</pre>          
         </div>
       )}
     </td>
@@ -47,7 +51,7 @@ function Tutors({ info }) {
 
 function Personnel({ courses }) {
   return (
-    <div>
+    <div >
       <h2 style={{ 'textAlign': 'left', 'paddingLeft': '1rem' }}>Who can help you?</h2>
       <ul>{courses.map(e => (
         <li key={e}><pre>{e}</pre></li>

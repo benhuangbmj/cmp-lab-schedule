@@ -1,9 +1,9 @@
 import Scheduling from './scheduling/Scheduling'
   
-export default function FrontendLab() {
+export default function FrontendLab({info, fetchInfo}) {
   return(
     <>
-      <Scheduling />
+      <Scheduling info={info} fetchInfo={fetchInfo}  />
     </>
   )
 }

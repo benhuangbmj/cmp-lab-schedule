@@ -1,11 +1,12 @@
 import './App.css';
-import { useState, useEffect } from 'react';
-import Select from "react-select";
+import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import { getSingleAsset } from './api-operations';
-import {sortByLastName} from './util';
+import { getSingleAsset, update } from './api-operations';
 
-export default function Management({ info, fetchInfo, setRerender, update }) {
+
+import SelectTutor from './util-components/SelectTutor';
+
+export default function Management({ info, fetchInfo }) {
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState('Upload');
 
@@ -118,7 +119,7 @@ export default function Management({ info, fetchInfo, setRerender, update }) {
               url: currUrl,
               id: createdId,
             }
-            update('profilePic', [selected], newProfile);
+            update('profilePic', [selected], newProfile, fetchInfo);
           }, 1000);
         }
       }
@@ -140,13 +141,9 @@ export default function Management({ info, fetchInfo, setRerender, update }) {
   }
 
   const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH190', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT281', 'STAT291', 'STAT292'];
-  const options = [];
+  
   const skip = ['courses', 'profilePic'];
-
-  Object.entries(info).forEach(e => {
-    options.push({ value: e[0], label: e[1].name });
-  });
-  sortByLastName(options, ['label']);
+  
   const isFieldArray = (key) => {
     return Array.isArray(Object.values(info)[0][key]);
   };
@@ -167,9 +164,8 @@ export default function Management({ info, fetchInfo, setRerender, update }) {
     }
     const username = data.username;
     delete data.username;    
-    update(username, [], data).then(() => {
-      setSelected(null);
-      setRerender(prev => prev+1); 
+    update(username, [], data, fetchInfo).then(() => {
+      setSelected(null);   
     });     
   }
   const handleSelect = (selected) => {
@@ -181,6 +177,7 @@ export default function Management({ info, fetchInfo, setRerender, update }) {
     const initialVal = Object.assign({}, { username: selected.value }, info[selected.value]);
     reset(initialVal);
   }
+  
   const testFunc = function() {
     fetch(`https://api.contentful.com/spaces/${spaceId}/environments/master/assets/3YEEPT914X0B8vi6RGkBnc`, {
       method: 'GET',
@@ -189,11 +186,10 @@ export default function Management({ info, fetchInfo, setRerender, update }) {
       }
     }).then(res => res.json()).then(res => console.log(res.fields.file['en-US'].url));
   }
-
+  
   return (
-    <main>
-      <label>Select tutor </label>
-      <Select className="select" options={options} onChange={handleSelect}/>
+    <main>      
+      <SelectTutor info={info} handleSelect={handleSelect} />
       <div className='profile-container'>{profile ? <img className="profilePic" src={profile} /> : <div style={{ marginTop: "35px" }}>profile picture</div>}</div>
       <ChangeProfile />
       <form onSubmit={handleSubmit(onSubmit)}>

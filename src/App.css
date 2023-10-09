@@ -3,13 +3,12 @@ main {
   vertical-align: center;
 }
 
-table, th, td {
+table,tbody,thead {
   margin: auto;
   width: 100%;
 }
 
 table {
-  width: 100%;
   border: solid;
 }
 
@@ -22,7 +21,13 @@ pre {
   font-family: Times, Monospace;
   display: inline-block;
   margin: auto;
-  font-size: 1.5rem
+  font-size: 1rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
 }
 
 ul {
@@ -44,6 +49,7 @@ ul {
 
 .profile-pic-small {
   height: 3rem;
+  width: 2rem;
   display: inline-block;
   margin-right: .5rem;
   text-align: left;
@@ -51,8 +57,8 @@ ul {
 
 .left-align{
   text-align: left;    
-  width: 16rem;
-  margin: 1rem auto;
+  width: 55%;
+  margin: auto;
 }
 
 .profile-container {

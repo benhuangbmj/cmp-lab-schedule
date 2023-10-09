@@ -1,11 +1,8 @@
 import styles from './timetable-style.module.css'
 import {useMemo, useRef, useEffect} from 'react';
+import {days, times} from '../util'
 
-export default function Timetable({tutor, slots, setSlots}) {
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
-  const times = useMemo(() => {
-    return Array.from(Array(13), (e,i)=> (6 + Math.floor(i/4)) + ":" + (i%4?(i%4)*15:"00") + " PM")
-  }, []);
+export default function Timetable({tutor, slots, setSlots}) {  
   const mouseDown = useRef(false);
 
   useEffect(() => {
@@ -42,7 +39,7 @@ export default function Timetable({tutor, slots, setSlots}) {
           <tr>
             {days.map(e => <th key={e}>{e}</th>)}
           </tr>
-          {times.map((time,i) => <tr key={i}>{days.map((day, j) => <td key={j} style={{backgroundColor: slots[i][j]==true?'grey':null, height: '3rem'}} onMouseDown={handleMouseDown} onMouseEnter={handleMouseEnter} data-pos={[i,j]}>{time}</td>)}</tr>)}
+          {times.map((time,i) => <tr key={i}>{days.map((day, j) => <td key={j} style={{backgroundColor: slots[i][j]==true?'grey':null}} onMouseDown={handleMouseDown} onMouseEnter={handleMouseEnter} data-pos={[i,j]}>{time}</td>)}</tr>)}
         </tbody>
       </table>
     </div>
