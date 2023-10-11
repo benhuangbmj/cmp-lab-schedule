@@ -40,6 +40,7 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts) => {
       const courseMap = new Map();
       for (let student in tutorInfo) {
         const currInfo = tutorInfo[student];
+        console.log(currInfo.day);
         //Make the shifts
         for (let i = 0; i < currInfo.day.length; i++) {
           const day = currInfo.day[i];

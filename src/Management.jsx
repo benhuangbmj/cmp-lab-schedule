@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef} from 'react';
 import { useForm } from 'react-hook-form';
 import { getSingleAsset, update } from './api-operations';
 
@@ -17,6 +17,7 @@ export default function Management({ info, fetchInfo }) {
   const [uploadStatus, setUploadStatus] = useState('Upload');
   const [profile, setProfile] = useState();
   const [selected, setSelected] = useState();
+  const currUser = useRef();
 
   const { register, reset, handleSubmit } = useForm();
 
@@ -176,12 +177,7 @@ export default function Management({ info, fetchInfo }) {
   }
   
   const testFunc = function() {
-    fetch(`https://api.contentful.com/spaces/${spaceId}/environments/master/assets/3YEEPT914X0B8vi6RGkBnc`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${cmaToken}`,
-      }
-    }).then(res => res.json()).then(res => console.log(res.fields.file['en-US'].url));
+    alert('Click "OK" to delete the selected user.')
   }
 
   useEffect(() => {
@@ -213,8 +209,10 @@ export default function Management({ info, fetchInfo }) {
           {courseOptions.map(e => <span key={e}><input type='checkbox' label={e} value={e} {...register('courses')} /><label className='small-label'>{e} </label></span>)}
         </p>
         <button type='submit'>{selected?"Update" : "Create"}</button>
+        <button type='reset'>Reset</button>
+        <button type='button' onClick={testFunc}>Delete</button>        
       </form>
-      <button onClick={testFunc} style={{display: 'none'}}>Test</button>
+      
     </main>
   )
 }
