@@ -81,3 +81,7 @@ input[type='file'] {
 .file-input-button {
   margin-left: -120pt;
 }
+
+.read-only {
+  color: darkgrey;
+}

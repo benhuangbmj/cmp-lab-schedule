@@ -23,16 +23,20 @@ export default function Scheduling({info, fetchInfo}) {
   }
 
   const handleSelect = (option) => {
-    if(selected != option.value) {
-      if(info[option.value].schedule) {
-        setSlots(info[option.value].schedule);
-        tutorSlots.current = JSON.parse(JSON.stringify(info[option.value].schedule));
-      } else {
-        setSlots(cleanSlate);
-        tutorSlots.current = cleanSlate;
+    if(option) {
+      if(selected != option.value) {
+        if(info[option.value].schedule) {
+          setSlots(info[option.value].schedule);
+          tutorSlots.current = JSON.parse(JSON.stringify(info[option.value].schedule));
+        } else {
+          setSlots(cleanSlate);
+          tutorSlots.current = cleanSlate;
+        }
+        
+        setSelected(option.value);
       }
-      
-      setSelected(option.value);
+    } else {
+      setSelected();
     }
   };
 

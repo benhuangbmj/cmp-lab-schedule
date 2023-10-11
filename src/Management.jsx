@@ -3,23 +3,26 @@ import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { getSingleAsset, update } from './api-operations';
 
-
 import SelectTutor from './util-components/SelectTutor';
+
+const spaceId = import.meta.env.VITE_SPACE_ID;
+const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
+const cmaToken = import.meta.env.VITE_CMA_TOKEN;
+
+const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH190', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT281', 'STAT291', 'STAT292'];  
+const skip = ['courses', 'profilePic', 'schedule', 'time', 'day'];
 
 export default function Management({ info, fetchInfo }) {
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState('Upload');
+  const [profile, setProfile] = useState();
+  const [selected, setSelected] = useState();
 
-  const spaceId = import.meta.env.VITE_SPACE_ID;
-  const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
-  const cmaToken = import.meta.env.VITE_CMA_TOKEN;
+  const { register, reset, handleSubmit } = useForm();
+
+  const infoKeys = ['username'].concat(Array.from(Object.keys(Object.values(info)[0])));
+  const blankForm = Object.fromEntries(infoKeys.map(key => [key, null])); 
   
-  useEffect(() => {
-    if (newPic) {
-      const newPicURL = URL.createObjectURL(newPic);
-      setProfile(newPicURL);
-    }
-  }, [newPic]);
   function ChangeProfile() {
     function handleChangeProfile(e) {
       setNewPic(e.target.files[0]);
@@ -138,24 +141,12 @@ export default function Management({ info, fetchInfo }) {
         <button className="file-input-button" onClick={uploadPic}>{uploadStatus}</button>
       </span>
     )
-  }
-
-  const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH190', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT281', 'STAT291', 'STAT292'];
-  
-  const skip = ['courses', 'profilePic'];
+  } 
   
   const isFieldArray = (key) => {
     return Array.isArray(Object.values(info)[0][key]);
   };
-
-  const infoKeys = Array.from(Object.keys(Object.values(info)[0]));
-  infoKeys.unshift('username');
-
-  const { register, reset, handleSubmit } = useForm();
-
-  const [profile, setProfile] = useState();
-  const [selected, setSelected] = useState();
-
+  
   const onSubmit = (data) => {
     for (let key in data) {
       if (isFieldArray(key) && typeof data[key] === 'string') {
@@ -169,13 +160,19 @@ export default function Management({ info, fetchInfo }) {
     });     
   }
   const handleSelect = (selected) => {
-    setProfile();
-    setSelected(selected.value);
-    if (info[selected.value].profilePic) {
-      setProfile(info[selected.value].profilePic.url);
+    if(selected) {
+      setProfile();
+      setSelected(selected.value);
+      if (info[selected.value].profilePic) {
+        setProfile(info[selected.value].profilePic.url);
+      }
+      const initialVal = Object.assign({}, { username: selected.value }, info[selected.value]);
+      reset(initialVal);
+    } else {
+      setSelected();
+      setProfile();
+      reset(blankForm);
     }
-    const initialVal = Object.assign({}, { username: selected.value }, info[selected.value]);
-    reset(initialVal);
   }
   
   const testFunc = function() {
@@ -186,6 +183,13 @@ export default function Management({ info, fetchInfo }) {
       }
     }).then(res => res.json()).then(res => console.log(res.fields.file['en-US'].url));
   }
+
+  useEffect(() => {
+    if (newPic) {
+      const newPicURL = URL.createObjectURL(newPic);
+      setProfile(newPicURL);
+    }
+  }, [newPic]);
   
   return (
     <main>      
@@ -198,7 +202,7 @@ export default function Management({ info, fetchInfo }) {
             return (
               <p key={e}>
                 <label>{e}: </label>
-                <input type='text' name={e} {...register(e)} />
+                {e == 'username' && selected? <input readOnly type='text' className = 'read-only' name={e} {...register(e)} /> : <input type='text' name={e} {...register(e)} />}
               </p>
             )
           }
@@ -208,7 +212,7 @@ export default function Management({ info, fetchInfo }) {
           <label>courses: </label>
           {courseOptions.map(e => <span key={e}><input type='checkbox' label={e} value={e} {...register('courses')} /><label className='small-label'>{e} </label></span>)}
         </p>
-        <button type='submit'>Update</button>
+        <button type='submit'>{selected?"Update" : "Create"}</button>
       </form>
       <button onClick={testFunc} style={{display: 'none'}}>Test</button>
     </main>

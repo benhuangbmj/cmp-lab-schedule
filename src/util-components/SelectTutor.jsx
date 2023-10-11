@@ -2,7 +2,7 @@ import {memo} from 'react';
 import {sortByLastName} from '../util';
 
 import Select from "react-select";
-
+import makeAnimated from "react-select/animated";
 
 export default memo(SelectTutor);
 
@@ -14,9 +14,8 @@ function SelectTutor({info, handleSelect}) {
   sortByLastName(tutorNames, ['label']);
 
   return (
-    <>
-      <label>Select tutor </label>
-      <Select className="select" options={tutorNames} onChange={handleSelect}/>
+    <>      
+      <Select isClearable={true} isSearchable={true} placeholder="Select a tutor ..." className="select" options={tutorNames} onChange={handleSelect}/>
     </>
   )
 }
