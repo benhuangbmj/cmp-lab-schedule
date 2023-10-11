@@ -197,8 +197,8 @@ export default function Management({ info, fetchInfo }) {
           if (!skip.includes(e)) {
             return (
               <p key={e}>
-                <label>{e}: </label>
-                {e == 'username' && selected? <input readOnly type='text' className = 'read-only' name={e} {...register(e)} /> : <input type='text' name={e} {...register(e)} />}
+                <label>{e}{e=='username' && <sup style={{color: "red"}}>*</sup>}: </label>
+                {e == 'username' && selected? <input readOnly type='text' className = 'read-only' name={e} {...register(e)} /> : <input type='text' name={e} {...register(e, {required: true})} />}
               </p>
             )
           }
