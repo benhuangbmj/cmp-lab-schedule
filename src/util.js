@@ -1,5 +1,5 @@
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
-const times = Array.from(Array(13), (e,i)=> (6 + Math.floor(i/4)) + ":" + (i%4?(i%4)*15:"00") + " PM");
+const times = Array.from(Array(13), (e, i) => (6 + Math.floor(i / 4)) + ":" + (i % 4 ? (i % 4) * 15 : "00") + " PM");
 const scheme = {
   name: "",
   time: [],
@@ -27,4 +27,4 @@ const sortByLastName = (arr, levels) => {
   });
 }
 
-export {sortByLastName, days, times};
+export { sortByLastName, days, times, scheme };

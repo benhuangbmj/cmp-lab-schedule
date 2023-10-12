@@ -1,29 +1,36 @@
 import './App.css';
-import { useState, useEffect, useCallback, useRef} from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { getSingleAsset, update } from './api-operations';
+import { scheme as dataScheme } from './util';
 
 import SelectTutor from './util-components/SelectTutor';
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 const cmaToken = import.meta.env.VITE_CMA_TOKEN;
+const privilege = import.meta.env.VITE_PRIVILEGE;
 
-const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH190', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT281', 'STAT291', 'STAT292'];  
+const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH190', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT281', 'STAT291', 'STAT292'];
 const skip = ['courses', 'profilePic', 'schedule', 'time', 'day'];
 
 export default function Management({ info, fetchInfo }) {
+  const infoKeys = ['username'].concat(Array.from(Object.keys(Object.values(info)[0])));
+  const blankForm = Object.fromEntries(infoKeys.map(key => [key, null]));
+
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState('Upload');
   const [profile, setProfile] = useState();
   const [selected, setSelected] = useState();
   const currUser = useRef();
 
-  const { register, reset, handleSubmit } = useForm();
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
 
-  const infoKeys = ['username'].concat(Array.from(Object.keys(Object.values(info)[0])));
-  const blankForm = Object.fromEntries(infoKeys.map(key => [key, null])); 
-  
   function ChangeProfile() {
     function handleChangeProfile(e) {
       setNewPic(e.target.files[0]);
@@ -102,7 +109,7 @@ export default function Management({ info, fetchInfo }) {
             "X-Contentful-Version": 1
           }
         });
-        if (processed.ok) {          
+        if (processed.ok) {
           setTimeout(async () => {
             var published = await fetch(`https://api.contentful.com/spaces/${spaceId}/environments/master/assets/${createdId}/published`, {
               method: 'PUT',
@@ -112,7 +119,7 @@ export default function Management({ info, fetchInfo }) {
               }
             });
             if (published.ok) {
-              alert("Change profile picture sucessfully!");            
+              alert("Change profile picture sucessfully!");
             } else {
               alert("Change profile picture failed");
             }
@@ -129,7 +136,7 @@ export default function Management({ info, fetchInfo }) {
       }
       const tutor = info[selected];
       if (tutor.profilePic) {
-        deleteAsset(tutor.profilePic.id);        
+        deleteAsset(tutor.profilePic.id);
       } else {
         tutor.profilePic = {};
       }
@@ -142,12 +149,12 @@ export default function Management({ info, fetchInfo }) {
         <button className="file-input-button" onClick={uploadPic}>{uploadStatus}</button>
       </span>
     )
-  } 
-  
+  }
+
   const isFieldArray = (key) => {
     return Array.isArray(Object.values(info)[0][key]);
   };
-  
+
   const onSubmit = (data) => {
     for (let key in data) {
       if (isFieldArray(key) && typeof data[key] === 'string') {
@@ -155,13 +162,16 @@ export default function Management({ info, fetchInfo }) {
       }
     }
     const username = data.username;
-    delete data.username;    
+    delete data.username;
+    if (!selected) {
+      data = Object.assign(dataScheme, data);
+    }
     update(username, [], data, fetchInfo).then(() => {
-      setSelected(null);   
-    });     
+      setSelected(null);
+    });
   }
   const handleSelect = (selected) => {
-    if(selected) {
+    if (selected) {
       setProfile();
       setSelected(selected.value);
       if (info[selected.value].profilePic) {
@@ -175,9 +185,14 @@ export default function Management({ info, fetchInfo }) {
       reset(blankForm);
     }
   }
-  
+
   const testFunc = function() {
-    alert('Click "OK" to delete the selected user.')
+    const confirm = prompt('Type "Confirm" to proceed to delete the user');
+    if (confirm === 'Confirm') {
+      alert('The user is deleted');
+    } else {
+      alert('Deletion is terminated.');
+    }
   }
 
   useEffect(() => {
@@ -186,9 +201,9 @@ export default function Management({ info, fetchInfo }) {
       setProfile(newPicURL);
     }
   }, [newPic]);
-  
+
   return (
-    <main>      
+    <main>
       <SelectTutor info={info} handleSelect={handleSelect} />
       <div className='profile-container'>{profile ? <img className="profilePic" src={profile} /> : <div style={{ marginTop: "35px" }}>profile picture</div>}</div>
       <ChangeProfile />
@@ -197,8 +212,16 @@ export default function Management({ info, fetchInfo }) {
           if (!skip.includes(e)) {
             return (
               <p key={e}>
-                <label>{e}{e=='username' && <sup style={{color: "red"}}>*</sup>}: </label>
-                {e == 'username' && selected? <input readOnly type='text' className = 'read-only' name={e} {...register(e)} /> : <input type='text' name={e} {...register(e, {required: true})} />}
+                <label>{e}{e == 'username' && <sup style={{ color: "red" }}>*</sup>}: </label>
+                {
+                  e == 'username' && selected ?
+                    <input readOnly type='text' className='read-only' name={e} {...register(e)} /> : e == "username" ?
+                      <>
+                        <input type='text' name={e} {...register(e, { required: "Username is required." })} />
+                        {errors.username ? <p className='errorMessage'>{errors.username.message}</p> : null}
+                      </> :
+                      <input type='text' name={e} {...register(e)} />
+                }
               </p>
             )
           }
@@ -208,11 +231,11 @@ export default function Management({ info, fetchInfo }) {
           <label>courses: </label>
           {courseOptions.map(e => <span key={e}><input type='checkbox' label={e} value={e} {...register('courses')} /><label className='small-label'>{e} </label></span>)}
         </p>
-        <button type='submit'>{selected?"Update" : "Create"}</button>
+        <button type='submit'>{selected ? "Update" : "Create"}</button>
         <button type='reset'>Reset</button>
-        <button type='button' onClick={testFunc}>Delete</button>        
+        <button type='button' disabled={selected ? false : true} onClick={testFunc}>Delete</button>
       </form>
-      
+
     </main>
   )
 }

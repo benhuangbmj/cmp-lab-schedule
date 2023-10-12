@@ -1,8 +1,10 @@
-import {sortByLastName} from './util'
+import { sortByLastName } from './util'
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const cmaToken = import.meta.env.VITE_CMA_TOKEN;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
+const databaseId = import.meta.env.VITE_DATABASE_ID;
+const backupId = import.meta.env.VITE_BACKUP_ID;
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 
@@ -40,7 +42,6 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts) => {
       const courseMap = new Map();
       for (let student in tutorInfo) {
         const currInfo = tutorInfo[student];
-        console.log(currInfo.day);
         //Make the shifts
         for (let i = 0; i < currInfo.day.length; i++) {
           const day = currInfo.day[i];
@@ -64,14 +65,15 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts) => {
         courses.push(str);
       })
       courses.sort();
-      setCourseTutor(courses);      
+      setCourseTutor(courses);
       setShifts(shift);
       setInfo(() => tutorInfo);
     });
 }
 
-const update = async (targetKey, keys, value, fetchInfo) => {      
-  return fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/UIushXQv9bsjZ5hAWxmUz`, {
+const update = async (targetKey, keys, value, fetchInfo, backup = false) => {
+  const entryId = backup ? backupId : databaseId;
+  return fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${cmaToken}`
@@ -85,7 +87,7 @@ const update = async (targetKey, keys, value, fetchInfo) => {
         currLevel = currLevel[e];
       });
       currLevel[targetKey] = value;
-      fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/UIushXQv9bsjZ5hAWxmUz`, {
+      fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${cmaToken}`,
@@ -97,7 +99,7 @@ const update = async (targetKey, keys, value, fetchInfo) => {
         .then(res => res.json())
         .then(res => {
           const newVersion = res.sys.version;
-          fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/UIushXQv9bsjZ5hAWxmUz/published`, {
+          fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}/published`, {
             method: 'PUT',
             headers: {
               Authorization: `Bearer ${cmaToken}`,
@@ -107,7 +109,7 @@ const update = async (targetKey, keys, value, fetchInfo) => {
             if (res.ok) {
               fetchInfo().then(() => {
                 alert('Update tutor information successfully!');
-              });                              
+              });
             } else {
               alert('Update failed.')
             }

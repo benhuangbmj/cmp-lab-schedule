@@ -85,3 +85,8 @@ input[type='file'] {
 .read-only {
   color: darkgrey;
 }
+
+.errorMessage {
+  color: red;
+  font-size: 8pt;
+}
