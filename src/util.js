@@ -8,6 +8,7 @@ const scheme = {
   courses: [],
   profilePic: null,
   shcedule: null,
+  override: {}
 }
 
 

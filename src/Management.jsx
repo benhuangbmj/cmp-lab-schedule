@@ -12,7 +12,8 @@ const cmaToken = import.meta.env.VITE_CMA_TOKEN;
 const privilege = import.meta.env.VITE_PRIVILEGE;
 
 const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH190', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT281', 'STAT291', 'STAT292'];
-const skip = ['courses', 'profilePic', 'schedule', 'time', 'day'];
+//const skip = ['courses', 'profilePic', 'schedule', 'time', 'day', 'override'];/Obsolete. Replaced by $display.
+const display = ['username','name','subject', 'courses'];
 
 export default function Management({ info, fetchInfo }) {
   const infoKeys = ['username'].concat(Array.from(Object.keys(Object.values(info)[0])));
@@ -186,6 +187,17 @@ export default function Management({ info, fetchInfo }) {
     }
   }
 
+  const handleBackup = () => {
+    const passcode = prompt("Please enter the passocde.");
+    if(passcode === privilege) {
+      update(null, [], info, fetchInfo).then(()=>{
+        alert("Backup Successful!");
+      });
+    } else {
+      alert('No privilege to back up.');
+    }
+  }
+
   const testFunc = function() {
     const confirm = prompt('Type "Confirm" to proceed to delete the user');
     if (confirm === 'Confirm') {
@@ -209,7 +221,7 @@ export default function Management({ info, fetchInfo }) {
       <ChangeProfile />
       <form onSubmit={handleSubmit(onSubmit)}>
         {infoKeys.map(e => {
-          if (!skip.includes(e)) {
+          if (display.includes(e)) {
             return (
               <p key={e}>
                 <label>{e}{e == 'username' && <sup style={{ color: "red" }}>*</sup>}: </label>
@@ -234,6 +246,7 @@ export default function Management({ info, fetchInfo }) {
         <button type='submit'>{selected ? "Update" : "Create"}</button>
         <button type='reset'>Reset</button>
         <button type='button' disabled={selected ? false : true} onClick={testFunc}>Delete</button>
+        <button type='button' onClick={handleBackup}>Backup</button >
       </form>
 
     </main>

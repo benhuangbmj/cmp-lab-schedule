@@ -71,8 +71,8 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts) => {
     });
 }
 
-const update = async (targetKey, keys, value, fetchInfo, backup = false) => {
-  const entryId = backup ? backupId : databaseId;
+const update = async (targetKey, keys, value, fetchInfo) => {
+  const entryId = targetKey ? databaseId:backupId;
   return fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`, {
     method: 'GET',
     headers: {
@@ -81,12 +81,16 @@ const update = async (targetKey, keys, value, fetchInfo, backup = false) => {
   })
     .then(res => res.json())
     .then(res => {
-      const currVersion = res.sys.version;
-      let currLevel = res.fields.tutorInfo['en-US'];
-      keys.forEach(e => {
-        currLevel = currLevel[e];
-      });
-      currLevel[targetKey] = value;
+      const currVersion = res.sys.version;      
+      if(targetKey != null) {
+        let currLevel = res.fields.tutorInfo['en-US'];
+        keys.forEach(e => {
+          currLevel = currLevel[e];
+        });
+        currLevel[targetKey] = value;
+      } else {
+        res.fields.tutorInfo['en-US'] = value;
+      }
       fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`, {
         method: 'PUT',
         headers: {
