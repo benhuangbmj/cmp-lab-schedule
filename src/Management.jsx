@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { getSingleAsset, update } from './api-operations';
-import { scheme as dataScheme } from './util';
+import { scheme as dataScheme, courseOptions } from './util';
 
 import SelectTutor from './util-components/SelectTutor';
 
@@ -11,9 +11,7 @@ const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 const cmaToken = import.meta.env.VITE_CMA_TOKEN;
 const privilege = import.meta.env.VITE_PRIVILEGE;
 
-const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH190', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT281', 'STAT291', 'STAT292'];
-//const skip = ['courses', 'profilePic', 'schedule', 'time', 'day', 'override'];/Obsolete. Replaced by $display.
-const display = ['username','name','subject', 'courses'];
+const display = ['username','name','subject'];
 
 export default function Management({ info, fetchInfo }) {
   const infoKeys = ['username'].concat(Array.from(Object.keys(Object.values(info)[0])));
@@ -238,11 +236,11 @@ export default function Management({ info, fetchInfo }) {
             )
           }
         }
-        )}
-        <p>
-          <label>courses: </label>
-          {courseOptions.map(e => <span key={e}><input type='checkbox' label={e} value={e} {...register('courses')} /><label className='small-label'>{e} </label></span>)}
-        </p>
+        )}        
+          <label style={{display:'block'}}>courses: </label>
+          <div className='course-container'>{/*Try the flex-box style*/}
+            {courseOptions.map(e =><div key={e}><input type='checkbox' label={e} value={e} {...register('courses')} /><label className='small-label'>{e} </label></div>)}
+          </div>  
         <button type='submit'>{selected ? "Update" : "Create"}</button>
         <button type='reset'>Reset</button>
         <button type='button' disabled={selected ? false : true} onClick={testFunc}>Delete</button>

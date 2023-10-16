@@ -22,22 +22,23 @@ pre {
   display: inline-block;
   margin: auto;
   font-size: 1rem;
-  overflow-x: auto;
+  /*overflow-x: auto;*/
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
-  word-wrap: break-word;
+  word-wrap: break-word;  
 }
 
 ul {
   text-align: left;
+  vertical-align:
 }
 
 .select {
   margin: auto;
   margin-top: 1rem;
-  width: 20rem;
+  width: 30rem;
   display: inline-block;
 }
 
@@ -89,4 +90,22 @@ input[type='file'] {
 .errorMessage {
   color: red;
   font-size: 8pt;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.course-container {
+  width: 25rem;
+  margin: 0.5rem auto 1rem auto;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+}
+.course-container>div {
+  width: 25%;
+  text-align: left;
+  line-height: 1.5rem;
+  margin: 0px;
 }

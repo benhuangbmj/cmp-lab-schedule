@@ -10,6 +10,9 @@ const scheme = {
   shcedule: null,
   override: {}
 }
+const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH180', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT281', 'STAT291', 'STAT292', 'PHYS201', 'PHYS202', 'PHYS211', 'PHYS212'];
+
+courseOptions.sort();
 
 
 const sortByLastName = (arr, levels) => {
@@ -28,4 +31,4 @@ const sortByLastName = (arr, levels) => {
   });
 }
 
-export { sortByLastName, days, times, scheme };
+export { sortByLastName, days, times, scheme, courseOptions };

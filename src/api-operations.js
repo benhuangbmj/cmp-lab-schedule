@@ -1,12 +1,10 @@
-import { sortByLastName } from './util'
+import { sortByLastName, days } from './util'
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const cmaToken = import.meta.env.VITE_CMA_TOKEN;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 const databaseId = import.meta.env.VITE_DATABASE_ID;
 const backupId = import.meta.env.VITE_BACKUP_ID;
-
-const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 
 const getSingleAsset = async function(assetId) {
   let asset = await fetch(`https://api.contentful.com/spaces/${spaceId}/environments/master/assets/${assetId}`, {
