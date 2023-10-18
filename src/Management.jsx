@@ -13,7 +13,17 @@ const privilege = import.meta.env.VITE_PRIVILEGE;
 
 const display = ['username','name','subject'];
 
+
+
 export default function Management({ info, fetchInfo }) {
+  const {
+    register,
+    reset,
+    watch,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
+  
   const infoKeys = ['username'].concat(Array.from(Object.keys(Object.values(info)[0])));
   const blankForm = Object.fromEntries(infoKeys.map(key => [key, null]));
 
@@ -22,13 +32,7 @@ export default function Management({ info, fetchInfo }) {
   const [profile, setProfile] = useState();
   const [selected, setSelected] = useState();
   const currUser = useRef();
-
-  const {
-    register,
-    reset,
-    handleSubmit,
-    formState: { errors }
-  } = useForm();
+  const newUsername = watch('username');
 
   function ChangeProfile() {
     function handleChangeProfile(e) {
@@ -144,8 +148,8 @@ export default function Management({ info, fetchInfo }) {
     return (
       <span>
         <label>Change Profile Picture </label>
-        <input type='file' accept='image/*' onChange={handleChangeProfile} />
-        <button className="file-input-button" onClick={uploadPic}>{uploadStatus}</button>
+        <input disabled = {(selected||newUsername)? false : true} type='file' accept='image/*' onChange={handleChangeProfile} />
+        <button disabled = {(selected||newUsername)? false : true} className="file-input-button" onClick={uploadPic}>{uploadStatus}</button>
       </span>
     )
   }
@@ -227,7 +231,7 @@ export default function Management({ info, fetchInfo }) {
                   e == 'username' && selected ?
                     <input readOnly type='text' className='read-only' name={e} {...register(e)} /> : e == "username" ?
                       <>
-                        <input type='text' name={e} {...register(e, { required: "Username is required." })} />
+                        <input type='text' name={e} {...register(e, { required: "Username is required." })}/>
                         {errors.username ? <p className='errorMessage'>{errors.username.message}</p> : null}
                       </> :
                       <input type='text' name={e} {...register(e)} />
@@ -238,7 +242,7 @@ export default function Management({ info, fetchInfo }) {
         }
         )}        
           <label style={{display:'block'}}>courses: </label>
-          <div className='course-container'>{/*Try the flex-box style*/}
+          <div className='course-container'>
             {courseOptions.map(e =><div key={e}><input type='checkbox' label={e} value={e} {...register('courses')} /><label className='small-label'>{e} </label></div>)}
           </div>  
         <button type='submit'>{selected ? "Update" : "Create"}</button>
@@ -246,7 +250,6 @@ export default function Management({ info, fetchInfo }) {
         <button type='button' disabled={selected ? false : true} onClick={testFunc}>Delete</button>
         <button type='button' onClick={handleBackup}>Backup</button >
       </form>
-
     </main>
   )
 }
