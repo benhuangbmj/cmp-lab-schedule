@@ -1,15 +1,15 @@
 import {PDFViewer} from '@react-pdf/renderer';
 
 import Scheduling from './scheduling/Scheduling'
-import IDcard from './IDcard/IDcard';
+import CardDisplay from './IDcard/CardDisplay';
   
-export default function FrontendLab({info, fetchInfo}) {
+export default function FrontendLab({info, fetchInfo}) {  
   return(
     <>
-      <Scheduling info={info} fetchInfo={fetchInfo}  />
-      <PDFViewer style={{height: "100vh"}} width='100%'>
-        <IDcard info={info}/>
-      </PDFViewer>
+      <Scheduling info={info} fetchInfo={fetchInfo}  />{    
+      <PDFViewer style={{height: "100vh",}} width='100%'>
+        <CardDisplay info={info}/>
+      </PDFViewer>}
     </>
   )
 }
