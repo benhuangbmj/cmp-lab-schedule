@@ -1,6 +1,7 @@
 import { Text, View, StyleSheet, Image, Font } from '@react-pdf/renderer';
 import {useState, useEffect} from 'react';
-import QRcode from 'qrcode';
+import QRCode from 'qrcode';
+import {icons} from '../util';
 
 
 const cardTitle = ' STUDENT TUTOR ';
@@ -8,12 +9,12 @@ const [cw,ch] = [4,3];
 const [iw,ih] = ['1.2in', '1.6in'];
 const [companyBackground, display, borderSetting] = ['#002856', 'initial', "none"];
 
-Font.register({family: 'Priori', src: 'public/zPrioriSansOT-Regular.otf'});
-Font.register({family: 'Priori', fontWeight: 'bold', src: '/public/PrioriSansOT-Bold.otf'});
-Font.register({family: 'Priori', fontWeight: 'light', src: '/public/PrioriSansOT-Light.otf'});
-Font.register({family: 'Priori-Black', src: '/public/PrioriSansOT-Black.otf'});
-Font.register({family: 'Aptifer-Slab', src: 'public/Aptifer Slab LT Pro.otf'});
-Font.register({family: 'Aptifer-Slab-Black', src: 'public/Aptifer Slab LT Pro Black.otf'});
+Font.register({family: 'Priori', src: '/zPrioriSansOT-Regular.otf'});
+Font.register({family: 'Priori', fontWeight: 'bold', src: '/PrioriSansOT-Bold.otf'});
+Font.register({family: 'Priori', fontWeight: 'light', src: '/PrioriSansOT-Light.otf'});
+Font.register({family: 'Priori-Black', src: '/PrioriSansOT-Black.otf'});
+Font.register({family: 'Aptifer-Slab', src: '/Aptifer Slab LT Pro.otf'});
+Font.register({family: 'Aptifer-Slab-Black', src: '/Aptifer Slab LT Pro Black.otf'});
 
 const styles = StyleSheet.create({  
   card: {
@@ -95,7 +96,8 @@ const styles = StyleSheet.create({
   decoration: {
     width: '40%',
     border: borderSetting,
-    height: '31.5%'
+    height: '31.5%',
+    paddingTop: '2px',
   },
   subjects: {
     border: borderSetting,
@@ -105,10 +107,32 @@ const styles = StyleSheet.create({
     marginTop: '4pt',    
     justifyContent: "flex-start",
     textAlign: 'left',        
+  },
+  icon: {
+    margin: 'auto',
+    width: '50px',
+    height: '50px',
   }
 })
 
-export default function IDCard ({user}) { 
+export default function IDCard ({user}) {
+  /*const [qr, setQr] = useState({});
+
+  useEffect(() => {    
+    if(user.links) {
+      Object.keys(user.links).forEach(link => {
+        if(user.links[link]) {
+          QRCode.toDataURL(user.links[link])
+          .then(res => {
+            const output = {};
+            output[link] = res;
+            setQr(prev => Object.assign(prev, output));
+          })
+        }
+      })
+    }
+  }, []);*/
+  
   return (    
     <View style={styles.card} wrap={false}>      
       <View style={styles.company}>
@@ -127,13 +151,44 @@ export default function IDCard ({user}) {
           
         </View>        
         <View style={styles.profile}>
-          <Image style={[styles.image, (user.profilePic && user.profilePic.transform)? {transform: user.profilePic.transform, width: ih, height: iw, marginTop: '0.2in', marginLeft: "-0.2in" }: null]} src={user.profilePic? 'https:' + user.profilePic.url : 'https://images.ctfassets.net/o0mxfnwxsmg0/7wk9sXm2sQjMhg7pmyffqr/39c218f89506084b406222c6ee680905/question-mark-hacker-attack-mask-preview.jpg'}/>
+          {
+            (user.profilePic && user.profilePic.transform)?
+            <Image 
+              style={
+                [
+                  styles.image, 
+                  {
+                    transform: user.profilePic.transform, 
+                    width: ih, 
+                    height: iw, 
+                    marginTop: '0.2in', 
+                    marginLeft: "-0.2in" 
+                  }
+                ]
+              }
+              src= {
+                user.profilePic? 
+                'https:' + user.profilePic.url:
+                'https://images.ctfassets.net/o0mxfnwxsmg0/7wk9sXm2sQjMhg7pmyffqr/39c218f89506084b406222c6ee680905/question-mark-hacker-attack-mask-preview.jpg'
+              }
+            />:
+            <Image 
+              style={styles.image}
+              src= {
+                user.profilePic? 
+                'https:' + user.profilePic.url:
+                'https://images.ctfassets.net/o0mxfnwxsmg0/7wk9sXm2sQjMhg7pmyffqr/39c218f89506084b406222c6ee680905/question-mark-hacker-attack-mask-preview.jpg'
+              }
+            />
+          }
+          
         </View>
         <View style={styles.decoration}>
-          
+          <Image style={styles.icon} src='src/img/tutorForm.png'/>
         </View>
       </View>      
       <View style={styles.category}>{cardTitle.split("").map((e)=><Text key={e} style={styles.rotate}>{e}</Text> )}</View>
     </View> 
   )
+  //<Image style={styles.icon} src = {qr[link]}/>
 }

@@ -1,6 +1,34 @@
+.card-holder {
+  display: inline-block;
+  border: 1px solid black;
+  margin: 1rem auto;
+  height: 2.95in;
+  width: 3.85in;
+}
+
+.flexbox-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 550px;
+  margin: auto;
+}
+
+form {  
+  width: 70%;
+  margin: auto;
+}
+
+.input-holder {
+  max-width: 300px;
+  margin: auto;
+  text-align: right;
+}
+
 main {
   text-align: center;  
-  vertical-align: center;
 }
 
 table,tbody,thead {
@@ -32,20 +60,19 @@ pre {
 
 ul {
   text-align: left;
-  vertical-align:
 }
 
 .select {
   margin: auto;
   margin-top: 1rem;
-  width: 30rem;
+  width: 300px;
   display: inline-block;
 }
 
 .small-label {
   font-size: 0.75rem;
   text-align: left;
-  vertical-align: center;
+  vertical-align: 2.5px;
 }
 
 .profile-pic-small {
@@ -63,10 +90,12 @@ ul {
 }
 
 .profile-container {
-  width: 80px;
-  height: 120px;
-  border: 1px solid;
+  display: inline-block;
+  width: 1.2in;
+  height: 1.6in;
+  border: 1px solid black;
   margin: 1rem auto;
+  line-height: 1.6in;  
 }
 
 .profilePic {

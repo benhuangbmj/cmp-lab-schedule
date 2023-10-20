@@ -1,4 +1,4 @@
-import { Page, Document, StyleSheet } from '@react-pdf/renderer';
+import { PDFViewer, Page, Document, StyleSheet } from '@react-pdf/renderer';
 import IDCard from './IDCard';
 
 const styles = StyleSheet.create({
@@ -12,12 +12,18 @@ const styles = StyleSheet.create({
   },
 })
 
-export default function CardDisplay({ info }) {
+export default function CardDisplay({ pageSize, info, pageOrientation, toolbar=false }) {
   return (
-    <Document>            
-      <Page size='LETTER' style={styles.page}>
-        {Object.keys(info).map(e => <IDCard key={e} user={info[e]} />)}        
-      </Page>
-    </Document>
+    <PDFViewer
+      width='100%'
+      height='100%'
+      showToolbar={toolbar}
+      children={
+        <Document>
+          <Page size={pageSize} orientation={pageOrientation} style={styles.page}>
+            {Object.keys(info).map(e => <IDCard key={e} user={info[e]} />)}
+          </Page>
+        </Document>} >
+    </PDFViewer>
   )
 }

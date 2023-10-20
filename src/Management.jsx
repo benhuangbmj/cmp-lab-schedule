@@ -3,15 +3,18 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { getSingleAsset, update } from './api-operations';
 import { scheme as dataScheme, courseOptions } from './util';
+import {PDFViewer, Document, Page, Text, View, StyleSheet} from '@react-pdf/renderer';
 
 import SelectTutor from './util-components/SelectTutor';
+import IDCard from './IDcard/IDCard';
+import CardDisplay from './IDcard/CardDisplay';
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 const cmaToken = import.meta.env.VITE_CMA_TOKEN;
 const privilege = import.meta.env.VITE_PRIVILEGE;
 
-const display = ['username','name','subject'];
+const display = ['username','name','subject', 'links'];
 
 
 
@@ -25,7 +28,7 @@ export default function Management({ info, fetchInfo }) {
   } = useForm();
   
   const infoKeys = ['username'].concat(Array.from(Object.keys(Object.values(info)[0])));
-  const blankForm = Object.fromEntries(infoKeys.map(key => [key, null]));
+  const blankForm = Object.fromEntries(infoKeys.map(key => [key, null]));//Fix: use the dataScheme as the model
 
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState('Upload');
@@ -166,9 +169,13 @@ export default function Management({ info, fetchInfo }) {
     }
     const username = data.username;
     delete data.username;
-    if (!selected) {
-      data = Object.assign(dataScheme, data);
-    }
+    const links = {};
+    Object.keys(dataScheme.links).forEach(key => {
+      links[key] = data[key];
+      delete data[key];
+    });
+    data.links = links;
+    data = Object.assign(dataScheme, data);
     update(username, [], data, fetchInfo).then(() => {
       setSelected(null);
     });
@@ -180,7 +187,8 @@ export default function Management({ info, fetchInfo }) {
       if (info[selected.value].profilePic) {
         setProfile(info[selected.value].profilePic.url);
       }
-      const initialVal = Object.assign({}, { username: selected.value }, info[selected.value]);
+      const initialVal = Object.assign({}, { username: selected.value }, info[selected.value], info[selected.value].links);
+      delete initialVal.links;
       reset(initialVal);
     } else {
       setSelected();
@@ -203,9 +211,9 @@ export default function Management({ info, fetchInfo }) {
   const testFunc = function() {
     const confirm = prompt('Type "Confirm" to proceed to delete the user');
     if (confirm === 'Confirm') {
-      alert('The user is deleted');
+      alert('This function is under construction.');
     } else {
-      alert('Deletion is terminated.');
+      alert('Action terminated.');
     }
   }
 
@@ -215,32 +223,44 @@ export default function Management({ info, fetchInfo }) {
       setProfile(newPicURL);
     }
   }, [newPic]);
-
   return (
     <main>
       <SelectTutor info={info} handleSelect={handleSelect} />
-      <div className='profile-container'>{profile ? <img className="profilePic" src={profile} /> : <div style={{ marginTop: "35px" }}>profile picture</div>}</div>
+      <div className='flexbox-row'>
+        {selected? 
+          [
+            <img key='profile' className="profile-container" src={profile?profile:'https://images.ctfassets.net/o0mxfnwxsmg0/7wk9sXm2sQjMhg7pmyffqr/39c218f89506084b406222c6ee680905/question-mark-hacker-attack-mask-preview.jpg'} />,
+            <div key="IDCard" className='card-holder'>
+              {info[selected] && <CardDisplay pageSize={[220, 290]} pageOrientation='landscape' info={{user: info[selected]}} />}
+            </div>
+          ] : [
+            <div key="profile" className='profile-container'>profile picture</div>, 
+            <div key="IDCard" className='card-holder'></div>
+          ] }
+      </div>
       <ChangeProfile />
       <form onSubmit={handleSubmit(onSubmit)}>
-        {infoKeys.map(e => {
-          if (display.includes(e)) {
-            return (
-              <p key={e}>
-                <label>{e}{e == 'username' && <sup style={{ color: "red" }}>*</sup>}: </label>
-                {
-                  e == 'username' && selected ?
-                    <input readOnly type='text' className='read-only' name={e} {...register(e)} /> : e == "username" ?
-                      <>
-                        <input type='text' name={e} {...register(e, { required: "Username is required." })}/>
-                        {errors.username ? <p className='errorMessage'>{errors.username.message}</p> : null}
-                      </> :
-                      <input type='text' name={e} {...register(e)} />
-                }
-              </p>
-            )
+        <div className='input-holder'>
+          {['username'].concat(Object.keys(dataScheme)).map(e => {          
+            if (display.includes(e)) {
+              return (
+                e != 'links'? <p key={e}>
+                  <label>{e}{e == 'username' && <sup style={{ color: "red" }}>*</sup>}: </label>
+                  {
+                    e == 'username' && selected ?
+                      <input readOnly type='text' className='read-only' name={e} {...register(e)} /> : e == "username" ?
+                        <>
+                          <input type='text' name={e} {...register(e, { required: "Username is required." })}/>
+                          {errors.username ? <p className='errorMessage'>{errors.username.message}</p> : null}
+                        </> :
+                        <input type='text' name={e} {...register(e)} />
+                  }
+                </p> : Object.keys(dataScheme[e]).map(link => <p key={link}><label style={{textTransform: 'capitalize'}}>{link}: </label><input type='text' name={link} {...register(link)}/> </p>) 
+              )
+            }
           }
-        }
-        )}        
+          )}     
+        </div>   
           <label style={{display:'block'}}>courses: </label>
           <div className='course-container'>
             {courseOptions.map(e =><div key={e}><input type='checkbox' label={e} value={e} {...register('courses')} /><label className='small-label'>{e} </label></div>)}
@@ -250,6 +270,7 @@ export default function Management({ info, fetchInfo }) {
         <button type='button' disabled={selected ? false : true} onClick={testFunc}>Delete</button>
         <button type='button' onClick={handleBackup}>Backup</button >
       </form>
+      
     </main>
   )
 }
