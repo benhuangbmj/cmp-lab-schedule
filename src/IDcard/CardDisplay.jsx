@@ -1,4 +1,5 @@
 import { PDFViewer, Page, Document, StyleSheet } from '@react-pdf/renderer';
+import {useState, useRef, useEffect} from 'react';
 import IDCard from './IDCard';
 
 const styles = StyleSheet.create({
@@ -13,17 +14,24 @@ const styles = StyleSheet.create({
 })
 
 export default function CardDisplay({ pageSize, info, pageOrientation, toolbar=false }) {
+  const [rerender, setRerender] = useState(0);
+  const canvas = useRef(null);
+  
   return (
-    <PDFViewer
-      width='100%'
-      height='100%'
-      showToolbar={toolbar}
-      children={
-        <Document>
-          <Page size={pageSize} orientation={pageOrientation} style={styles.page}>
-            {Object.keys(info).map(e => <IDCard key={e} user={info[e]} />)}
-          </Page>
-        </Document>} >
-    </PDFViewer>
+    <>
+      <canvas ref={canvas} style={{display:'none'}} width='429' height='167'></canvas>
+      <PDFViewer
+        width='100%'
+        height='100%'
+        showToolbar={toolbar}
+        children={
+          <Document>
+            <Page size={pageSize} orientation={pageOrientation} style={styles.page}>
+              {Object.keys(info).map(e => <IDCard key={e} user={info[e]} setRerender={setRerender} canvas={canvas}/>)}
+            </Page>
+          </Document>} >
+      </PDFViewer>
+    </>
+    
   )
 }

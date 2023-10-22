@@ -1,13 +1,13 @@
 import { Text, View, StyleSheet, Image, Font } from '@react-pdf/renderer';
 import { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
-import { icons } from '../util';
+import { icons, makeLogo } from '../util';
 
 
 const cardTitle = ' STUDENT TUTOR ';
 const [cw, ch] = [4, 3];
 const [iw, ih] = ['0.96in', '1.28in'];
-const [companyBackground, display, borderSetting] = ['#002856', 'initial', "1px solid red"];
+const [companyBackground, display, borderSetting] = ['#002856', 'initial', "none"];
 
 Font.register({ family: 'Priori', src: '/zPrioriSansOT-Regular.otf' });
 Font.register({ family: 'Priori', fontWeight: 'bold', src: '/PrioriSansOT-Bold.otf' });
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignContent: 'space-between',
     alignItems: 'flex-end',
-    justifyContent: 'space-between',  
+    justifyContent: 'space-between',
   },
   company: {
     border: borderSetting,
@@ -48,9 +48,9 @@ const styles = StyleSheet.create({
     height: '20%',
     backgroundColor: companyBackground,
   },
-  department: {
+  logoContainer: {
     width: '2.6in',
-    height: "50%",
+    height: "25%",
     border: borderSetting,
   },
   profile: {
@@ -62,11 +62,10 @@ const styles = StyleSheet.create({
     boxSizing: "border-box",
     border: borderSetting,
     width: '2.6in',
-    height: "50%",
     fontFamily: 'Priori',
     fontWeight: "light",
-    fontSize: '12pt',
-    paddingLeft: '4pt',
+    fontSize: '10pt',
+    paddingLeft: '2px',
   },
   category: {
     border: borderSetting,
@@ -89,8 +88,7 @@ const styles = StyleSheet.create({
     border: borderSetting,
   },
   logo: {
-    objectFit: 'cover',
-    height: '35%',
+    objectFit: 'contain',
     display: display,
     border: borderSetting,
   },
@@ -103,68 +101,105 @@ const styles = StyleSheet.create({
     width: '0.96in',
     border: borderSetting,
     height: '31.5%',
-    paddingTop: '2px',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-end',
+    alignContent: 'flex-end',
   },
   subjects: {
     border: borderSetting,
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: '4pt',
     justifyContent: "flex-start",
     textAlign: 'left',
   },
   icon: {
-    margin: 'auto',
-    width: '50px',
-    height: '50px',
+    width: '0.6in',
+    height: '0.6in',
   },
   social: {
     border: borderSetting,
-    width: '100%',
-    height: '65%',
+    width: '2.6in',
+    height: '35%',
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    alignContent: 'space-between',
+    overflow: 'hidden',
+  },
+  QR: {
+    width: '.55in',
+    height: '.55in',
+    margin: 'auto',
+    //objectFit: "fill",
+  },
+  socialIcon: {
+    width: '0.3in',
+    height: '0.3in',
+    ObjectFit: 'contain',
+    margin: 'auto',
   }
 })
 
-export default function IDCard({ user }) {
+export default function IDCard({ user, setRerender, canvas }) {
   const [qr, setQr] = useState({});
+  const [logo, setLogo] = useState();
 
-  useEffect(() => {    
-    if(user.links) {
+  useEffect(() => {
+    if (user.links) {
       Object.keys(user.links).forEach(link => {
-        if(user.links[link] != null) {
-          console.log(link, user.links[link]);
+        if (user.links[link] != null && user.links[link] != '') {
           QRCode.toDataURL(user.links[link])
-          .then(res => {
-            const output = {};
-            output[link] = res;
-            setQr(prev => {
-              console.log(output);
-              return Object.assign(prev, output)});
-          })
+            .then(res => {
+              const output = {};
+              output[link] = res;
+              setQr(prev => {
+                return Object.assign(prev, output)
+              });
+            })
+            .then(() => {
+              setRerender(prev => prev + 1);
+            })
         }
       })
     }
   }, []);
+
+  useEffect(() => {
+    makeLogo(canvas, setLogo);
+  }, [])
+
   return (
     <View style={styles.card} wrap={false}>
       <View style={styles.company}>
         <Image style={[styles.brand, { backgroundColor: companyBackground }]} src='src/img/MULogo-DeptCMP-White-Horiz.png' />
       </View>
       <View style={styles.content}>
-        <View style={styles.department}>
-          <View style={styles.social}>
-            {qr.linkedin && <Image style={styles.icon} src = {qr.linkedin}/>}
-          </View>
-          <Image style={styles.logo} src='src/img/see anew-purpleblueword.jpg' />
+        <View style={styles.logoContainer}>
+          {logo && <Image style={styles.logo} src={logo} />}
+        </View>
+        <View style={styles.social}>
+          {
+            Object.keys(qr).length > 0 &&
+            Object.entries(qr).map(([link, code]) => {
+              return (
+                <View key={link} style={{ border: borderSetting, width: '33.3%' }}>
+                  <Image style={styles.socialIcon} src={icons[link]} />
+                  <Image style={styles.QR} src={code} />
+                </View>
+              )
+            }
+            )}
         </View>
         <View style={styles.information}>
-          <Text style={{ fontSize: '15pt', fontFamily: "Priori-Black", fontWeight: "normal", }}>{user.name + ' (' + user.subject + ')'}</Text>
+          <Text style={{ fontSize: '20pt', fontFamily: "Priori-Black", fontWeight: "normal", }}>{user.name + ' (' + user.subject + ')'}</Text>
           <Text >{user.day.map((e, i) => `${e} ${user.time[i]}`)}</Text>
           <View style={styles.subjects}>
             {user.courses && user.courses.map(e => <Text key={e} style={{ width: '33%' }}>{e}</Text>)}
           </View>
-
         </View>
         <View style={styles.profile}>
           {

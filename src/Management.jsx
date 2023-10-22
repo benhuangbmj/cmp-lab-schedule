@@ -178,6 +178,7 @@ export default function Management({ info, fetchInfo }) {
     data = Object.assign(dataScheme, data);
     update(username, [], data, fetchInfo).then(() => {
       setSelected(null);
+      reset();
     });
   }
   const handleSelect = (selected) => {
