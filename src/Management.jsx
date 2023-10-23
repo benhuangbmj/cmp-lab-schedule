@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { getSingleAsset, update } from './api-operations';
-import { scheme as dataScheme, courseOptions } from './util';
+import { scheme as dataScheme, courseOptions, blankForm } from './util';
 import {PDFViewer, Document, Page, Text, View, StyleSheet} from '@react-pdf/renderer';
 
 import SelectTutor from './util-components/SelectTutor';
@@ -27,8 +27,8 @@ export default function Management({ info, fetchInfo }) {
     formState: { errors }
   } = useForm();
   
-  const infoKeys = ['username'].concat(Array.from(Object.keys(Object.values(info)[0])));
-  const blankForm = Object.fromEntries(infoKeys.map(key => [key, null]));//Fix: use the dataScheme as the model
+  //const infoKeys = ['username'].concat(Array.from(Object.keys(Object.values(info)[0])));
+  //const blankForm = Object.fromEntries(infoKeys.map(key => [key, null]));//Fix: use the dataScheme as the model
 
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState('Upload');
@@ -152,7 +152,8 @@ export default function Management({ info, fetchInfo }) {
       <span>
         <label>Change Profile Picture </label>
         <input disabled = {(selected||newUsername)? false : true} type='file' accept='image/*' onChange={handleChangeProfile} />
-        <button disabled = {(selected||newUsername)? false : true} className="file-input-button" onClick={uploadPic}>{uploadStatus}</button>
+        <button type='button' disabled = {(selected||newUsername)? false : true} className="file-input-button" onClick={uploadPic}>{uploadStatus}</button>
+        <button type='button' disabled = {profile? false: true} style={{marginLeft: '5px'}}>Rotate</button>
       </span>
     )
   }
@@ -178,7 +179,7 @@ export default function Management({ info, fetchInfo }) {
     data = Object.assign(dataScheme, data);
     update(username, [], data, fetchInfo).then(() => {
       setSelected(null);
-      reset();
+      reset(blankForm);
     });
   }
   const handleSelect = (selected) => {

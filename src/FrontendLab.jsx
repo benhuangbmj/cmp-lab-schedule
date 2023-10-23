@@ -11,8 +11,8 @@ export default function FrontendLab({info, fetchInfo}) {
     <>      
       <Scheduling info={info} fetchInfo={fetchInfo}  />      
       <div style={{width: '100%', height: '100vh'}}>
-        <CardDisplay pageSize='LETTER' pageOrientation='portrait' info={info} toolbar={true}/>
-      </div>      
+{        //<CardDisplay pageSize='LETTER' pageOrientation='portrait' info={info} toolbar={true}/>
+}      </div>      
     </>
   )
 }

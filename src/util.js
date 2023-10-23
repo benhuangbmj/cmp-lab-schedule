@@ -1,10 +1,10 @@
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const times = Array.from(Array(13), (e, i) => (6 + Math.floor(i / 4)) + ":" + (i % 4 ? (i % 4) * 15 : "00") + " PM");
 const scheme = {
-  name: "",
+  name: null,
   time: [],
   day: [],
-  subject: "",
+  subject: null,
   courses: [],
   profilePic: {
     url: null,
@@ -20,8 +20,15 @@ const scheme = {
     instagram: null,
     youtube: null,
     facebook: null,    
-  }
-}
+  },
+  lastUpdate: null,
+};
+
+let blankForm = Object.assign({}, scheme);
+blankForm = Object.assign(blankForm, scheme.links);
+delete blankForm.profilePic;
+delete blankForm.links;
+
 const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH180', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT281', 'STAT291', 'STAT292', 'PHYS201', 'PHYS202', 'PHYS211', 'PHYS212'];
 
 courseOptions.sort();
@@ -68,4 +75,4 @@ const sortByLastName = (arr, levels) => {
   });
 }
 
-export { sortByLastName, days, times, scheme, courseOptions, icons, makeLogo };
+export { sortByLastName, days, times, scheme, courseOptions, icons, makeLogo, blankForm };
