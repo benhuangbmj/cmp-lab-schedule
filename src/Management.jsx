@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { getSingleAsset, update } from './api-operations';
 import { scheme as dataScheme, courseOptions, blankForm } from './util';
 import {PDFViewer, Document, Page, Text, View, StyleSheet} from '@react-pdf/renderer';
+import bcrypt from 'bcryptjs';
 
 import SelectTutor from './util-components/SelectTutor';
 import IDCard from './IDcard/IDCard';
@@ -14,7 +15,7 @@ const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 const cmaToken = import.meta.env.VITE_CMA_TOKEN;
 const privilege = import.meta.env.VITE_PRIVILEGE;
 
-const display = ['username','name','subject', 'links'];
+const display = ['username','name','subject', 'links', 'password'];
 
 
 
@@ -26,9 +27,6 @@ export default function Management({ info, fetchInfo }) {
     handleSubmit,
     formState: { errors }
   } = useForm();
-  
-  //const infoKeys = ['username'].concat(Array.from(Object.keys(Object.values(info)[0])));
-  //const blankForm = Object.fromEntries(infoKeys.map(key => [key, null]));//Fix: use the dataScheme as the model
 
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState('Upload');
@@ -157,33 +155,47 @@ export default function Management({ info, fetchInfo }) {
       </span>
     )
   }
-
+/*
   const isFieldArray = (key) => {
     return Array.isArray(Object.values(info)[0][key]);
-  };
+  };*/
 
-  const onSubmit = (data) => {
+  const handleUpdate = (data) => {/*
     for (let key in data) {
       if (isFieldArray(key) && typeof data[key] === 'string') {
         data[key] = data[key].split(',');
       }
-    }
+    }*/
     const username = data.username;
     delete data.username;
     const links = {};
-    Object.keys(dataScheme.links).forEach(key => {
-      links[key] = data[key];
+    Object.keys(dataScheme.links).forEach(key => {      
+      links[key] = data[key];      
       delete data[key];
     });
     data.links = links;
+    if(data.password != "") {
+      data.password = bcrypt.hashSync(data.password, 10);
+    } else {
+      delete data.password;
+    }
     data = Object.assign(dataScheme, data);
     update(username, [], data, fetchInfo).then(() => {
       setSelected(null);
       reset(blankForm);
     });
-  }
+  };
   const handleSelect = (selected) => {
     if (selected) {
+      if(info[selected.value].password) {
+        const currPassword = prompt('Please enter your password.');
+        console.log(currPassword, info[selected.value].password);
+        const verified = bcrypt.compareSync(currPassword, info[selected.value].password);
+        if(!verified) {
+          alert('Invalid password.');
+          return;
+        }
+      }      
       setProfile();
       setSelected(selected.value);
       if (info[selected.value].profilePic) {
@@ -191,7 +203,8 @@ export default function Management({ info, fetchInfo }) {
       }
       const initialVal = Object.assign({}, { username: selected.value }, info[selected.value], info[selected.value].links);
       delete initialVal.links;
-      reset(initialVal);
+      delete initialVal.password;
+      reset(initialVal);    
     } else {
       setSelected();
       setProfile();
@@ -241,13 +254,13 @@ export default function Management({ info, fetchInfo }) {
           ] }
       </div>
       <ChangeProfile />
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(handleUpdate)}>
         <div className='input-holder'>
           {['username'].concat(Object.keys(dataScheme)).map(e => {          
             if (display.includes(e)) {
               return (
                 e != 'links'? <p key={e}>
-                  <label>{e}{e == 'username' && <sup style={{ color: "red" }}>*</sup>}: </label>
+                  <label>{e=='password'?'new passowrd':e}{e == 'username' && <sup style={{ color: "red" }}>*</sup>}: </label>
                   {
                     e == 'username' && selected ?
                       <input readOnly type='text' className='read-only' name={e} {...register(e)} /> : e == "username" ?
@@ -255,9 +268,9 @@ export default function Management({ info, fetchInfo }) {
                           <input type='text' name={e} {...register(e, { required: "Username is required." })}/>
                           {errors.username ? <p className='errorMessage'>{errors.username.message}</p> : null}
                         </> :
-                        <input type='text' name={e} {...register(e)} />
+                        <input type={e=='password'?'password':"text"} name={e} {...register(e)} />
                   }
-                </p> : Object.keys(dataScheme[e]).map(link => <p key={link}><label style={{textTransform: 'capitalize'}}>{link}: </label><input type='text' name={link} {...register(link)}/> </p>) 
+                </p> : Object.keys(dataScheme[e]).map(link => <p key={link}><label style={{textTransform: 'capitalize'}}>{link}: </label><input type='url' name={link} {...register(link)}/> </p>) 
               )
             }
           }

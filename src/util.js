@@ -1,6 +1,7 @@
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const times = Array.from(Array(13), (e, i) => (6 + Math.floor(i / 4)) + ":" + (i % 4 ? (i % 4) * 15 : "00") + " PM");
 const scheme = {
+  password: null,
   name: null,
   time: [],
   day: [],
