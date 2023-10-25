@@ -27,6 +27,14 @@ form {
   text-align: right;
 }
 
+.login {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 100px;
+  justify-content: space-around;
+}
+
 main {
   text-align: center;  
 }

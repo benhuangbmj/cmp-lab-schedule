@@ -223,6 +223,10 @@ export default function Management({ info, fetchInfo }) {
     }
   }
 
+  const handleLogin = () => {
+    
+  }
+
   const testFunc = function() {
     const confirm = prompt('Type "Confirm" to proceed to delete the user');
     if (confirm === 'Confirm') {
@@ -240,7 +244,12 @@ export default function Management({ info, fetchInfo }) {
   }, [newPic]);
   return (
     <main>
-      <SelectTutor info={info} handleSelect={handleSelect} />
+      <div className="login">
+        <SelectTutor info={info} handleSelect={handleSelect} />
+        <form onSubmit={handleSubmit(handleLogin)}>
+          <label>password: </label><input type='password' name='password' {...register('password')}></input> <button type='submit'>Log in</button>
+        </form>
+      </div>
       <div className='flexbox-row'>
         {selected? 
           [
