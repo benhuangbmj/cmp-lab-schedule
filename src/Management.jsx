@@ -28,10 +28,18 @@ export default function Management({ info, fetchInfo }) {
     formState: { errors }
   } = useForm();
 
+  const {
+    register: registerLogin,
+    handleSubmit: handleSubmitLogin,
+    reset: resetLogin,
+    formState: {errors: errorsLogin},
+  } = useForm();
+
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState('Upload');
   const [profile, setProfile] = useState();
   const [selected, setSelected] = useState();
+  const [loggedIn, setLoggedIn] = useState(false);
   const currUser = useRef();
   const newUsername = watch('username');
 
@@ -160,12 +168,7 @@ export default function Management({ info, fetchInfo }) {
     return Array.isArray(Object.values(info)[0][key]);
   };*/
 
-  const handleUpdate = (data) => {/*
-    for (let key in data) {
-      if (isFieldArray(key) && typeof data[key] === 'string') {
-        data[key] = data[key].split(',');
-      }
-    }*/
+  const handleUpdate = (data) => {
     const username = data.username;
     delete data.username;
     const links = {};
@@ -185,33 +188,27 @@ export default function Management({ info, fetchInfo }) {
       reset(blankForm);
     });
   };
-  const handleSelect = (selected) => {
-    if (selected) {
-      if(info[selected.value].password) {
-        const currPassword = prompt('Please enter your password.');
-        console.log(currPassword, info[selected.value].password);
-        const verified = bcrypt.compareSync(currPassword, info[selected.value].password);
-        if(!verified) {
-          alert('Invalid password.');
-          return;
-        }
-      }      
-      setProfile();
-      setSelected(selected.value);
-      if (info[selected.value].profilePic) {
-        setProfile(info[selected.value].profilePic.url);
+  const handleSelect = (currSelected) => {
+    const resetAll = () => {
+      reset(blankForm);
+      resetLogin({pw: null});
+      setLoggedIn(false);
+    }
+    if (currSelected) {
+      const user = currSelected.value
+      resetAll();
+      setSelected(user);
+      if(!info[user].password) {
+        displayInfo(user);
+        setLoggedIn(true);
       }
-      const initialVal = Object.assign({}, { username: selected.value }, info[selected.value], info[selected.value].links);
-      delete initialVal.links;
-      delete initialVal.password;
-      reset(initialVal);    
     } else {
       setSelected();
       setProfile();
-      reset(blankForm);
+      resetAll();
     }
   }
-
+  
   const handleBackup = () => {
     const passcode = prompt("Please enter the passocde.");
     if(passcode === privilege) {
@@ -223,9 +220,30 @@ export default function Management({ info, fetchInfo }) {
     }
   }
 
-  const handleLogin = () => {
-    
+  const displayInfo = (user) => {
+    setProfile();
+    if (info[user].profilePic) {
+      setProfile(info[user].profilePic.url);      
+    }
+    const initialVal = Object.assign({}, { username: user }, info[user], info[user].links);
+    delete initialVal.links;
+    delete initialVal.password;
+    reset(initialVal);    
   }
+  
+  const handleLogin = (data) => {
+    if(info[selected].password) {
+      const verified = bcrypt.compareSync(data.pw, info[selected].password);
+      if(!verified) {
+        alert('Invalid password.');
+        return;
+      } else {
+        alert('Log in successfully!');
+        setLoggedIn(true);
+      }
+    }
+    displayInfo(selected);
+  };
 
   const testFunc = function() {
     const confirm = prompt('Type "Confirm" to proceed to delete the user');
@@ -246,16 +264,19 @@ export default function Management({ info, fetchInfo }) {
     <main>
       <div className="login">
         <SelectTutor info={info} handleSelect={handleSelect} />
-        <form onSubmit={handleSubmit(handleLogin)}>
-          <label>password: </label><input type='password' name='password' {...register('password')}></input> <button type='submit'>Log in</button>
+        <form onSubmit={handleSubmitLogin(handleLogin)}>
+          <label>password: </label>
+          <input type='password' name='pw' {...registerLogin('pw', {required: 'Please enter your password.'})}>            
+          </input> <button disabled={selected == null} type='submit'>Log in</button>          
         </form>
+        {errorsLogin.pw && <p className='errorMessage'>{errorsLogin.pw.message}</p>}
       </div>
       <div className='flexbox-row'>
         {selected? 
           [
             <img key='profile' className="profile-container" src={profile?profile:'https://images.ctfassets.net/o0mxfnwxsmg0/7wk9sXm2sQjMhg7pmyffqr/39c218f89506084b406222c6ee680905/question-mark-hacker-attack-mask-preview.jpg'} />,
             <div key="IDCard" className='card-holder'>
-              {info[selected] && <CardDisplay pageSize={[220, 290]} pageOrientation='landscape' info={{user: info[selected]}} />}
+              {loggedIn && <CardDisplay pageSize={[220, 290]} pageOrientation='landscape' info={{user: info[selected]}} />}
             </div>
           ] : [
             <div key="profile" className='profile-container'>profile picture</div>, 
