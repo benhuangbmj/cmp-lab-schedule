@@ -16,137 +16,144 @@ Font.register({ family: 'Priori-Black', src: '/PrioriSansOT-Black.otf' });
 Font.register({ family: 'Aptifer-Slab', src: '/Aptifer Slab LT Pro.otf' });
 Font.register({ family: 'Aptifer-Slab-Black', src: '/Aptifer Slab LT Pro Black.otf' });
 
-const styles = StyleSheet.create({
-  card: {
-    border: '2pt dotted black',
-    width: `${cw}in`,
-    height: `${ch}in`,
-    display: 'flex',
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-  },
-  image: {
-    border: borderSetting,
-    objectFit: 'fill',
-    width: iw,
-    height: ih,
-  },
-  content: {
-    border: borderSetting,
-    width: "90%",
-    height: '80%',
-    display: "flex",
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-    alignContent: 'space-between',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-  },
-  company: {
-    border: borderSetting,
-    width: '90%',
-    height: '20%',
-    backgroundColor: companyBackground,
-  },
-  logoContainer: {
-    width: '2.6in',
-    height: "25%",
-    border: borderSetting,
-  },
-  profile: {
-    border: borderSetting,
-    width: iw,
-    height: ih,
-  },
-  information: {
-    boxSizing: "border-box",
-    border: borderSetting,
-    width: '2.6in',
-    fontFamily: 'Priori',
-    fontWeight: "light",
-    fontSize: '10pt',
-    paddingLeft: '2px',
-  },
-  category: {
-    border: borderSetting,
-    width: '10%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-    backgroundColor: "#1C8AC2",
-  },
-  rotate: {
-    width: `${1 / (cardTitle.length) * ch * 0.97}in`,
-    height: `${1 / (cardTitle.length) * ch * 0.97}in`,
-    fontSize: `${1 / (cardTitle.length) * ch * 0.8}in`,
-    textAlign: "center",
-    marginLeft: "20%",
-    transform: 'rotate(90deg)',
-    color: 'white',
-    fontFamily: 'Aptifer-Slab-Black',
-    border: borderSetting,
-  },
-  logo: {
-    objectFit: 'contain',
-    display: display,
-    border: borderSetting,
-  },
-  brand: {
-    objectFit: 'cover',
-    display: display,
-    border: borderSetting,
-  },
-  decoration: {
-    width: '0.96in',
-    border: borderSetting,
-    height: '31.5%',
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-end',
-    alignContent: 'flex-end',
-  },
-  subjects: {
-    border: borderSetting,
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: "flex-start",
-    textAlign: 'left',
-  },
-  icon: {
-    width: '0.6in',
-    height: '0.6in',
-  },
-  social: {
-    border: borderSetting,
-    width: '2.6in',
-    height: '35%',
-    display: 'flex',
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    alignContent: 'space-between',
-    overflow: 'hidden',
-  },
-  QR: {
-    width: '.55in',
-    height: '.55in',
-    margin: 'auto',
-    //objectFit: "fill",
-  },
-  socialIcon: {
-    width: '0.3in',
-    height: '0.3in',
-    ObjectFit: 'contain',
-    margin: 'auto',
-  }
-})
+
 
 export default function IDCard({ user, setRerender, canvas }) {
   const [qr, setQr] = useState({});
   const [logo, setLogo] = useState();
+
+  const toAdjustMargin = user.profilePic && user.profilePic.transform && Number(user.profilePic.transform.match(/\d+/g)[0])%180 != 0;
+
+  const styles = StyleSheet.create({
+    card: {
+      border: '2pt dotted black',
+      width: `${cw}in`,
+      height: `${ch}in`,
+      display: 'flex',
+      flexDirection: 'column',
+      flexWrap: 'wrap',
+    },
+    image: {
+      border: borderSetting,
+      objectFit: 'fill',
+      transform: user.profilePic && user.profilePic.transform? user.profilePic.transform: 'rotate(0deg)',
+      width: toAdjustMargin? ih:iw,
+      height: toAdjustMargin? iw:ih,
+      marginTop: toAdjustMargin? '0.16in' : null,
+      marginLeft: toAdjustMargin? "-0.16in" : null,
+    },
+    content: {
+      border: borderSetting,
+      width: "90%",
+      height: '80%',
+      display: "flex",
+      flexDirection: 'column',
+      flexWrap: 'wrap',
+      alignContent: 'space-between',
+      alignItems: 'flex-end',
+      justifyContent: 'space-between',
+    },
+    company: {
+      border: borderSetting,
+      width: '90%',
+      height: '20%',
+      backgroundColor: companyBackground,
+    },
+    logoContainer: {
+      width: '2.6in',
+      height: "25%",
+      border: borderSetting,
+    },
+    profile: {
+      border: borderSetting,
+      width: iw,
+      height: ih,
+    },
+    information: {
+      boxSizing: "border-box",
+      border: borderSetting,
+      width: '2.6in',
+      fontFamily: 'Priori',
+      fontWeight: "light",
+      fontSize: '10pt',
+      paddingLeft: '2px',
+    },
+    category: {
+      border: borderSetting,
+      width: '10%',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      flexWrap: 'wrap',
+      backgroundColor: "#1C8AC2",
+    },
+    rotate: {
+      width: `${1 / (cardTitle.length) * ch * 0.97}in`,
+      height: `${1 / (cardTitle.length) * ch * 0.97}in`,
+      fontSize: `${1 / (cardTitle.length) * ch * 0.8}in`,
+      textAlign: "center",
+      marginLeft: "20%",
+      transform: 'rotate(90deg)',
+      color: 'white',
+      fontFamily: 'Aptifer-Slab-Black',
+      border: borderSetting,
+    },
+    logo: {
+      objectFit: 'contain',
+      display: display,
+      border: borderSetting,
+    },
+    brand: {
+      objectFit: 'cover',
+      display: display,
+      border: borderSetting,
+    },
+    decoration: {
+      width: '0.96in',
+      border: borderSetting,
+      height: '31.5%',
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'flex-end',
+      alignContent: 'flex-end',
+    },
+    subjects: {
+      border: borderSetting,
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: "flex-start",
+      textAlign: 'left',
+    },
+    icon: {
+      width: '0.6in',
+      height: '0.6in',
+    },
+    social: {
+      border: borderSetting,
+      width: '2.6in',
+      height: '35%',
+      display: 'flex',
+      flexDirection: 'column',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      alignContent: 'space-between',
+      overflow: 'hidden',
+    },
+    QR: {
+      width: '.55in',
+      height: '.55in',
+      margin: 'auto',
+      //objectFit: "fill",
+    },
+    socialIcon: {
+      width: '0.3in',
+      height: '0.3in',
+      ObjectFit: 'contain',
+      margin: 'auto',
+    }
+  })
 
   useEffect(() => {
     if (user.links) {
@@ -202,37 +209,14 @@ export default function IDCard({ user, setRerender, canvas }) {
           </View>
         </View>
         <View style={styles.profile}>
-          {
-            (user.profilePic && user.profilePic.transform) ?
-              <Image
-                style={
-                  [
-                    styles.image,
-                    {
-                      transform: user.profilePic.transform,
-                      width: ih,
-                      height: iw,
-                      marginTop: '0.16in',
-                      marginLeft: "-0.16in"
-                    }
-                  ]
-                }
-                src={
-                  user.profilePic ?
-                    'https:' + user.profilePic.url :
-                    'https://images.ctfassets.net/o0mxfnwxsmg0/4dgxIfA7J2Mf8r3oOj9NF5/f302b65565292fef34ebff268a96edfe/question-mark-hacker-attack-mask-preview.jpg'
-                }
-              /> :
-              <Image
-                style={styles.image}
-                src={
-                  user.profilePic ?
-                    'https:' + user.profilePic.url :
-                    'https://images.ctfassets.net/o0mxfnwxsmg0/4dgxIfA7J2Mf8r3oOj9NF5/f302b65565292fef34ebff268a96edfe/question-mark-hacker-attack-mask-preview.jpg'
-                }
-              />
-          }
-
+          <Image
+            style={styles.image}
+            src={
+              user.profilePic ?
+                'https:' + user.profilePic.url :
+                'https://images.ctfassets.net/o0mxfnwxsmg0/4dgxIfA7J2Mf8r3oOj9NF5/f302b65565292fef34ebff268a96edfe/question-mark-hacker-attack-mask-preview.jpg'
+            }
+          />
         </View>
         <View style={styles.decoration}>
           <Image style={styles.icon} src='src/img/tutorForm.png' />

@@ -25,12 +25,12 @@ const scheme = {
   lastUpdate: null,
 };
 
-let blankForm = Object.assign({}, scheme);
+let blankForm = Object.assign({}, scheme, {username: null});
 blankForm = Object.assign(blankForm, scheme.links);
 delete blankForm.profilePic;
 delete blankForm.links;
 
-const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH180', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT281', 'STAT291', 'STAT292', 'PHYS201', 'PHYS202', 'PHYS211', 'PHYS212'];
+const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH180', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT281', 'STAT291', 'STAT292', 'PHYS201', 'PHYS202', 'PHYS211', 'PHYS212', 'MATH105'];
 
 courseOptions.sort();
 

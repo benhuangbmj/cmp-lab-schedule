@@ -159,15 +159,27 @@ export default function Management({ info, fetchInfo }) {
         <label>Change Profile Picture </label>
         <input disabled = {(selected||newUsername)? false : true} type='file' accept='image/*' onChange={handleChangeProfile} />
         <button type='button' disabled = {(selected||newUsername)? false : true} className="file-input-button" onClick={uploadPic}>{uploadStatus}</button>
-        <button type='button' disabled = {profile? false: true} style={{marginLeft: '5px'}}>Rotate</button>
+        <button type='button' disabled = {profile? false: true} style={{marginLeft: '5px'}} onClick={() => {handleRotate(true)} }>Rotate Clockwise</button>
+        <button type='button' disabled = {profile? false: true} style={{marginLeft: '5px'}} onClick={() => {handleRotate(false)} }>Rotate Counterclockwise</button>
       </span>
     )
   }
-/*
-  const isFieldArray = (key) => {
-    return Array.isArray(Object.values(info)[0][key]);
-  };*/
 
+  const handleRotate = (clockwise) => {
+    const newDeg = clockwise ? 90 : -90;
+    const currInfo = info[selected];
+    let newRotate;
+    if(!currInfo.profilePic.transform) {
+      newRotate = `rotate(${newDeg}deg)`;
+    } else {
+      const currRotation = currInfo.profilePic.transform;
+      const regex = /-*\d+/g;
+      const currDeg = currRotation.match(regex)[0];
+      newRotate = currRotation.replace(regex, `${(Number(currDeg) + newDeg)%360}`);      
+    }
+    update('transform',[selected,'profilePic'], newRotate, fetchInfo);    
+  }
+  
   const handleUpdate = (data) => {
     const username = data.username;
     delete data.username;
@@ -267,16 +279,16 @@ export default function Management({ info, fetchInfo }) {
         <form onSubmit={handleSubmitLogin(handleLogin)}>
           <label>password: </label>
           <input type='password' name='pw' {...registerLogin('pw', {required: 'Please enter your password.'})}>            
-          </input> <button disabled={selected == null} type='submit'>Log in</button>          
+          </input> <button disabled={selected == null || info[selected].password == null} type='submit'>Log in</button>          
         </form>
         {errorsLogin.pw && <p className='errorMessage'>{errorsLogin.pw.message}</p>}
       </div>
       <div className='flexbox-row'>
-        {selected? 
+        {(selected && loggedIn)? 
           [
             <img key='profile' className="profile-container" src={profile?profile:'https://images.ctfassets.net/o0mxfnwxsmg0/7wk9sXm2sQjMhg7pmyffqr/39c218f89506084b406222c6ee680905/question-mark-hacker-attack-mask-preview.jpg'} />,
             <div key="IDCard" className='card-holder'>
-              {loggedIn && <CardDisplay pageSize={[220, 290]} pageOrientation='landscape' info={{user: info[selected]}} />}
+              <CardDisplay pageSize={[220, 290]} pageOrientation='landscape' info={{user: info[selected]}} />
             </div>
           ] : [
             <div key="profile" className='profile-container'>profile picture</div>, 

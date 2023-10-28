@@ -40,14 +40,14 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts) => {
       const courseMap = new Map();
       for (let student in tutorInfo) {
         const currInfo = tutorInfo[student];
-        //Make the shifts
+
         for (let i = 0; i < currInfo.day.length; i++) {
           const day = currInfo.day[i];
           const index = days.indexOf(day);
           shift[index][0].push(`${currInfo.name} (${currInfo.subject})` + '\n' + currInfo.time[i]);
           currInfo.profilePic ? shift[index][1].push(currInfo.profilePic.url) : shift[index][1].push(null);
         }
-        //Making the course-tutor correspondence            
+
         for (let i = 0; i < currInfo.courses.length; i++) {
           if (!courseMap.has(currInfo.courses[i])) {
             courseMap.set(currInfo.courses[i], [currInfo.name]);
@@ -65,7 +65,7 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts) => {
       courses.sort();
       setCourseTutor(courses);
       setShifts(shift);
-      setInfo(() => tutorInfo);
+      setInfo(tutorInfo);
     });
 }
 
