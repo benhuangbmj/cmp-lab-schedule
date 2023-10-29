@@ -117,6 +117,9 @@ export default function IDCard({ user, setRerender, canvas }) {
       flexWrap: 'wrap',
       justifyContent: 'flex-end',
       alignContent: 'flex-end',
+      fontSize: '9pt',
+      fontFamily: 'Priori',
+      fontWeight: 'light',
     },
     subjects: {
       border: borderSetting,
@@ -145,7 +148,6 @@ export default function IDCard({ user, setRerender, canvas }) {
       width: '.55in',
       height: '.55in',
       margin: 'auto',
-      //objectFit: "fill",
     },
     socialIcon: {
       width: '0.3in',
@@ -212,13 +214,15 @@ export default function IDCard({ user, setRerender, canvas }) {
           <Image
             style={styles.image}
             src={
-              user.profilePic ?
+              user.profilePic && user.profilePic.url?
                 'https:' + user.profilePic.url :
-                'https://images.ctfassets.net/o0mxfnwxsmg0/4dgxIfA7J2Mf8r3oOj9NF5/f302b65565292fef34ebff268a96edfe/question-mark-hacker-attack-mask-preview.jpg'
+              'https://www.messiah.edu/images/stained_glass_circle1_multicolor.jpg'
+                //'https://images.ctfassets.net/o0mxfnwxsmg0/4dgxIfA7J2Mf8r3oOj9NF5/f302b65565292fef34ebff268a96edfe/question-mark-hacker-attack-mask-preview.jpg'
             }
           />
         </View>
         <View style={styles.decoration}>
+          <Text style={{width: '100%'}}>Please scan the QR code below to sign in for tutoring</Text>
           <Image style={styles.icon} src='src/img/tutorForm.png' />
         </View>
       </View>

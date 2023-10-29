@@ -2,16 +2,14 @@ import {useState, useRef, useEffect} from 'react';
 import {days, times} from '../util'
 import {update} from '../api-operations';
 
-import SelectTutor from '../util-components/SelectTutor';
 import Timetable from './Timetable'
 
-
-export default function Scheduling({info, fetchInfo}) {  
-  const [slots, setSlots] = useState();
-  const [selected, setSelected] = useState();
+export default function Scheduling({info, fetchInfo, selected}) {  
+  const cleanSlate = Array.from(Array(13), () => Array.from(Array(4), ()=>false));
+  const [slots, setSlots] = useState(cleanSlate);
   const tutorSlots = useRef();
   
-  const cleanSlate = Array.from(Array(13), () => Array.from(Array(4), ()=>false));
+  
 
   const handleReset = () => {
     const resetSlots = Array.from(tutorSlots.current);
@@ -21,7 +19,7 @@ export default function Scheduling({info, fetchInfo}) {
   const handleClear = () => {
     setSlots(cleanSlate);
   }
-
+/*
   const handleSelect = (option) => {
     if(option) {
       if(selected != option.value) {
@@ -39,7 +37,7 @@ export default function Scheduling({info, fetchInfo}) {
       setSelected();
     }
   };
-
+*/
   const handleUpdate = () => {
     const createSchedule = () => {
       const tutorDays = [];
@@ -72,15 +70,29 @@ export default function Scheduling({info, fetchInfo}) {
     const data = createSchedule();
     update(selected, [], data, fetchInfo);
   };
+
+  useEffect(() => {
+    if(selected) {
+      if(info[selected].schedule) {
+        setSlots(info[selected].schedule);
+        tutorSlots.current = JSON.parse(JSON.stringify(info[selected].schedule));
+      } else {
+        setSlots(cleanSlate);
+        tutorSlots.current = cleanSlate;
+      }
+    } else {
+      setSlots(cleanSlate);
+      tutorSlots.current = cleanSlate;
+    }
+  }, [selected]);
   return (
       <>
-        <SelectTutor info={info} handleSelect={handleSelect}/>
-        {selected && <main>          
-          <Timetable tutor={info[selected].name} slots={slots} setSlots = {setSlots}/>
-          <button style={{display: 'inline-block'}}  onClick={handleUpdate}>Update</button>
-          <button style={{display: 'inline-block'}}  onClick={handleReset}>Reset</button>
-          <button style={{display: 'inline-block'}}  onClick={handleClear}>Clear</button>
-        </main>} 
+        <main>          
+          <Timetable tutor={selected?info[selected].name:null} slots={slots} setSlots = {setSlots}/>
+          <button disabled={selected==null} type='button' style={{display: 'inline-block'}}  onClick={handleUpdate}>Update</button>
+          <button type='button' style={{display: 'inline-block'}}  onClick={handleReset}>Reset</button>
+          <button type='button' style={{display: 'inline-block'}}  onClick={handleClear}>Clear</button>
+        </main>
       </>     
   )
 }

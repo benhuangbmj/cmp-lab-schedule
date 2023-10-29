@@ -69,8 +69,8 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts) => {
     });
 }
 
-const update = async (targetKey, keys, value, fetchInfo) => {
-  const entryId = targetKey ? databaseId:backupId;
+const update = async (targetKey, keys, value, fetchInfo, backup=false) => {
+  const entryId = backup? backupId:databaseId;
   return fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`, {
     method: 'GET',
     headers: {

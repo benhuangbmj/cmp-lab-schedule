@@ -9,6 +9,7 @@ import bcrypt from 'bcryptjs';
 import SelectTutor from './util-components/SelectTutor';
 import IDCard from './IDcard/IDCard';
 import CardDisplay from './IDcard/CardDisplay';
+import Scheduling from './scheduling/Scheduling';
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
@@ -157,10 +158,10 @@ export default function Management({ info, fetchInfo }) {
     return (
       <span>
         <label>Change Profile Picture </label>
-        <input disabled = {(selected||newUsername)? false : true} type='file' accept='image/*' onChange={handleChangeProfile} />
-        <button type='button' disabled = {(selected||newUsername)? false : true} className="file-input-button" onClick={uploadPic}>{uploadStatus}</button>
-        <button type='button' disabled = {profile? false: true} style={{marginLeft: '5px'}} onClick={() => {handleRotate(true)} }>Rotate Clockwise</button>
-        <button type='button' disabled = {profile? false: true} style={{marginLeft: '5px'}} onClick={() => {handleRotate(false)} }>Rotate Counterclockwise</button>
+        <input disabled = {(loggedIn||newUsername)? false : true} type='file' accept='image/*' onChange={handleChangeProfile} />
+        <button type='button' disabled = {(loggedIn||newUsername)? false : true} className="file-input-button" onClick={uploadPic}>{uploadStatus}</button>
+        <button type='button' disabled = {(loggedIn && profile)? false: true} style={{marginLeft: '5px'}} onClick={() => {handleRotate(true)} }>Rotate Clockwise</button>
+        <button type='button' disabled = {(loggedIn && profile)? false: true} style={{marginLeft: '5px'}} onClick={() => {handleRotate(false)} }>Rotate Counterclockwise</button>
       </span>
     )
   }
@@ -191,13 +192,12 @@ export default function Management({ info, fetchInfo }) {
     data.links = links;
     if(data.password != "") {
       data.password = bcrypt.hashSync(data.password, 10);
+      setLoggedIn(false);
     } else {
       delete data.password;
     }
     data = Object.assign(dataScheme, data);
-    update(username, [], data, fetchInfo).then(() => {
-      setSelected(null);
-      reset(blankForm);
+    update(username, [], data, fetchInfo).then(() => {      
     });
   };
   const handleSelect = (currSelected) => {
@@ -224,7 +224,7 @@ export default function Management({ info, fetchInfo }) {
   const handleBackup = () => {
     const passcode = prompt("Please enter the passocde.");
     if(passcode === privilege) {
-      update(null, [], info, fetchInfo).then(()=>{
+      update(null, [], info, fetchInfo, true).then(()=>{
         alert("Backup Successful!");
       });
     } else {
@@ -257,10 +257,12 @@ export default function Management({ info, fetchInfo }) {
     displayInfo(selected);
   };
 
-  const testFunc = function() {
+  const handleDelete = function() {
     const confirm = prompt('Type "Confirm" to proceed to delete the user');
     if (confirm === 'Confirm') {
-      alert('This function is under construction.');
+      delete info[selected];
+      update(null,[],info,fetchInfo);
+      setSelected();
     } else {
       alert('Action terminated.');
     }
@@ -292,7 +294,7 @@ export default function Management({ info, fetchInfo }) {
             </div>
           ] : [
             <div key="profile" className='profile-container'>profile picture</div>, 
-            <div key="IDCard" className='card-holder'></div>
+            <div key="IDCard" className='card-holder'>ID card</div>
           ] }
       </div>
       <ChangeProfile />
@@ -317,17 +319,21 @@ export default function Management({ info, fetchInfo }) {
             }
           }
           )}     
-        </div>   
-          <label style={{display:'block'}}>courses: </label>
-          <div className='course-container'>
-            {courseOptions.map(e =><div key={e}><input type='checkbox' label={e} value={e} {...register('courses')} /><label className='small-label'>{e} </label></div>)}
-          </div>  
+        </div>
+          <div>
+            <label style={{display:'block'}}>courses: </label>
+            <div className='course-container'>
+              {courseOptions.map(e =><div key={e}><input type='checkbox' label={e} value={e} {...register('courses')} /><label className='small-label'>{e} </label></div>)}
+            </div>  
+          </div>    
         <button type='submit'>{selected ? "Update" : "Create"}</button>
         <button type='reset'>Reset</button>
-        <button type='button' disabled={selected ? false : true} onClick={testFunc}>Delete</button>
+        <button type='button' disabled={selected ? false : true} onClick={handleDelete}>Delete</button>
         <button type='button' onClick={handleBackup}>Backup</button >
       </form>
-      
+      <div>
+        <Scheduling info={info} fetchInfo={fetchInfo} selected={loggedIn?selected:null}/>
+      </div>
     </main>
   )
 }

@@ -43,7 +43,7 @@ export default function App() {
         <nav>
           <NavLink to="/">Schedule</NavLink> | <NavLink to="/management">Manage</NavLink> | <NavLink to="/experimental">Experimental</NavLink>
         </nav>
-        <Routes> {/* The components in Routes don't rerender properly. */}
+        <Routes> {}
           <Route path='/' element={<Schedule shift={shifts} courses={courseTutor} />} />
           <Route path='/management' element={<Management info={info} fetchInfo={fetchInfo} />} />
           <Route path='/experimental' element={< FrontendLab info={info} fetchInfo={fetchInfo} />}/>

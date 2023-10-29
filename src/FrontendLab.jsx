@@ -1,17 +1,22 @@
 import {useRef, useEffect, useState} from 'react';
 
-import Scheduling from './scheduling/Scheduling'
+import Scheduling from './scheduling/Scheduling';
 import CardDisplay from './IDcard/CardDisplay';
 
+const privilege = import.meta.env.VITE_PRIVILEGE;
   
 export default function FrontendLab({info, fetchInfo}) {
   const [display, setDisplay] = useState('none');
+  const [pass, setPass] = useState(null);
 
-  
-  return(
+  useEffect(() => {
+    const currPass = prompt('What\'s your pass?');
+    setPass(currPass === privilege);
+  }, []);
+    
+  return (
+    pass === true?
     <>      
-      <Scheduling info={info} fetchInfo={fetchInfo}  />
-      
       <button 
         type='button' 
         onClick={() => {
@@ -22,6 +27,9 @@ export default function FrontendLab({info, fetchInfo}) {
       <div style={{width: '100%', height: '100vh', display: display}}>
         <CardDisplay pageSize='LETTER' pageOrientation='portrait' info={info} toolbar={true}/>
       </div>      
-    </>
+    </> : pass === false?
+    <div>
+      <h1>Invalid pass</h1>
+    </div> : null
   )
 }
