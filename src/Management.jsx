@@ -160,6 +160,9 @@ export default function Management({ info, fetchInfo }) {
         <label>Change Profile Picture </label>
         <input disabled = {(loggedIn||newUsername)? false : true} type='file' accept='image/*' onChange={handleChangeProfile} />
         <button type='button' disabled = {(loggedIn||newUsername)? false : true} className="file-input-button" onClick={uploadPic}>{uploadStatus}</button>
+        <button type='button' disabled = {(loggedIn && profile)? false: true} style={{marginLeft: '5px'}} onClick={() => {
+        alert('This feature is under construction.')
+        } }>Remove</button>
         <button type='button' disabled = {(loggedIn && profile)? false: true} style={{marginLeft: '5px'}} onClick={() => {handleRotate(true)} }>Rotate Clockwise</button>
         <button type='button' disabled = {(loggedIn && profile)? false: true} style={{marginLeft: '5px'}} onClick={() => {handleRotate(false)} }>Rotate Counterclockwise</button>
       </span>
