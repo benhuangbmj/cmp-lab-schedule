@@ -217,7 +217,6 @@ export default function IDCard({ user, setRerender, canvas }) {
               user.profilePic && user.profilePic.url?
                 'https:' + user.profilePic.url :
               'https://www.messiah.edu/images/stained_glass_circle1_multicolor.jpg'
-                //'https://images.ctfassets.net/o0mxfnwxsmg0/4dgxIfA7J2Mf8r3oOj9NF5/f302b65565292fef34ebff268a96edfe/question-mark-hacker-attack-mask-preview.jpg'
             }
           />
         </View>

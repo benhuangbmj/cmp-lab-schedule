@@ -85,14 +85,14 @@ export default function Scheduling({info, fetchInfo, selected}) {
       tutorSlots.current = cleanSlate;
     }
   }, [selected]);
-  return (
-      <>
+  return (      
         <main>          
           <Timetable tutor={selected?info[selected].name:null} slots={slots} setSlots = {setSlots}/>
-          <button disabled={selected==null} type='button' style={{display: 'inline-block'}}  onClick={handleUpdate}>Update</button>
-          <button type='button' style={{display: 'inline-block'}}  onClick={handleReset}>Reset</button>
-          <button type='button' style={{display: 'inline-block'}}  onClick={handleClear}>Clear</button>
-        </main>
-      </>     
+          <div>
+            <button disabled={selected==null} type='button' style={{display: 'inline-block'}}  onClick={handleUpdate}>Update</button>
+            <button type='button' style={{display: 'inline-block'}}  onClick={handleReset}>Reset</button>
+            <button type='button' style={{display: 'inline-block'}}  onClick={handleClear}>Clear</button>
+          </div>          
+        </main>         
   )
 }

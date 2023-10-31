@@ -7,25 +7,29 @@
   line-height: 2.95in;
 }
 
+.card-profile-frame {
+  max-width: 550px;
+}
+
 .flexbox-row {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
-  align-items: center;
-  max-width: 550px;
+  align-items: center;  
   margin: auto;
 }
 
-form {  
-  width: 70%;
+form {
   margin: auto;
 }
 
 .input-holder {
-  max-width: 350px;
-  margin: auto;
+  max-width: 350px; 
   text-align: right;
+}
+.input-timetable-frame {
+   max-width: 650px;
 }
 
 .login {

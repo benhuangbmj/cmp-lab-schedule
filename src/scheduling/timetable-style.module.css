@@ -5,10 +5,8 @@
 }
 
 .container {
-  width: 50%;
-  max-width: 200px;
+  width:auto;  
   height: auto;
-  margin: auto;
-  font-size: .7em;
-  margin-bottom: 5px;
+  font-size: .75em;
+  margin-bottom: 5px; 
 }

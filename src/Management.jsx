@@ -288,41 +288,54 @@ export default function Management({ info, fetchInfo }) {
         </form>
         {errorsLogin.pw && <p className='errorMessage'>{errorsLogin.pw.message}</p>}
       </div>
-      <div className='flexbox-row'>
+      <div className='flexbox-row card-profile-frame'>
         {(selected && loggedIn)? 
           [
-            <img key='profile' className="profile-container" src={profile?profile:'https://images.ctfassets.net/o0mxfnwxsmg0/7wk9sXm2sQjMhg7pmyffqr/39c218f89506084b406222c6ee680905/question-mark-hacker-attack-mask-preview.jpg'} />,
+            <img key='profile' className="profile-container" src={profile?profile:'https://www.messiah.edu/images/stained_glass_circle1_multicolor.jpg'} />,
             <div key="IDCard" className='card-holder'>
               <CardDisplay pageSize={[220, 290]} pageOrientation='landscape' info={{user: info[selected]}} />
             </div>
           ] : [
-            <div key="profile" className='profile-container'>profile picture</div>, 
+            <div key="profile" className='profile-container'>
+              <span style={{position: 'absolute'}}>
+                profile
+              </span>
+              <span style={{position: 'relative', top: '20px'}}>
+                picture
+              </span>
+            </div>, 
             <div key="IDCard" className='card-holder'>ID card</div>
           ] }
       </div>
       <ChangeProfile />
       <form onSubmit={handleSubmit(handleUpdate)}>
-        <div className='input-holder'>
-          {['username'].concat(Object.keys(dataScheme)).map(e => {          
-            if (display.includes(e)) {
-              return (
-                e != 'links'? <p key={e}>
-                  <label>{e=='password'?'new passowrd':e}{e == 'username' && <sup style={{ color: "red" }}>*</sup>}: </label>
-                  {
-                    e == 'username' && selected ?
-                      <input readOnly type='text' className='read-only' name={e} {...register(e)} /> : e == "username" ?
-                        <>
-                          <input type='text' name={e} {...register(e, { required: "Username is required." })}/>
-                          {errors.username ? <p className='errorMessage'>{errors.username.message}</p> : null}
-                        </> :
-                        <input type={e=='password'?'password':"text"} name={e} {...register(e)} />
-                  }
-                </p> : Object.keys(dataScheme[e]).map(link => <p key={link}><label style={{textTransform: 'capitalize'}}>{link}: </label><input type='url' name={link} {...register(link)}/> </p>) 
-              )
+        <div className = 'flexbox-row input-timetable-frame'>
+          <div className='input-holder'>
+            {['username'].concat(Object.keys(dataScheme)).map(e => {          
+              if (display.includes(e)) {
+                return (
+                  e != 'links'? <p key={e}>
+                    <label>{e=='password'?'new passowrd':e}{e == 'username' && <sup style={{ color: "red" }}>*</sup>}: </label>
+                    {
+                      e == 'username' && selected ?
+                        <input readOnly type='text' className='read-only' name={e} {...register(e)} /> : e == "username" ?
+                          <>
+                            <input type='text' name={e} {...register(e, { required: "Username is required." })}/>
+                            {errors.username ? <p className='errorMessage'>{errors.username.message}</p> : null}
+                          </> :
+                          <input type={e=='password'?'password':"text"} name={e} {...register(e)} />
+                    }
+                  </p> : Object.keys(dataScheme[e]).map(link => <p key={link}><label style={{textTransform: 'capitalize'}}>{link}: </label><input type='url' name={link} {...register(link)}/> </p>) 
+                )
+              }
             }
-          }
-          )}     
+            )}     
+          </div>
+          <div>
+            <Scheduling info={info} fetchInfo={fetchInfo} selected={loggedIn?selected:null}/>
+          </div>
         </div>
+        
           <div>
             <label style={{display:'block'}}>courses: </label>
             <div className='course-container'>
@@ -334,9 +347,7 @@ export default function Management({ info, fetchInfo }) {
         <button type='button' disabled={selected ? false : true} onClick={handleDelete}>Delete</button>
         <button type='button' onClick={handleBackup}>Backup</button >
       </form>
-      <div>
-        <Scheduling info={info} fetchInfo={fetchInfo} selected={loggedIn?selected:null}/>
-      </div>
+      
     </main>
   )
 }
