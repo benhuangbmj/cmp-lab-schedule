@@ -44,6 +44,12 @@ export default function Management({ info, fetchInfo }) {
   const currUser = useRef();
   const newUsername = watch('username');
 
+  const resetAll = () => {
+    reset(blankForm);
+    resetLogin({pw: null});
+    setLoggedIn(false);
+  }
+  
   function ChangeProfile() {
     function handleChangeProfile(e) {
       setNewPic(e.target.files[0]);
@@ -197,18 +203,18 @@ export default function Management({ info, fetchInfo }) {
       data.password = bcrypt.hashSync(data.password, 10);
       setLoggedIn(false);
     } else {
-      delete data.password;
+      data.password = info[selected].password;
     }
+    data.lastUpdate = new Date().toString();
     data = Object.assign(dataScheme, data);
-    update(username, [], data, fetchInfo).then(() => {      
+    console.log(data);//delete
+    update(username, [], data, fetchInfo).then(() => {
+      if(!selected) {
+        resetAll();
+      }
     });
   };
-  const handleSelect = (currSelected) => {
-    const resetAll = () => {
-      reset(blankForm);
-      resetLogin({pw: null});
-      setLoggedIn(false);
-    }
+  const handleSelect = (currSelected) => {    
     if (currSelected) {
       const user = currSelected.value
       resetAll();
@@ -342,9 +348,9 @@ export default function Management({ info, fetchInfo }) {
               {courseOptions.map(e =><div key={e}><input type='checkbox' label={e} value={e} {...register('courses')} /><label className='small-label'>{e} </label></div>)}
             </div>  
           </div>    
-        <button type='submit'>{selected ? "Update" : "Create"}</button>
+        <button type='submit' disabled={!selected? false : loggedIn? false : true} >{selected ? "Update" : "Create"}</button>
         <button type='reset'>Reset</button>
-        <button type='button' disabled={selected ? false : true} onClick={handleDelete}>Delete</button>
+        <button type='button' disabled={loggedIn ? false : true} onClick={handleDelete}>Delete</button>
         <button type='button' onClick={handleBackup}>Backup</button >
       </form>
       
