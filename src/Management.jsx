@@ -287,6 +287,7 @@ export default function Management({ info, fetchInfo }) {
     <main>
       <div className="login">
         <SelectTutor info={info} handleSelect={handleSelect} />
+        {selected && <p>Last Update: {info[selected].lastUpdate}</p>}
         <form onSubmit={handleSubmitLogin(handleLogin)}>
           <label>password: </label>
           <input type='password' name='pw' {...registerLogin('pw', {required: 'Please enter your password.'})}>            

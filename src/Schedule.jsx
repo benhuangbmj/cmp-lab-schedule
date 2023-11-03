@@ -39,7 +39,7 @@ function Tutors({ info }) {
       {info[0].map((e, i) =>
         <div className="left-align" key={e}>
           <div className='profile-pic-small'>
-            <img  className="profilePic" src={info[1][i]} />
+            <img  className="profilePic" src={info[1][i]?info[1][i] : 'https://www.messiah.edu/images/4_see_your_possibilities_anew.jpg'} />
           </div>          
           <pre>{e}</pre>          
         </div>

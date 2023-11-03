@@ -128,6 +128,8 @@ export default function IDCard({ user, setRerender, canvas }) {
       flexWrap: 'wrap',
       justifyContent: "flex-start",
       textAlign: 'left',
+      maxHeight: ".415in",
+      overflow: "hidden",
     },
     icon: {
       width: '0.6in',
@@ -205,9 +207,9 @@ export default function IDCard({ user, setRerender, canvas }) {
         </View>
         <View style={styles.information}>
           <Text style={{ fontSize: '20pt', fontFamily: "Priori-Black", fontWeight: "normal", }}>{user.name + ' (' + user.subject + ')'}</Text>
-          <Text >{user.day.map((e, i) => `${e} ${user.time[i]}`)}</Text>
+          <Text style={{maxHeight: ".4in", overflow:'hidden'}}>{user.day.map((e, i) => `${e} ${user.time[i]}`)}</Text>
           <View style={styles.subjects}>
-            {user.courses && user.courses.map(e => <Text key={e} style={{ width: '33%' }}>{e}</Text>)}
+            {user.courses && user.courses.toReversed().map(e => <Text key={e} style={{ width: '33%' }}>{e}</Text>)}
           </View>
         </View>
         <View style={styles.profile}>
@@ -221,7 +223,7 @@ export default function IDCard({ user, setRerender, canvas }) {
           />
         </View>
         <View style={styles.decoration}>
-          <Text style={{width: '100%'}}>Please scan the QR code below to sign in for tutoring</Text>
+          <Text style={{width: '100%', paddingRight: '2px'}}>Please scan the QR code below to sign in for tutoring</Text>
           <Image style={styles.icon} src='src/img/tutorForm.png' />
         </View>
       </View>
