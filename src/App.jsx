@@ -1,7 +1,8 @@
 import './App.css';
 import { useState, useEffect, useCallback} from 'react';
-import {sortByLastName} from './util';
+//import {sortByLastName} from './util';
 import { Route, Routes, Link, NavLink } from "react-router-dom";
+
 import {fetchInfo as preFetchInfo} from './api-operations.js'
 
 import Schedule from './Schedule';
@@ -14,12 +15,12 @@ const cmaToken = import.meta.env.VITE_CMA_TOKEN;
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 
-export default function App() {  
-  
+export default function App() { 
   const [info, setInfo] = useState(null);
   const [courseTutor, setCourseTutor] = useState(null);
   const [shifts, setShifts] = useState(null);
   const [passed, setPassed] = useState(false);
+
 
   const fetchInfo = useCallback(async () => {
     return preFetchInfo(setCourseTutor, setInfo, setShifts);
@@ -44,9 +45,9 @@ export default function App() {
         <nav>
           <NavLink to="/">Schedule</NavLink> | <NavLink to="/management">Manage</NavLink> | <NavLink to="/experimental">Experimental</NavLink>
         </nav>
-        <Routes> {}
+        <Routes>
           <Route path='/' element={<Schedule shift={shifts} courses={courseTutor} />} />
-          <Route path='/management' element={<Management info={info} fetchInfo={fetchInfo} />} />
+          <Route path='/management' element={<Management info={info} fetchInfo={fetchInfo}/>} />
           <Route path='/experimental' element={< FrontendLab info={info} fetchInfo={fetchInfo} passed={passed} setPassed = {setPassed} />}/>
         </Routes>
       </>

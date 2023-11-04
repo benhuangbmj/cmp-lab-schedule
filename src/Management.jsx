@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { getSingleAsset, update } from './api-operations';
 import { scheme as dataScheme, courseOptions, blankForm } from './util';
-import {PDFViewer, Document, Page, Text, View, StyleSheet} from '@react-pdf/renderer';
+//import {PDFViewer, Document, Page, Text, View, StyleSheet} from '@react-pdf/renderer';
 import bcrypt from 'bcryptjs';
 
 import SelectTutor from './util-components/SelectTutor';
@@ -17,8 +17,6 @@ const cmaToken = import.meta.env.VITE_CMA_TOKEN;
 const privilege = import.meta.env.VITE_PRIVILEGE;
 
 const display = ['username','name','subject', 'links', 'password'];
-
-
 
 export default function Management({ info, fetchInfo }) {
   const {
@@ -284,7 +282,7 @@ export default function Management({ info, fetchInfo }) {
     }
   }, [newPic]);
   return (
-    <main>
+    <main>      
       <div className="login">
         <SelectTutor info={info} handleSelect={handleSelect} />
         {selected && <p>Last Update: {info[selected].lastUpdate}</p>}
