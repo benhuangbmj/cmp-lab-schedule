@@ -1,5 +1,5 @@
 import './App.css';
-import { forwardRef, useRef } from 'react';
+import { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 
 const Schedule = ({ shift, courses }) => {

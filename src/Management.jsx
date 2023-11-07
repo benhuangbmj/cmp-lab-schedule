@@ -46,13 +46,15 @@ export default function Management({ info, fetchInfo }) {
     reset(blankForm);
     resetLogin({pw: null});
     setLoggedIn(false);
+    setNewPic();
+    setProfile();
   }
   
   function ChangeProfile() {
     function handleChangeProfile(e) {
       setNewPic(e.target.files[0]);
     }
-    function uploadPic() {
+    async function uploadPic() {
       setUploadStatus('Uploading ...');
       const deleteAsset = async function(assetId) {
         let currAsset = await fetch(`https://api.contentful.com/spaces/${spaceId}/environments/master/assets/${assetId}`, {
@@ -63,20 +65,24 @@ export default function Management({ info, fetchInfo }) {
         });
         currAsset = await currAsset.json();
         const currVersion = currAsset.sys.version;
-        await fetch(`https://api.contentful.com/spaces/${spaceId}/environments/master/assets/${assetId}/published`, {
+        const unpublished = await fetch(`https://api.contentful.com/spaces/${spaceId}/environments/master/assets/${assetId}/published`, {
           method: 'DELETE',
           headers: {
             Authorization: `Bearer ${cmaToken}`,
             "X-Contentful-Version": currVersion,
           }
         });
-        let deletedAsset = await fetch(`https://api.contentful.com/spaces/${spaceId}/environments/master/assets/${assetId}`, {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${cmaToken}`,
-            "X-Contentful-Version": currVersion,
-          }
-        });
+        if (unpublished.ok) {
+          var deletedAsset = await fetch(`https://api.contentful.com/spaces/${spaceId}/environments/master/assets/${assetId}`, {
+            method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ${cmaToken}`,
+              "X-Contentful-Version": currVersion,
+            }
+          });
+          return deletedAsset;
+        }
+        
       }
       const createAsset = async function(file, title) {
         let uploaded = await fetch(`https://upload.contentful.com/spaces/${spaceId}/uploads`, {
@@ -152,18 +158,20 @@ export default function Management({ info, fetchInfo }) {
         }
       }
       const tutor = info[selected];
-      if (tutor.profilePic) {
-        deleteAsset(tutor.profilePic.id);
+      if (tutor.profilePic && tutor.profilePic.id) {
+        var deleted = await deleteAsset(tutor.profilePic.id);
       } else {
-        tutor.profilePic = {};
+        var deleted = true;
       }
-      createAsset(newPic, selected);
+      if (deleted) {
+        createAsset(newPic, selected);
+      }
     }
     return (
       <span>
         <label>Change Profile Picture </label>
         <input disabled = {(loggedIn||newUsername)? false : true} type='file' accept='image/*' onChange={handleChangeProfile} />
-        <button type='button' disabled = {(loggedIn||newUsername)? false : true} className="file-input-button" onClick={uploadPic}>{uploadStatus}</button>
+        <button type='button' disabled = {(loggedIn && newPic)? false : true} className="file-input-button" onClick={uploadPic}>{uploadStatus}</button>
         <button type='button' disabled = {(loggedIn && profile)? false: true} style={{marginLeft: '5px'}} onClick={() => {
         alert('This feature is under construction.')
         } }>Remove</button>
@@ -285,13 +293,14 @@ export default function Management({ info, fetchInfo }) {
     <main>      
       <div className="login">
         <SelectTutor info={info} handleSelect={handleSelect} />
-        {selected && <p>Last Update: {info[selected].lastUpdate}</p>}
+        
         <form onSubmit={handleSubmitLogin(handleLogin)}>
           <label>password: </label>
-          <input type='password' name='pw' {...registerLogin('pw', {required: 'Please enter your password.'})}>            
+          <input style={{marginTop: '1rem'}} type='password' name='pw' {...registerLogin('pw', {required: 'Please enter your password.'})}>            
           </input> <button disabled={selected == null || info[selected].password == null} type='submit'>Log in</button>          
         </form>
         {errorsLogin.pw && <p className='errorMessage'>{errorsLogin.pw.message}</p>}
+        {selected && <p style={{border: '1px solid black'}}>Last Update: {info[selected].lastUpdate}</p>}
       </div>
       <div className='flexbox-row card-profile-frame'>
         {(selected && loggedIn)? 
