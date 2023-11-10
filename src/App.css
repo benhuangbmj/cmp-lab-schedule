@@ -11,6 +11,11 @@
   max-width: 550px;
 }
 
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);  
+}
+
 .flexbox-row {
   display: flex;
   flex-direction: row;
@@ -76,8 +81,8 @@ pre {
 
 .qr-code {
   display: inline-block;
-  width: 1.5in;
-  height: 1.5in;
+  width: 1in;
+  height: 1in;
   margin: 1rem 1in 1rem 1in;
 }
 
@@ -99,8 +104,8 @@ ul {
 }
 
 .profile-pic-small {
-  height: 3rem;
-  width: 2.4rem;
+  height: 2rem;
+  width: 1.6rem;
   display: inline-block;
   margin-right: .5rem;
   text-align: left;
@@ -116,8 +121,8 @@ ul {
 
 .profile-container {
   display: inline-block;
-  width: 1.2in;
-  height: 1.6in;
+  width: 0.9in;
+  height: 1.2in;
   border: 1px solid black;
   margin: 1rem auto;
   line-height: 1.6in;  

@@ -65,9 +65,9 @@ function Personnel({ courses }) {
   return (
     <div>
       <h2 style={{ 'textAlign': 'left', 'paddingLeft': '1rem' }}>Who can help you?</h2>
-      <div className='flexbox-row' style={{textAlign: 'left'}}>
+      <div className="course-grid">
         {courses.map(e => (
-          <pre key={e}>{e}</pre>
+          <pre key={e} style={{width: '100%', textAlign: 'left', fontSize: ".7rem", height:"100%"}}>{e}</pre>
         ))}
       </div>      
     </div>
