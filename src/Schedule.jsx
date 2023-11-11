@@ -67,7 +67,7 @@ function Personnel({ courses }) {
       <h2 style={{ 'textAlign': 'left', 'paddingLeft': '1rem' }}>Who can help you?</h2>
       <div className="course-grid">
         {courses.map(e => (
-          <pre key={e} style={{width: '100%', textAlign: 'left', fontSize: ".7rem", height:"100%"}}>{e}</pre>
+          <pre key={e} style={{width: '100%', textAlign: 'left', fontSize: "1rem", height: "100%"}}>{e}</pre>
         ))}
       </div>      
     </div>
