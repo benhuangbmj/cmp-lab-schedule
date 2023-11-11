@@ -293,14 +293,13 @@ export default function Management({ info, fetchInfo }) {
     <main>      
       <div className="login">
         <SelectTutor info={info} handleSelect={handleSelect} />
-        
+        {selected? <p style={{width: '520px', textAlign: 'left', margin: 'auto'}}>Last Update: {info[selected].lastUpdate}</p>:<p>&nbsp;</p>}
         <form onSubmit={handleSubmitLogin(handleLogin)}>
           <label>password: </label>
           <input style={{marginTop: '1rem'}} type='password' name='pw' {...registerLogin('pw', {required: 'Please enter your password.'})}>            
           </input> <button disabled={selected == null || info[selected].password == null} type='submit'>Log in</button>          
         </form>
-        {errorsLogin.pw && <p className='errorMessage'>{errorsLogin.pw.message}</p>}
-        {selected && <p style={{border: '1px solid black'}}>Last Update: {info[selected].lastUpdate}</p>}
+        {errorsLogin.pw? <p className='errorMessage'>{errorsLogin.pw.message}</p> : <p className='errorMessage'>&nbsp;</p>}        
       </div>
       <div className='flexbox-row card-profile-frame'>
         {(selected && loggedIn)? 
