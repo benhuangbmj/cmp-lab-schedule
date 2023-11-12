@@ -37,8 +37,8 @@ const Schedule = ({ shift, courses }) => {
         </table>
         <Personnel courses={courses} />
         <p>Follow us on social media</p>
-        <img className='qr-code' src='src/img/static-qr-code-6939aa416818b250434bfed8a036658a.png'/>
-        <img className='qr-code' src='src/img/static-qr-code-c9a3c95af7c11e11812547307a750c05.png'/>
+        <img className='qr-code' src='src/img/static-qr-code-6939aa416818b250434bfed8a036658a.png' />
+        <img className='qr-code' src='src/img/static-qr-code-c9a3c95af7c11e11812547307a750c05.png' />
       </div>
       <button type='button' onClick={handlePrint}>Print the schedule</button>
     </main>
@@ -66,10 +66,13 @@ function Personnel({ courses }) {
     <div>
       <h2 style={{ 'textAlign': 'left', 'paddingLeft': '1rem' }}>Who can help you?</h2>
       <div className="course-grid">
-        {courses.map(e => (
-          <pre key={e} style={{width: '100%', textAlign: 'left',height: "100%"}}>{e}</pre>
-        ))}
-      </div>      
+        {courses.map(e => {
+          const arr = e.split(':');
+          return (
+            <pre key={e} style={{ width: '100%', textAlign: 'left', height: "100%" }}><strong>{arr[0]}</strong>:{arr[1]} </pre>
+          )
+        })}
+      </div>
     </div>
   )
 }
