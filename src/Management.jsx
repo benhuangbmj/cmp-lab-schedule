@@ -10,6 +10,7 @@ import SelectTutor from './util-components/SelectTutor';
 import IDCard from './IDcard/IDCard';
 import CardDisplay from './IDcard/CardDisplay';
 import Scheduling from './scheduling/Scheduling';
+import ResetPassword from './management/ResetPassword';
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
@@ -297,7 +298,9 @@ export default function Management({ info, fetchInfo }) {
         <form onSubmit={handleSubmitLogin(handleLogin)}>
           <label>password: </label>
           <input style={{marginTop: '1rem'}} type='password' name='pw' {...registerLogin('pw', {required: 'Please enter your password.'})}>            
-          </input> <button disabled={selected == null || info[selected].password == null} type='submit'>Log in</button>          
+          </input>
+          <button disabled={selected == null || info[selected].password == null} type='submit'>Log in</button>
+          <ResetPassword />
         </form>
         {errorsLogin.pw? <p className='errorMessage'>{errorsLogin.pw.message}</p> : <p className='errorMessage'>&nbsp;</p>}        
       </div>
