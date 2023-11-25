@@ -300,7 +300,7 @@ export default function Management({ info, fetchInfo }) {
           <input style={{marginTop: '1rem'}} type='password' name='pw' {...registerLogin('pw', {required: 'Please enter your password.'})}>            
           </input>
           <button disabled={selected == null || info[selected].password == null} type='submit'>Log in</button>
-          <ResetPassword disabled={selected == null} user={selected} fetchInfo={fetchInfo} />
+          <ResetPassword disabled={selected == null} user={selected} fetchInfo={fetchInfo} info={info}/>
         </form>
         {errorsLogin.pw? <p className='errorMessage'>{errorsLogin.pw.message}</p> : <p className='errorMessage'>&nbsp;</p>}        
       </div>
