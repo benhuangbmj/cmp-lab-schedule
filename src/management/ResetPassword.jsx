@@ -22,12 +22,17 @@ export default function ResetPassword({disabled, user, fetchInfo, info}) {
       <button type='button' onClick={()=>setOpen(true)}>Open</button>{//delete
       }
       <button type='button' onClick={() => {
-        emailjs.send(serviceId, templateId, {message: 'testing'}, emailjsPublicKey)
-        .then(function(response) {
-           console.log('SUCCESS!', response.status, response.text);
-        }, function(error) {
-           console.log('FAILED...', error);
-        });
+        const pass = promt("Passcode: ");
+        if(pass == import.meta.env.VITE_PRIVILEGE) {
+          emailjs.send('default_service', templateId, {message: 'testing', recipient: 'bhuang@messiah.edu', reply_to: 'bhuang@messiah.edu'}, emailjsPublicKey)
+          .then(function(response) {
+             console.log('SUCCESS!', response.status, response.text);
+          }, function(error) {
+             console.log('FAILED...', error);
+          });
+        } else {
+          alert("failed.");
+        }
       } }>Send email</button> {//delete
       }
       <Popup open={open} closeOnDocumentClick={false}>
