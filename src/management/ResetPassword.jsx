@@ -1,4 +1,6 @@
 import {useState, useRef} from 'react';
+import {useSelector, useDispatch} from "react-redux";
+import {fetchData} from '/src/reducers/userDataReducer';
 
 import {update} from '/src/api-operations';
 import sendEmail from './sendEmail';
@@ -11,7 +13,6 @@ import 'reactjs-popup/dist/index.css';
 const templateId = import.meta.env.VITE_EMAIL_TEMPLATE_ID;
 const emailjsPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 const serviceId = import.meta.env.VITE_EMAIL_SERVICE_ID;
-console.log(serviceId, templateId, emailjsPublicKey);//delete
 
 export default function ResetPassword({disabled, user, fetchInfo, info}) {
   const [open,setOpen] = useState(false);
