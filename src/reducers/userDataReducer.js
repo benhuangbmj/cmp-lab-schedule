@@ -5,10 +5,10 @@ export const userDataSlice = createSlice({
     value: null
   },
   reducers: {
-    fetchData: state => {
-      state.value = "Hello World"
+    updateUserData: (state, action) => {
+      state.value = action.payload;
     }
   }
 })
-export const {fetchData} = userDataSlice.actions
+export const {updateUserData} = userDataSlice.actions
 export default userDataSlice.reducer
