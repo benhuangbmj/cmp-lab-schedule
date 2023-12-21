@@ -1,6 +1,7 @@
 import './App.css';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useReactToPrint } from 'react-to-print';
+import { manageStore } from './api-operations';
 
 const Schedule = ({ shift, courses }) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
@@ -9,6 +10,10 @@ const Schedule = ({ shift, courses }) => {
   const handlePrint = useReactToPrint({
     content: () => toPrint.current
   })
+
+  useEffect(() => {
+    manageStore();
+  }, [])
   return (
     <main>
       <div ref={toPrint} style={{ textAlign: 'center' }}>
