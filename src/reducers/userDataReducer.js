@@ -13,10 +13,13 @@ export const userDataSlice = createSlice({
   },
   reducers: {
     updateUserData: (state, action) => {
-      console.log('state: ', state);//delete
-      console.log('action: ', action);//delete
       state.value = action.payload;
     }
+  },
+  extraReducers(builder) {
+    builder.addCase(fetchUserData.fulfilled, (state, action) => {
+      state.value = action.payload;
+    })
   }
 })
 
