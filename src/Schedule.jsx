@@ -1,9 +1,7 @@
 import './App.css';
 import { useRef, useEffect } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { manageStore } from './api-operations';//delete
-import { useSelector, useDispatch } from 'react-redux';
-import {fetchUserData} from './reducers/userDataReducer';
+import { useSelector, useDispatch } from 'react-redux';//delete
 
 const Schedule = ({ shift, courses }) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
@@ -12,16 +10,15 @@ const Schedule = ({ shift, courses }) => {
   const handlePrint = useReactToPrint({
     content: () => toPrint.current
   })
-  const userData = useSelector(state => state.userData.value);
-  const dispatch = useDispatch();
-  
-  useEffect(() => {
-    dispatch(fetchUserData());
-  }, [])
+  //delete below
+  const userData = useSelector(state => state.userData.value);  
 
   useEffect(() => {
-    console.log('userData', userData);
+    for(let key in userData){
+      console.log(key, userData[key])
+    }
   }, [userData])
+  //delete above
   return (
     <main>
       <div ref={toPrint} style={{ textAlign: 'center' }}>

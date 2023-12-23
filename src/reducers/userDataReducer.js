@@ -9,7 +9,8 @@ const backupId = import.meta.env.VITE_BACKUP_ID;
 export const userDataSlice = createSlice({
   name: "userData",
   initialState: {
-    value: null
+    value: null,
+    status: 'idle',
   },
   reducers: {
     updateUserData: (state, action) => {
@@ -19,6 +20,7 @@ export const userDataSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(fetchUserData.fulfilled, (state, action) => {
       state.value = action.payload;
+      state.status = 'succeeded';
     })
   }
 })
@@ -40,7 +42,7 @@ export const fetchUserData = createAsyncThunk('userData/fetchUserData', async ()
     body: JSON.stringify({ query }),
   })
   response = await response.json();
-  return response.data;
+  return response.data.tutorsCollection.items[0].tutorInfo;
 })
 
 export const {updateUserData} = userDataSlice.actions

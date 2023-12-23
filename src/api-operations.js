@@ -1,20 +1,10 @@
 import { sortByLastName, days } from './util'
-import store from './store'//delete
-import {updateUserData} from './reducers/userDataReducer'//delete
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const cmaToken = import.meta.env.VITE_CMA_TOKEN;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 const databaseId = import.meta.env.VITE_DATABASE_ID;
 const backupId = import.meta.env.VITE_BACKUP_ID;
-
-
-//delete the following
-const manageStore = () => {
-  store.dispatch(updateUserData('hello world!'));
-  console.log(store.getState());
-}
-//delete the above
 
 const getSingleAsset = async function(assetId) {
   let asset = await fetch(`https://api.contentful.com/spaces/${spaceId}/environments/master/assets/${assetId}`, {
@@ -130,4 +120,4 @@ const update = async (targetKey, keys, value, fetchInfo, backup=false) => {
     });
 };
 
-export { getSingleAsset, update, fetchInfo, manageStore };//delete manageStore
+export { getSingleAsset, update, fetchInfo};
