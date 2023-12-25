@@ -7,10 +7,12 @@ import { scheme as dataScheme, courseOptions, blankForm } from './util';
 import bcrypt from 'bcryptjs';
 
 import SelectTutor from './util-components/SelectTutor';
-import IDCard from './IDcard/IDCard';
+//import IDCard from './IDcard/IDCard';
 import CardDisplay from './IDcard/CardDisplay';
 import Scheduling from './scheduling/Scheduling';
 import ResetPassword from './management/ResetPassword';
+
+import sendEmail from '/src/management/sendEmail';
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
@@ -268,6 +270,9 @@ export default function Management({ info, fetchInfo }) {
       } else {
         alert('Log in successfully!');
         setLoggedIn(true);
+        const now = new Date();
+        sendEmail('bhuang', `User ${selected} logged in at ${now.toLocaleString("en-US", {timeZone: "America/New_York"})}.`)
+        
       }
     }
     displayInfo(selected);

@@ -2,6 +2,7 @@ import {useRef, useEffect, useState} from 'react';
 
 import Scheduling from './scheduling/Scheduling';
 import CardDisplay from './IDcard/CardDisplay';
+import Progress from '/src/progress/Progress';
 
 const privilege = import.meta.env.VITE_PRIVILEGE;
   
@@ -27,7 +28,8 @@ export default function FrontendLab({info, fetchInfo, passed, setPassed}) {
       </button>
       <div style={{width: '100%', height: '100vh', display: display}}>
         <CardDisplay pageSize='LETTER' pageOrientation='portrait' info={info} toolbar={true}/>
-      </div>      
+      </div>
+      <Progress />
     </> : passed === false?
     <div>
       <h1>Invalid pass</h1>
