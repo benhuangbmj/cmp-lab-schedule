@@ -35,7 +35,6 @@ export default function CreateTask() {
     },
   ];
   const handleCreateTask = (data) => {
-    console.log(JSON.stringify(data));
     fetch('https://backend-lab.manifold1985.repl.co/create-task', {
       method: 'POST',
       headers: {

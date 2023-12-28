@@ -1,16 +1,20 @@
 import './App.css';
+import {io} from 'socket.io-client';
 import { useState, useEffect, useCallback} from 'react';
 import { Route, Routes, Link, NavLink } from "react-router-dom";
-import { useDispatch } from 'react-redux';
-import {fetchUserData} from './reducers/userDataReducer';
+import {useSelector, useDispatch} from 'react-redux';
+import {selectTasks, updateTasks} from '/src/reducers/tasksReducer';
 
 import {fetchInfo as preFetchInfo} from './api-operations.js'
+
 
 import Schedule from './Schedule';
 import Management from './Management';
 import FrontendLab from './FrontendLab';
 
-export default function App() { 
+export default function App() {
+  const socket = io('https://backend-lab.manifold1985.repl.co');
+
   const [info, setInfo] = useState(null);
   const [courseTutor, setCourseTutor] = useState(null);
   const [shifts, setShifts] = useState(null);
@@ -25,9 +29,19 @@ export default function App() {
   useEffect(() => {
     if (!info) {
       fetchInfo();
-      dispatch(fetchUserData());
     }
   }, []);
+
+  useEffect(() => {
+    socket.emit('fetchDisplay');
+    socket.on('receiveDisplay', (data) => {
+      dispatch(updateTasks(data));
+    });
+  },[]);
+
+  useEffect(() => {
+    if(info) console.log(info.bhuang);
+  }, [info]);//delete
   
   if (!info) {
     return (

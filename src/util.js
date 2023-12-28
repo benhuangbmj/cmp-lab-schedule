@@ -76,4 +76,5 @@ const sortByLastName = (arr, levels) => {
   });
 }
 
-export { sortByLastName, days, times, scheme, courseOptions, icons, makeLogo, blankForm };
+export { sortByLastName, days, times, scheme, courseOptions, icons, makeLogo, blankForm,};
+

@@ -40,6 +40,8 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts) => {
       const courseMap = new Map();
       for (let student in tutorInfo) {
         const currInfo = tutorInfo[student];
+        delete currInfo.password;
+        delete currInfo.resetPassword;
 
         for (let i = 0; i < currInfo.day.length; i++) {
           const day = currInfo.day[i];
