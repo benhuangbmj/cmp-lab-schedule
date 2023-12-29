@@ -64,6 +64,10 @@ th, td {
   border: 1px solid;
 }
 
+.topnav-right {
+  float: right;
+}
+
 pre {  
   font-family: Times, Monospace;
   display: inline-block;

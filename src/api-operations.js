@@ -71,6 +71,27 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts) => {
     });
 }
 
+export const fetchPassword = async(user) => {
+  const query = `{
+    tutorsCollection {
+      items {
+        tutorInfo
+      }
+    }
+  }`;
+  let userData = await fetch(`https://graphql.contentful.com/content/v1/spaces/${spaceId}/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ query }),
+  })
+  userData = await userData.json();
+  userData = userData.data.tutorsCollection.items[0].tutorInfo[user];
+  return userData.password;
+}
+
 const update = async (targetKey, keys, value, fetchInfo, backup=false) => {
   const entryId = backup? backupId:databaseId;
   return fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`, {

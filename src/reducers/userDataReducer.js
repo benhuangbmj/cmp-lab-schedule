@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const cmaToken = import.meta.env.VITE_CMA_TOKEN;
@@ -9,17 +9,17 @@ const backupId = import.meta.env.VITE_BACKUP_ID;
 export const userDataSlice = createSlice({
   name: "userData",
   initialState: {
-    value: null,
+    items: null,
     status: 'idle',
   },
   reducers: {
     updateUserData: (state, action) => {
-      state.value = action.payload;
+      state.items = action.payload;
     }
   },
   extraReducers(builder) {
     builder.addCase(fetchUserData.fulfilled, (state, action) => {
-      state.value = action.payload;
+      state.items = action.payload;
       state.status = 'succeeded';
     })
   }
@@ -42,8 +42,15 @@ export const fetchUserData = createAsyncThunk('userData/fetchUserData', async ()
     body: JSON.stringify({ query }),
   })
   response = await response.json();
-  return response.data.tutorsCollection.items[0].tutorInfo;
+  const output = response.data.tutorsCollection.items[0].tutorInfo;
+  for (let user in output) {
+    const currUser = output[user];
+    delete currUser.password;
+    delete currUser.resetPassword;
+  }
+  return output;
 })
 
+export const selectUserData = (state) => state.userData;
 export const {updateUserData} = userDataSlice.actions
 export default userDataSlice.reducer
