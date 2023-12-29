@@ -1,10 +1,16 @@
 import './App.css';
+
+import bcrypt from 'bcryptjs';
+
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+
 import { getSingleAsset, update } from './api-operations';
 import { scheme as dataScheme, courseOptions, blankForm } from './util';
 //import {PDFViewer, Document, Page, Text, View, StyleSheet} from '@react-pdf/renderer';
-import bcrypt from 'bcryptjs';
+
+
 
 import SelectTutor from './util-components/SelectTutor';
 //import IDCard from './IDcard/IDCard';
@@ -40,8 +46,8 @@ export default function Management({ info, fetchInfo }) {
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState('Upload');
   const [profile, setProfile] = useState();
-  const [selected, setSelected] = useState();
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [selected, setSelected] = useState(useSelector(state => state.active.user));
+  const [loggedIn, setLoggedIn] = useState(true);
   const currUser = useRef();
   const newUsername = watch('username');
 
@@ -295,6 +301,10 @@ export default function Management({ info, fetchInfo }) {
       setProfile(newPicURL);
     }
   }, [newPic]);
+
+  useEffect(() => {
+    displayInfo(selected);
+  }, [])
   return (
     <main>      
       <div className="login">

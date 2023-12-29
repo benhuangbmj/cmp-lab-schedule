@@ -2,9 +2,11 @@ import {useState, useRef} from 'react';
 
 import {update} from '/src/api-operations';
 import sendEmail from './sendEmail';
+import {generateVerificationCode} from '/src/util.js';
 import Popup from 'reactjs-popup';
 import bcrypt from 'bcryptjs';
 import 'reactjs-popup/dist/index.css';
+
 
 export default function ResetPassword({disabled, user, fetchInfo, info}) {
   const [open,setOpen] = useState(false);
@@ -34,19 +36,6 @@ export default function ResetPassword({disabled, user, fetchInfo, info}) {
       </Popup>
     </>
   )
-}
-
-const generateVerificationCode = () => {
-  const codeArr = Array(4).fill();
-  codeArr.forEach((e,i) => {
-    codeArr[i] = Math.floor(Math.random() * 10);    
-  });
-  const code = codeArr.join('');
-  const output = {
-    code: code,
-    generatedTime: new Date().getTime()
-  };
-  return output;
 }
 
 const handleSubmit = (info, user, value, fetchInfo) => {

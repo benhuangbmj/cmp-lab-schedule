@@ -71,7 +71,7 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts) => {
     });
 }
 
-export const fetchPassword = async(user) => {
+export const fetchKey = async (user, key) => {
   const query = `{
     tutorsCollection {
       items {
@@ -89,11 +89,11 @@ export const fetchPassword = async(user) => {
   })
   userData = await userData.json();
   userData = userData.data.tutorsCollection.items[0].tutorInfo[user];
-  return userData.password;
+  return userData[key];
 }
 
-const update = async (targetKey, keys, value, fetchInfo, backup=false) => {
-  const entryId = backup? backupId:databaseId;
+const update = async (targetKey, keys, value, fetchInfo, backup = false) => {
+  const entryId = backup ? backupId : databaseId;
   return fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`, {
     method: 'GET',
     headers: {
@@ -102,8 +102,8 @@ const update = async (targetKey, keys, value, fetchInfo, backup=false) => {
   })
     .then(res => res.json())
     .then(res => {
-      const currVersion = res.sys.version;      
-      if(targetKey != null) {
+      const currVersion = res.sys.version;
+      if (targetKey != null) {
         let currLevel = res.fields.tutorInfo['en-US'];
         keys.forEach(e => {
           currLevel = currLevel[e];
@@ -143,4 +143,48 @@ const update = async (targetKey, keys, value, fetchInfo, backup=false) => {
     });
 };
 
-export { getSingleAsset, update, fetchInfo};
+export const update2_0 = async (targetKey, keys, value) => {
+  const entryId = databaseId;
+  let res = await fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${cmaToken}`
+    }
+  });
+  res = await res.json();
+  const currVersion = res.sys.version;
+  if (targetKey != null) {
+    let currLevel = res.fields.tutorInfo['en-US'];
+    keys.forEach(e => {
+      currLevel = currLevel[e];
+    });
+    currLevel[targetKey] = value;
+  } else {
+    res.fields.tutorInfo['en-US'] = value;
+  }
+  res = await fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${cmaToken}`,
+      "Content-Type": 'application/vnd.contentful.management.v1+json',
+      "X-Contentful-Version": currVersion,
+    },
+    body: JSON.stringify(res),
+  });
+  res = await res.json();
+  const newVersion = res.sys.version;
+  res = await fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}/published`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${cmaToken}`,
+      "X-Contentful-Version": newVersion,
+    },
+  });
+  if (res.ok) {
+    return res.status;
+  } else {
+    throw Error(res.status);
+  }
+}
+
+export { getSingleAsset, update, fetchInfo };

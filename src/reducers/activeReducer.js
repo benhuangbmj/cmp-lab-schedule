@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 export const activeSlice = createSlice(
   {
@@ -15,5 +15,5 @@ export const activeSlice = createSlice(
 );
 
 export const selectActive = (state) => state.active;
-export const {updateActive} = activeSlice.actions;
+export const { updateActive } = activeSlice.actions;
 export default activeSlice.reducer;
