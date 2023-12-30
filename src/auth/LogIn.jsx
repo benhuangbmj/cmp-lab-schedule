@@ -5,11 +5,12 @@ import bcrypt from 'bcryptjs';
 import { generateVerificationCode } from '/src/util.js';
 import { update2_0 } from '/src/api-operations.js';
 
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import { useForm } from 'react-hook-form';
 import {useSelector, useDispatch} from 'react-redux';
 import {selectUserData} from '/src/reducers/userDataReducer.js';
 import {selectActive, updateActive} from '/src/reducers/activeReducer.js';
+import {useLocation, Navigate} from 'react-router-dom';
 
 import {fetchKey} from '/src/api-operations.js';
 
@@ -22,13 +23,14 @@ export default function LogIn() {
     handleSubmit: handleSubmitLogin,
     reset: resetLogin,
     formState: {errors: errorsLogin},
-    watch: watchLogin
   } = useForm();
   const dispatch = useDispatch();
 
-  const currUser = watchLogin('username');
+  const [redirect, setRedirect] = useState(false);
+
   const userData = useSelector(selectUserData).items;
   const active = useSelector(selectActive);
+  const location = useLocation();
 
   const getExpires = () => {
     const now = Date.now();
@@ -41,12 +43,11 @@ export default function LogIn() {
         alert(`Log in successfully, ${userData[username].name}!`);
         dispatch(updateActive(username));
         const status = generateVerificationCode(33);
-        update2_0('status', [username], status).then(res => {
-          console.log('status：', res);
+        update2_0('status', [username], status).then(() => {          
           const result = status.code;
           document.cookie=`activeUser=${username}; expires=${getExpires()}`;
           document.cookie=`activeStatus=${result}; expires=${getExpires()}`;
-        }).catch(err => console.log(err));
+        }).catch(err => console.log("Log in error: ", err));
     } else {
       
     }
@@ -80,6 +81,10 @@ export default function LogIn() {
     displayInfo(selected);    
     */
   };
+
+  const handleRedirect = () => {
+    setRedirect(true);
+  }
   
   return (
     <div className="login">
@@ -94,6 +99,8 @@ export default function LogIn() {
       {/*errorsLogin.pw? <p className='errorMessage'>{errorsLogin.pw.message}</p> : <p className='errorMessage'>&nbsp;</p> <-- what is this?*/}
       {Object.keys(errorsLogin).map(key => <p key={key} className='errorMessage'>{errorsLogin[key].message}</p>)
       }
+      {location.state && active.user && <button type='button' onClick={handleRedirect}>Go back to the previous page</button>}
+      {redirect && <Navigate to={location.state.from.pathname} />}
     </div>
   )
 }

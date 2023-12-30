@@ -1,8 +1,9 @@
 import {useSelector} from 'react-redux';
-import {Navigate} from 'react-router-dom';
+import {Navigate, useLocation} from 'react-router-dom';
 import {useState, useEffect} from 'react';
 
 export default function ProtectedRoute({children, role}) {
+  const location = useLocation();
   const activeUser = useSelector(state => state.active.user);
   const loaded = useSelector(state => state.active.loaded);
   const userData = useSelector(state => state.userData.items);
@@ -18,7 +19,7 @@ export default function ProtectedRoute({children, role}) {
     )
   } else {
     if (!activeUser) {
-      return <Navigate to="/login" replace />
+      return <Navigate to="/login" state={{from: location}} replace />
     } else if (role != undefined) {
       if (activeRole === null) {
         return <p>Loading</p>

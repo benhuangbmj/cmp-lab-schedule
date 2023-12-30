@@ -66,10 +66,6 @@ export default function App() {
       dispatch(updateTasks(data));
     });
   },[]);
-
-  useEffect(() => {
-    console.log(active);
-  }, [active]);//delete
   
   if (!info) {
     return (
