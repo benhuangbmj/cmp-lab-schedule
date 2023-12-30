@@ -13,10 +13,6 @@ export default function Progress() {
   const tasks = useSelector(selectTasks);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log(tasks);
-  }, [tasks]);//delete
-
   return (
     <>
       <CreateTask />
@@ -32,8 +28,8 @@ export default function Progress() {
           {
             tasks.map((task, i) => {
               return (
-                <p>
-                  <Timelapse key={i} task={task} />
+                <p key={i}>
+                  <Timelapse task={task} />
                   <Stopwatch task={task} socket={socket} />
                 </p>
               )

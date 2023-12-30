@@ -24,7 +24,7 @@ const scheme = {
   },
   lastUpdate: null,
   roles: {
-    develop: false,
+    developer: false,
     admin: false,
   }
 };

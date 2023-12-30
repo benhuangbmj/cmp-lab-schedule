@@ -15,6 +15,7 @@ import Management from './Management';
 import FrontendLab from './FrontendLab';
 import LogIn from '/src/auth/LogIn';
 import ProtectedRoute from '/src/utils/ProtectedRoute';
+import SignOut from '/src/auth/SignOut';
 
 export default function App() {
   const socket = io('https://backend-lab.manifold1985.repl.co');
@@ -22,7 +23,7 @@ export default function App() {
   const [info, setInfo] = useState(null);
   const [courseTutor, setCourseTutor] = useState(null);
   const [shifts, setShifts] = useState(null);
-  const [passed, setPassed] = useState(false);
+  
 
   const active = useSelector(selectActive);
 
@@ -33,7 +34,7 @@ export default function App() {
   }, []);
 
   const checkActive = async () => {
-    console.log('checkActive');
+    console.log('checkActive');//delete
     const cookieStr = document.cookie.split(';');
     const cookie = {};
     cookieStr.forEach(str => {
@@ -44,8 +45,10 @@ export default function App() {
       const userStatus = await fetchKey(cookie.activeUser, 'status');
       if(userStatus.code == cookie.activeStatus) {
         dispatch(updateActive(cookie.activeUser));
+        return;
       }
     }
+    dispatch(updateActive(null));
   }
   
   useEffect(() => {
@@ -79,18 +82,28 @@ export default function App() {
       <>
         <nav>
           <NavLink to="/">Schedule</NavLink> | <NavLink to="/management" >Manage</NavLink> | <NavLink to="/experimental">Experimental</NavLink>
-          <div className='topnav-right'><NavLink to='/login'>
-            {active.user? <button type='button'> Sign out </button> : <button type='button'> Log in </button>}
-          </NavLink></div>          
+          <div className='topnav-right'>
+            {
+              !active.user?
+              <NavLink to='/login'>
+                <button type='button'> Log in </button>  
+              </NavLink> :
+              <SignOut />
+            }
+          </div> 
         </nav>
         <Routes>
           <Route path='/' element={<Schedule shift={shifts} courses={courseTutor} />} />
           <Route path='/management'  element={
-            <ProtectedRoute>
+            <ProtectedRoute >
               <Management info={info} fetchInfo={fetchInfo}/>
             </ProtectedRoute>          
           } />
-          <Route path='/experimental' element={< FrontendLab info={info} fetchInfo={fetchInfo} passed={passed} setPassed = {setPassed} />}/>
+          <Route path='/experimental' element={
+            <ProtectedRoute role='developer'> 
+              < FrontendLab info={info} fetchInfo={fetchInfo} />
+            </ProtectedRoute>
+          }/>
           <Route path='/login' element={<LogIn />} />
         </Routes>
       </>

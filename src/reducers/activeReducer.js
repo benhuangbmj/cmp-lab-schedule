@@ -4,11 +4,13 @@ export const activeSlice = createSlice(
   {
     name: 'active',
     initialState: {
-      user: null
+      user: null,
+      loaded: false,
     },
     reducers: {
       updateActive: (state, action) => {
         state.user = action.payload;
+        state.loaded = true;
       }
     }
   }

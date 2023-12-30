@@ -80,10 +80,6 @@ export default function LogIn() {
     displayInfo(selected);    
     */
   };
-
-useEffect(() => {
-  console.log(active);
-}, [active]);//delete
   
   return (
     <div className="login">

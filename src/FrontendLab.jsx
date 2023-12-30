@@ -6,18 +6,10 @@ import Progress from '/src/progress/Progress';
 
 const privilege = import.meta.env.VITE_PRIVILEGE;
   
-export default function FrontendLab({info, fetchInfo, passed, setPassed}) {
+export default function FrontendLab({info, fetchInfo}) {
   const [display, setDisplay] = useState('none');
-
-  useEffect(() => {
-    if(!passed) {
-      const currPass = prompt('What\'s your pass?');
-      setPassed(currPass === privilege);
-    }
-  }, []);
     
   return (
-    passed === true?
     <>      
       <button 
         type='button' 
@@ -30,9 +22,6 @@ export default function FrontendLab({info, fetchInfo, passed, setPassed}) {
         <CardDisplay pageSize='LETTER' pageOrientation='portrait' info={info} toolbar={true}/>
       </div>
       <Progress />
-    </> : passed === false?
-    <div>
-      <h1>Invalid pass</h1>
-    </div> : null
+    </>
   )
 }

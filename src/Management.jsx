@@ -308,7 +308,7 @@ export default function Management({ info, fetchInfo }) {
   return (
     <main>      
       <div className="login">
-        <SelectTutor info={info} handleSelect={handleSelect} />
+        {/*<SelectTutor info={info} handleSelect={handleSelect} />*/}
         {selected? <p style={{width: '520px', textAlign: 'left', margin: 'auto'}}>Last Update: {info[selected].lastUpdate}</p>:<p>&nbsp;</p>}
         <form onSubmit={handleSubmitLogin(handleLogin)}>
           <label>password: </label>
