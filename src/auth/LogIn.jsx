@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 
 import { generateVerificationCode } from '/src/util.js';
 import { update2_0 } from '/src/api-operations.js';
+import {fetchKey} from '/src/api-operations.js';
 
 import {useEffect, useState} from 'react';
 import { useForm } from 'react-hook-form';
@@ -12,7 +13,8 @@ import {selectUserData} from '/src/reducers/userDataReducer.js';
 import {selectActive, updateActive} from '/src/reducers/activeReducer.js';
 import {useLocation, Navigate} from 'react-router-dom';
 
-import {fetchKey} from '/src/api-operations.js';
+
+import ResetPassword from '/src/management/ResetPassword';
 
 
 
@@ -40,16 +42,16 @@ export default function LogIn() {
 
   const handleVerify = (username, verified) => {
     if (verified) {
-        alert(`Log in successfully, ${userData[username].name}!`);
-        dispatch(updateActive(username));
-        const status = generateVerificationCode(33);
-        update2_0('status', [username], status).then(() => {          
-          const result = status.code;
-          document.cookie=`activeUser=${username}; expires=${getExpires()}`;
-          document.cookie=`activeStatus=${result}; expires=${getExpires()}`;
-        }).catch(err => console.log("Log in error: ", err));
+      alert(`Log in successfully, ${userData[username].name}!`);
+      dispatch(updateActive(username));
+      const status = generateVerificationCode(33);
+      update2_0('status', [username], status).then(() => {          
+        const result = status.code;
+        document.cookie=`activeUser=${username}; expires=${getExpires()}`;
+        document.cookie=`activeStatus=${result}; expires=${getExpires()}`;
+      }).catch(err => console.log("Log in error: ", err));
     } else {
-      
+      alert('Invalid credential!');
     }
     
   }
@@ -88,16 +90,23 @@ export default function LogIn() {
   
   return (
     <div className="login">
-      <form onSubmit={handleSubmitLogin(handleLogin)}>
-        <label>Username</label>
-        <input style={{marginTop: '1rem'}} type='text' name='username' {...registerLogin('username', {required: 'Please enter your username.'})}/>
-        <label>Password: </label>
-        <input style={{marginTop: '1rem'}} type='password' name='password' {...registerLogin('password', {required: 'Please enter your password.'})}/>        
-        <button type='submit'>Submit</button>
-        {/*<ResetPassword disabled={selected == null} user={selected} fetchInfo={fetchInfo} info={info}/>*/}
-      </form>      
-      {/*errorsLogin.pw? <p className='errorMessage'>{errorsLogin.pw.message}</p> : <p className='errorMessage'>&nbsp;</p> <-- what is this?*/}
-      {Object.keys(errorsLogin).map(key => <p key={key} className='errorMessage'>{errorsLogin[key].message}</p>)
+      { !active.user?
+        <>
+          <form onSubmit={handleSubmitLogin(handleLogin)}>
+            <label>Username</label>
+            <input style={{marginTop: '1rem'}} type='text' name='username' {...registerLogin('username', {required: 'Please enter your username.'})}/>
+            <label>Password: </label>
+            <input style={{marginTop: '1rem'}} type='password' name='password' {...registerLogin('password', {required: 'Please enter your password.'})}/>        
+            <button type='submit'>Submit</button>
+            {/*<ResetPassword disabled={selected == null} user={selected} fetchInfo={fetchInfo} info={info}/>*/}
+          </form>
+          <ResetPassword />
+          {/*errorsLogin.pw? <p className='errorMessage'>{errorsLogin.pw.message}</p> : <p className='errorMessage'>&nbsp;</p> <-- what is this?*/}
+            {Object.keys(errorsLogin).map(key => <p key={key} className='errorMessage'>{errorsLogin[key].message}</p>)}
+        </> :
+        <div>
+          Log in successfully, {userData[active.user].name}!
+        </div>
       }
       {location.state && active.user && <button type='button' onClick={handleRedirect}>Go back to the previous page</button>}
       {redirect && <Navigate to={location.state.from.pathname} />}

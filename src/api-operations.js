@@ -188,3 +188,8 @@ export const update2_0 = async (targetKey, keys, value) => {
 }
 
 export { getSingleAsset, update, fetchInfo };
+
+export default {
+  update2_0: update2_0,
+  fetchKey: fetchKey,
+}

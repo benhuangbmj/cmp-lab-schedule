@@ -93,3 +93,7 @@ export const generateVerificationCode = (digits=4) => {
 }
 export { sortByLastName, days, times, scheme, courseOptions, icons, makeLogo, blankForm, };
 
+
+export default {
+  generateVerificationCode: generateVerificationCode,
+}

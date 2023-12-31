@@ -306,11 +306,11 @@ export default function Management({ info, fetchInfo }) {
     displayInfo(selected);
   }, [])
   return (
-    <main>      
+    <main> {/*      
       <div className="login">
-        {/*<SelectTutor info={info} handleSelect={handleSelect} />*/}
-        {selected? <p style={{width: '520px', textAlign: 'left', margin: 'auto'}}>Last Update: {info[selected].lastUpdate}</p>:<p>&nbsp;</p>}
-        <form onSubmit={handleSubmitLogin(handleLogin)}>
+        <SelectTutor info={info} handleSelect={handleSelect} />
+        
+        {/*<form onSubmit={handleSubmitLogin(handleLogin)}>
           <label>password: </label>
           <input style={{marginTop: '1rem'}} type='password' name='pw' {...registerLogin('pw', {required: 'Please enter your password.'})}>            
           </input>
@@ -318,7 +318,8 @@ export default function Management({ info, fetchInfo }) {
           <ResetPassword disabled={selected == null} user={selected} fetchInfo={fetchInfo} info={info}/>
         </form>
         {errorsLogin.pw? <p className='errorMessage'>{errorsLogin.pw.message}</p> : <p className='errorMessage'>&nbsp;</p>}        
-      </div>
+      </div>*/}
+      {selected && <p style={{width: '520px', textAlign: 'left', margin: 'auto'}}>Last Update: {info[selected].lastUpdate}</p>}
       <div className='flexbox-row card-profile-frame'>
         {(selected && loggedIn)? 
           [
