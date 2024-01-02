@@ -11,7 +11,6 @@ import {fetchUserData} from '/src/reducers/userDataReducer';
 
 import {fetchInfo as preFetchInfo, fetchKey} from './api-operations.js'
 
-
 import Schedule from './Schedule';
 import Management from './Management';
 import FrontendLab from './FrontendLab';
@@ -19,8 +18,12 @@ import LogIn from '/src/auth/LogIn';
 import ProtectedRoute from '/src/utils/ProtectedRoute';
 import SignOut from '/src/auth/SignOut';
 
+const socket = io('https://backend-lab.manifold1985.repl.co', {
+  autoConnect: false,
+});
+
 export default function App() {
-  const socket = io('https://backend-lab.manifold1985.repl.co');
+  
 
   const [info, setInfo] = useState(null);
   const [courseTutor, setCourseTutor] = useState(null);
@@ -36,7 +39,7 @@ export default function App() {
   }, []);
 
   const checkActive = async () => {
-    console.log('checkActive');//delete
+    console.log('Check active');//delete
     const cookieStr = document.cookie.split(';');
     const cookie = {};
     cookieStr.forEach(str => {
@@ -62,12 +65,14 @@ export default function App() {
     checkActive();
   }, []);
 
+  /*
   useEffect(() => {
     socket.emit('fetchDisplay');
     socket.on('receiveDisplay', (data) => {
       dispatch(updateTasks(data));
     });
   },[]);
+  */
   
   if (!info) {
     return (

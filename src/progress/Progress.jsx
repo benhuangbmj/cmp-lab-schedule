@@ -7,21 +7,29 @@ import Timelapse from './components/Timelapse';
 import CreateTask from './components/CreateTask';
 import Stopwatch from './components/Stopwatch';
 
-const socket = io('https://backend-lab.manifold1985.repl.co');
+const socket = io('https://backend-lab.manifold1985.repl.co', {
+  autoConnect: false,
+});
 
 export default function Progress() {
   const tasks = useSelector(selectTasks);
+  const activeUser = useSelector(state => state.active.user);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    socket.connect();
+    return () => socket.disconnect();
+  })
+  
   return (
     <>
       <CreateTask />
       <button type='button' onClick={() => {
-        socket.emit('fetchDisplay');
-        socket.on('receiveDisplay', (data) => {
+        socket.emit('fetchTasks', activeUser);
+        socket.on('receiveTasks', (data) => {
           dispatch(updateTasks(data));
         });
-      }} >Reload Tasks</button>
+      }} >Load Tasks</button>
       {
         tasks &&
         <div>

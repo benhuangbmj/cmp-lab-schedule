@@ -10,8 +10,8 @@ export default function ProtectedRoute({children, role}) {
   const [activeRole, setActiveRole] = useState();
   
   useEffect(() => {        
-    if(activeUser && role) setActiveRole(userData[activeUser].roles[role]);
-  }, [activeUser,role]);
+    if(activeUser && role && userData) setActiveRole(userData[activeUser].roles[role]);
+  }, [activeUser,role, userData]);
   
   if (!loaded) {
     return (
