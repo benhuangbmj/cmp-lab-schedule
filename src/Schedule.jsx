@@ -36,6 +36,9 @@ const Schedule = ({ shift, courses }) => {
           </tbody>
         </table>
         <Personnel courses={courses} />
+        <p>Follow us on social media</p>
+        <img className='qr-code' src='src/img/static-qr-code-6939aa416818b250434bfed8a036658a.png' />
+        <img className='qr-code' src='src/img/qr-code.png' />
       </div>
       <button type='button' onClick={handlePrint}>Print the schedule</button>
     </main>
@@ -60,12 +63,16 @@ function Tutors({ info }) {
 
 function Personnel({ courses }) {
   return (
-    <div >
+    <div>
       <h2 style={{ 'textAlign': 'left', 'paddingLeft': '1rem' }}>Who can help you?</h2>
-      <ul>{courses.map(e => (
-        <li key={e}><pre>{e}</pre></li>
-      ))}
-      </ul>
+      <div className="course-grid">
+        {courses.map(e => {
+          const arr = e.split(':');
+          return (
+            <pre key={e} style={{ width: '100%', textAlign: 'left', height: "100%" }}><strong>{arr[0]}</strong>:{arr[1]} </pre>
+          )
+        })}
+      </div>
     </div>
   )
 }

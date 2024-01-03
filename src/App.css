@@ -11,6 +11,13 @@
   max-width: 550px;
 }
 
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: .5rem;
+  justify-content: center;
+}
+
 .flexbox-row {
   display: flex;
   flex-direction: row;
@@ -33,14 +40,10 @@ form {
 }
 
 .login {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  height: 200px;
-  max-width: 500px;
-  justify-content: space-around;
+  display: grid;
+  grid-template-rows: 3rem repeat(3,2.5rem);
+  grid-gap: 5px;
   margin: auto;
-  border: 1px solid black;
 }
 
 main {
@@ -61,6 +64,10 @@ th, td {
   border: 1px solid;
 }
 
+.topnav-right {
+  float: right;
+}
+
 pre {  
   font-family: Times, Monospace;
   display: inline-block;
@@ -72,6 +79,13 @@ pre {
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
   word-wrap: break-word;  
+}
+
+.qr-code {
+  display: inline-block;
+  width: 1in;
+  height: 1in;
+  margin: 1rem 1in 1rem 1in;
 }
 
 ul {
@@ -92,8 +106,8 @@ ul {
 }
 
 .profile-pic-small {
-  height: 3rem;
-  width: 2.4rem;
+  height: 2rem;
+  width: 1.6rem;
   display: inline-block;
   margin-right: .5rem;
   text-align: left;
@@ -135,6 +149,7 @@ input[type='file'] {
 }
 
 .errorMessage {
+  height: 100%;
   color: red;
   font-size: 8pt;
   align-text: center;

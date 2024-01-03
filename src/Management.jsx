@@ -1,15 +1,24 @@
 import './App.css';
+
+import bcrypt from 'bcryptjs';
+
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+
 import { getSingleAsset, update } from './api-operations';
 import { scheme as dataScheme, courseOptions, blankForm } from './util';
 //import {PDFViewer, Document, Page, Text, View, StyleSheet} from '@react-pdf/renderer';
-import bcrypt from 'bcryptjs';
 
-import SelectTutor from './util-components/SelectTutor';
-import IDCard from './IDcard/IDCard';
+
+
+//import SelectTutor from './util-components/SelectTutor';
+//import IDCard from './IDcard/IDCard';
 import CardDisplay from './IDcard/CardDisplay';
 import Scheduling from './scheduling/Scheduling';
+import ResetPassword from './management/ResetPassword';
+
+import sendEmail from '/src/management/sendEmail';
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
@@ -37,8 +46,8 @@ export default function Management({ info, fetchInfo }) {
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState('Upload');
   const [profile, setProfile] = useState();
-  const [selected, setSelected] = useState();
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [selected, setSelected] = useState(useSelector(state => state.active.user));
+  const [loggedIn, setLoggedIn] = useState(true);
   const currUser = useRef();
   const newUsername = watch('username');
 
@@ -267,6 +276,9 @@ export default function Management({ info, fetchInfo }) {
       } else {
         alert('Log in successfully!');
         setLoggedIn(true);
+        const now = new Date();
+        sendEmail('bhuang', `User ${selected} logged in at ${now.toLocaleString("en-US", {timeZone: "America/New_York"})}.`)
+        
       }
     }
     displayInfo(selected);
@@ -289,19 +301,25 @@ export default function Management({ info, fetchInfo }) {
       setProfile(newPicURL);
     }
   }, [newPic]);
+
+  useEffect(() => {
+    displayInfo(selected);
+  }, [])
   return (
-    <main>      
+    <main> {/*      
       <div className="login">
         <SelectTutor info={info} handleSelect={handleSelect} />
         
-        <form onSubmit={handleSubmitLogin(handleLogin)}>
+        {/*<form onSubmit={handleSubmitLogin(handleLogin)}>
           <label>password: </label>
           <input style={{marginTop: '1rem'}} type='password' name='pw' {...registerLogin('pw', {required: 'Please enter your password.'})}>            
-          </input> <button disabled={selected == null || info[selected].password == null} type='submit'>Log in</button>          
+          </input>
+          <button disabled={selected == null || info[selected].password == null} type='submit'>Log in</button>
+          <ResetPassword disabled={selected == null} user={selected} fetchInfo={fetchInfo} info={info}/>
         </form>
-        {errorsLogin.pw && <p className='errorMessage'>{errorsLogin.pw.message}</p>}
-        {selected && <p style={{border: '1px solid black'}}>Last Update: {info[selected].lastUpdate}</p>}
-      </div>
+        {errorsLogin.pw? <p className='errorMessage'>{errorsLogin.pw.message}</p> : <p className='errorMessage'>&nbsp;</p>}        
+      </div>*/}
+      {selected && <p style={{width: '520px', textAlign: 'left', margin: 'auto'}}>Last Update: {info[selected].lastUpdate}</p>}
       <div className='flexbox-row card-profile-frame'>
         {(selected && loggedIn)? 
           [
