@@ -1,4 +1,7 @@
 import '/src/App.css';
+
+import utils from '/src/util';
+
 import { useState, useEffect, useLayoutEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -40,7 +43,7 @@ export default function CreateTask() {
   ];
 
   const handleCreateTask = (data) => {
-    fetch('https://backend-lab.manifold1985.repl.co/create-task', {
+    fetch(utils.apiBaseUrl + '/create-task', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -52,7 +55,7 @@ export default function CreateTask() {
 
   useLayoutEffect(() => {
     if (activeUser) {
-      fetch(`https://backend-lab.manifold1985.repl.co/supervisees?user=${activeUser}`).then(res => {
+      fetch(utils.apiBaseUrl + `/supervisees?user=${activeUser}`).then(res => {
         res.json().then(data => {
           const users = Array.from(data);
           users.push(activeUser);

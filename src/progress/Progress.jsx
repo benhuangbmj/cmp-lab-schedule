@@ -1,3 +1,5 @@
+import utils from '/src/util'
+
 import { io } from 'socket.io-client';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,7 +9,7 @@ import Timelapse from './components/Timelapse';
 import CreateTask from './components/CreateTask';
 import Stopwatch from './components/Stopwatch';
 
-const socket = io('https://backend-lab.manifold1985.repl.co', {
+const socket = io(utils.apiBaseUrl, {
   autoConnect: false,
 });
 
@@ -18,14 +20,21 @@ const displayedFields = ['task_id', 'task_name', 'user', 'type', 'created_at', '
 export default function Progress() {
   const tasks = useSelector(selectTasks);
   const activeUser = useSelector(state => state.active.user);
+  const [descending, setDescending] = useState();
   const dispatch = useDispatch();
 
   const sortByField = useCallback((field) => {
     if (tasks[0].hasOwnProperty(field)) {
+      const sign = descending == field? -1 : 1;
+      if (sign == -1) {
+        setDescending();
+      } else {
+        setDescending(field);
+      }
       const sortedTasks = tasks.toSorted((a,b) => {
         const [c,d] = [a[field], b[field]];
-        if (c < d) return -1;
-        if (c > d) return 1;
+        if (c < d) return sign*-1;
+        if (c > d) return sign*1;
         return 0;
       });
       dispatch(updateTasks(sortedTasks));
