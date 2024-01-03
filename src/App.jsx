@@ -12,7 +12,7 @@ import {fetchUserData} from '/src/reducers/userDataReducer';
 import {fetchInfo as preFetchInfo, fetchKey} from './api-operations.js'
 
 import Schedule from './Schedule';
-import Management from './Management';
+import Profile from './Profile';
 import FrontendLab from './FrontendLab';
 import LogIn from '/src/auth/LogIn';
 import ProtectedRoute from '/src/utils/ProtectedRoute';
@@ -81,7 +81,7 @@ export default function App() {
           <Route path='/' element={<Schedule shift={shifts} courses={courseTutor} />} />
           <Route path='/profile'  element={
             <ProtectedRoute >
-              <Management info={info} fetchInfo={fetchInfo}/>
+              <Profile info={info} fetchInfo={fetchInfo}/>
             </ProtectedRoute>          
           } />
           <Route path='/experimental' element={
