@@ -12,7 +12,7 @@ import { scheme as dataScheme, courseOptions, blankForm } from './util';
 
 
 
-import SelectTutor from './util-components/SelectTutor';
+//import SelectTutor from './util-components/SelectTutor';
 //import IDCard from './IDcard/IDCard';
 import CardDisplay from './IDcard/CardDisplay';
 import Scheduling from './scheduling/Scheduling';

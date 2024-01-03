@@ -55,11 +55,11 @@ export default function Timelapse({ task }) {
               value = new Date(value).toLocaleString('en-US', {timeZone: 'America/New_York'});
             }
             return (
-              <span key={key}>{value} </span>)
+              <td key={key}>{value} </td>)
           }
         })
       }
-      <span>{lapse}</span>
+      <td>{lapse}</td>
     </>
   )
 }

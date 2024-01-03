@@ -1,6 +1,6 @@
 import {useSelector} from 'react-redux';
 import {Navigate, useLocation} from 'react-router-dom';
-import {useState, useEffect} from 'react';
+import {useState, useLayoutEffect, useEffect} from 'react';
 
 export default function ProtectedRoute({children, role}) {
   const location = useLocation();
@@ -9,11 +9,11 @@ export default function ProtectedRoute({children, role}) {
   const userData = useSelector(state => state.userData.items);
   const [activeRole, setActiveRole] = useState();
   
-  useEffect(() => {        
+  useLayoutEffect(() => {        
     if(activeUser && role && userData) setActiveRole(userData[activeUser].roles[role]);
   }, [activeUser,role, userData]);
   
-  if (!loaded) {
+  if (!(loaded && userData)) {
     return (
       <p>Loading</p>
     )
@@ -21,7 +21,7 @@ export default function ProtectedRoute({children, role}) {
     if (!activeUser) {
       return <Navigate to="/login" state={{from: location}} replace />
     } else if (role != undefined) {
-      if (activeRole === null) {
+      if (activeRole === undefined) {
         return <p>Loading</p>
       } else if (!activeRole) {
         return <p>Unauthorised</p>
