@@ -24,7 +24,20 @@ export default function Progress() {
   const dispatch = useDispatch();
 
   const sortByField = useCallback((field) => {
-    if (tasks[0].hasOwnProperty(field)) {//remove for version control purpose
+    if (tasks[0].hasOwnProperty(field)) {
+      const sign = descending == field? -1 : 1;
+      if (sign == -1) {
+        setDescending();
+      } else {
+        setDescending(field);
+      }
+      const sortedTasks = tasks.toSorted((a,b) => {
+        const [c,d] = [a[field], b[field]];
+        if (c < d) return sign*-1;
+        if (c > d) return sign*1;
+        return 0;
+      });
+      dispatch(updateTasks(sortedTasks));
     }
   }, [tasks]);
 
