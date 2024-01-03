@@ -1,5 +1,7 @@
 import './App.css';
 
+import utils from '/src/util';
+
 import {io} from 'socket.io-client';
 import { useState, useEffect, useCallback} from 'react';
 import { Route, Routes, Link, NavLink } from "react-router-dom";
@@ -18,7 +20,7 @@ import LogIn from '/src/auth/LogIn';
 import ProtectedRoute from '/src/utils/ProtectedRoute';
 import SignOut from '/src/auth/SignOut';
 
-const socket = io('https://backend-lab.manifold1985.repl.co', {
+const socket = io(utils.apiBaseUrl, {
   autoConnect: false,
 });
 
