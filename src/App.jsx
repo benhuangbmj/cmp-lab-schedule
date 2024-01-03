@@ -12,7 +12,7 @@ import {fetchUserData} from '/src/reducers/userDataReducer';
 import {fetchInfo as preFetchInfo, fetchKey} from './api-operations.js'
 
 import Schedule from './Schedule';
-import Profile from './Profile';
+import Profile from './profile/Profile';
 import FrontendLab from './FrontendLab';
 import LogIn from '/src/auth/LogIn';
 import ProtectedRoute from '/src/utils/ProtectedRoute';

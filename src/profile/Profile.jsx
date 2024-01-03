@@ -1,4 +1,4 @@
-import './App.css';
+import '/src/App.css';
 
 import bcrypt from 'bcryptjs';
 
@@ -6,17 +6,17 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
-import { getSingleAsset, update } from './api-operations';
-import { scheme as dataScheme, courseOptions, blankForm } from './util';
+import { getSingleAsset, update } from '/src/api-operations';
+import { scheme as dataScheme, courseOptions, blankForm } from '/src/util';
 //import {PDFViewer, Document, Page, Text, View, StyleSheet} from '@react-pdf/renderer';
 
 
 
 //import SelectTutor from './util-components/SelectTutor';
 //import IDCard from './IDcard/IDCard';
-import CardDisplay from './IDcard/CardDisplay';
-import Scheduling from './scheduling/Scheduling';
-import ResetPassword from './management/ResetPassword';
+import CardDisplay from '/src/IDcard/CardDisplay';
+import Scheduling from '/src/scheduling/Scheduling';
+//import ResetPassword from 'src/management/ResetPassword';
 
 import sendEmail from '/src/management/sendEmail';
 
@@ -27,7 +27,7 @@ const privilege = import.meta.env.VITE_PRIVILEGE;
 
 const display = ['username','name','subject', 'links', 'password'];
 
-export default function Management({ info, fetchInfo }) {
+export default function Profile({ info, fetchInfo }) {
   const {
     register,
     reset,
@@ -35,14 +35,14 @@ export default function Management({ info, fetchInfo }) {
     handleSubmit,
     formState: { errors }
   } = useForm();
-
+/*
   const {
     register: registerLogin,
     handleSubmit: handleSubmitLogin,
     reset: resetLogin,
     formState: {errors: errorsLogin},
   } = useForm();
-
+*/
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState('Upload');
   const [profile, setProfile] = useState();
