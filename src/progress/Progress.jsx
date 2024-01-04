@@ -42,12 +42,17 @@ export default function Progress() {
   }, [tasks]);
 
   useEffect(() => {
-    socket.connect();
-    socket.on('receiveTasks', data => {
-      data.sort((a,b) => a.task_id - b.task_id);
-      dispatch(updateTasks(data));
-    });
-    socket.on('taskUpdated', () => socket.emit('fetchTasks', activeUser));
+    try
+    {
+      socket.connect();
+      socket.on('receiveTasks', data => {
+        data.sort((a,b) => a.task_id - b.task_id);
+        dispatch(updateTasks(data));
+      });
+      socket.on('taskUpdated', () => socket.emit('fetchTasks', activeUser));
+    } catch(err) {
+      console.log(err);
+    }
     return () => socket.disconnect();
   }, [])
 
