@@ -6,3 +6,4 @@ dist-ssr
 tests
 *.sh
 vite.config.js.timestamp*.*
+package-lock.json
