@@ -5,3 +5,4 @@ dist-ssr
 *.local
 tests
 *.sh
+vite.config.js.timestamp*.*
