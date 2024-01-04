@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 import { getSingleAsset, update } from '/src/api-operations';
-import { scheme as dataScheme, courseOptions, blankForm } from '/src/util';
+import { schema as dataSchema, courseOptions, blankForm } from '/src/util';
 //import {PDFViewer, Document, Page, Text, View, StyleSheet} from '@react-pdf/renderer';
 
 
@@ -209,7 +209,7 @@ export default function Profile({ info, fetchInfo }) {
     const username = data.username;
     delete data.username;
     const links = {};
-    Object.keys(dataScheme.links).forEach(key => {      
+    Object.keys(dataSchema.links).forEach(key => {      
       links[key] = data[key];      
       delete data[key];
     });
@@ -221,7 +221,7 @@ export default function Profile({ info, fetchInfo }) {
       data.password = info[selected].password;
     }
     data.lastUpdate = new Date().toString();
-    data = Object.assign(dataScheme, data);
+    data = Object.assign(dataSchema, data);
     console.log(data);//delete
     update(username, [], data, fetchInfo).then(() => {
       if(!selected) {
@@ -319,7 +319,7 @@ export default function Profile({ info, fetchInfo }) {
         </form>
         {errorsLogin.pw? <p className='errorMessage'>{errorsLogin.pw.message}</p> : <p className='errorMessage'>&nbsp;</p>}        
       </div>*/}
-      {selected && <p style={{width: '520px', textAlign: 'left', margin: 'auto'}}>Last Update: {info[selected].lastUpdate}</p>}
+      {selected && <p style={{width: 'fit-content', textAlign: 'left', margin: 'auto',}}>Last Update: {info[selected].lastUpdate}</p>}
       <div className='flexbox-row card-profile-frame'>
         {(selected && loggedIn)? 
           [
@@ -343,7 +343,7 @@ export default function Profile({ info, fetchInfo }) {
       <form onSubmit={handleSubmit(handleUpdate)}>
         <div className = 'flexbox-row input-timetable-frame'>
           <div className='input-holder'>
-            {['username'].concat(Object.keys(dataScheme)).map(e => {          
+            {['username'].concat(Object.keys(dataSchema)).map(e => {          
               if (display.includes(e)) {
                 return (
                   e != 'links'? <p key={e}>
@@ -357,7 +357,7 @@ export default function Profile({ info, fetchInfo }) {
                           </> :
                           <input type={e=='password'?'password':"text"} name={e} {...register(e)} />
                     }
-                  </p> : Object.keys(dataScheme[e]).map(link => <p key={link}><label style={{textTransform: 'capitalize'}}>{link}: </label><input type='url' name={link} {...register(link)}/> </p>) 
+                  </p> : Object.keys(dataSchema[e]).map(link => <p key={link}><label style={{textTransform: 'capitalize'}}>{link}: </label><input type='url' name={link} {...register(link)}/> </p>) 
                 )
               }
             }

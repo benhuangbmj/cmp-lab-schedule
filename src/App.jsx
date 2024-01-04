@@ -17,6 +17,7 @@ import FrontendLab from './FrontendLab';
 import LogIn from '/src/auth/LogIn';
 import ProtectedRoute from '/src/utils/ProtectedRoute';
 import SignOut from '/src/auth/SignOut';
+import Admin from '/src/admin/Admin';
 
 export default function App() {
   const [info, setInfo] = useState(null);
@@ -66,7 +67,7 @@ export default function App() {
     return (
       <>
         <nav>
-          <NavLink to="/">Schedule</NavLink> | <NavLink to="/profile" >Profile</NavLink> | <NavLink to="/experimental">Experimental</NavLink>
+          <NavLink to="/">Schedule</NavLink> | <NavLink to="/profile" >Profile</NavLink> | <NavLink to="/admin">Administration</NavLink> |<NavLink to="/experimental">Experimental</NavLink>
           <div className='topnav-right'>
             {
               !active.user?
@@ -84,9 +85,14 @@ export default function App() {
               <Profile info={info} fetchInfo={fetchInfo}/>
             </ProtectedRoute>          
           } />
+          <Route path='/admin' element={
+            <ProtectedRoute role='admin'>
+              <Admin />
+            </ProtectedRoute>
+          } />
           <Route path='/experimental' element={
             <ProtectedRoute role='developer'> 
-              < FrontendLab info={info} fetchInfo={fetchInfo} />
+              <FrontendLab info={info} fetchInfo={fetchInfo} />
             </ProtectedRoute>
           }/>
           <Route path='/login' element={<LogIn />} />
