@@ -15,7 +15,7 @@ export default function InputText({name, utils, options}) {
         messages && <ul>
           {Object.entries(messages).map(([type, message]) => <li style={{width:'fit-content', fontSize: '8pt', border: "1px solid", color: 'red'}} key={type}>{message}</li>)}          
         </ul>          
-      } />
+      }/>
     </span>
   )
 }
