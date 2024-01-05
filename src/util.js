@@ -1,6 +1,6 @@
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const times = Array.from(Array(13), (e, i) => (6 + Math.floor(i / 4)) + ":" + (i % 4 ? (i % 4) * 15 : "00") + " PM");
-const scheme = {
+const schema = {
   password: null,
   name: null,
   time: [],
@@ -23,14 +23,15 @@ const scheme = {
     facebook: null,
   },
   lastUpdate: null,
+  lastLogin: null,
   roles: {
     developer: false,
     admin: false,
   }
 };
 
-let blankForm = Object.assign({}, scheme, { username: null });
-blankForm = Object.assign(blankForm, scheme.links);
+let blankForm = Object.assign({}, schema, { username: null });
+blankForm = Object.assign(blankForm, schema.links);
 blankForm.profilePic = null;
 delete blankForm.links;
 
@@ -91,7 +92,7 @@ export const generateVerificationCode = (digits=4) => {
   };
   return output;
 }
-export { sortByLastName, days, times, scheme, courseOptions, icons, makeLogo, blankForm, };
+export { sortByLastName, days, times, schema, courseOptions, icons, makeLogo, blankForm, };
 
 
 export default {

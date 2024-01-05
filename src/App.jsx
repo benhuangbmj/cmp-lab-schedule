@@ -2,35 +2,27 @@ import './App.css';
 
 import utils from '/src/util';
 
-import {io} from 'socket.io-client';
 import { useState, useEffect, useCallback} from 'react';
 import { Route, Routes, Link, NavLink } from "react-router-dom";
 import {useSelector, useDispatch} from 'react-redux';
 
-import {selectTasks, updateTasks} from '/src/reducers/tasksReducer';
 import {selectActive, updateActive} from '/src/reducers/activeReducer.js';
 import {fetchUserData} from '/src/reducers/userDataReducer';
 
 import {fetchInfo as preFetchInfo, fetchKey} from './api-operations.js'
 
 import Schedule from './Schedule';
-import Management from './Management';
+import Profile from './profile/Profile';
 import FrontendLab from './FrontendLab';
 import LogIn from '/src/auth/LogIn';
 import ProtectedRoute from '/src/utils/ProtectedRoute';
 import SignOut from '/src/auth/SignOut';
-
-const socket = io(utils.apiBaseUrl, {
-  autoConnect: false,
-});
+import Admin from '/src/admin/Admin';
 
 export default function App() {
-  
-
   const [info, setInfo] = useState(null);
   const [courseTutor, setCourseTutor] = useState(null);
-  const [shifts, setShifts] = useState(null);
-  
+  const [shifts, setShifts] = useState(null);  
 
   const active = useSelector(selectActive);
 
@@ -41,7 +33,6 @@ export default function App() {
   }, []);
 
   const checkActive = async () => {
-    console.log('Check active');//delete
     const cookieStr = document.cookie.split(';');
     const cookie = {};
     cookieStr.forEach(str => {
@@ -60,21 +51,11 @@ export default function App() {
   
   useEffect(() => {
     if (!info) {
-      console.log('no info');
       fetchInfo();
       dispatch(fetchUserData());
     }
     checkActive();
   }, []);
-
-  /*
-  useEffect(() => {
-    socket.emit('fetchDisplay');
-    socket.on('receiveDisplay', (data) => {
-      dispatch(updateTasks(data));
-    });
-  },[]);
-  */
   
   if (!info) {
     return (
@@ -86,7 +67,7 @@ export default function App() {
     return (
       <>
         <nav>
-          <NavLink to="/">Schedule</NavLink> | <NavLink to="/management" >Manage</NavLink> | <NavLink to="/experimental">Experimental</NavLink>
+          <NavLink to="/">Schedule</NavLink> | <NavLink to="/profile" >Profile</NavLink> | <NavLink to="/admin">Administration</NavLink> |<NavLink to="/experimental">Experimental</NavLink>
           <div className='topnav-right'>
             {
               !active.user?
@@ -99,14 +80,19 @@ export default function App() {
         </nav>
         <Routes>
           <Route path='/' element={<Schedule shift={shifts} courses={courseTutor} />} />
-          <Route path='/management'  element={
+          <Route path='/profile'  element={
             <ProtectedRoute >
-              <Management info={info} fetchInfo={fetchInfo}/>
+              <Profile info={info} fetchInfo={fetchInfo}/>
             </ProtectedRoute>          
+          } />
+          <Route path='/admin' element={
+            <ProtectedRoute role='admin'>
+              <Admin />
+            </ProtectedRoute>
           } />
           <Route path='/experimental' element={
             <ProtectedRoute role='developer'> 
-              < FrontendLab info={info} fetchInfo={fetchInfo} />
+              <FrontendLab info={info} fetchInfo={fetchInfo} />
             </ProtectedRoute>
           }/>
           <Route path='/login' element={<LogIn />} />

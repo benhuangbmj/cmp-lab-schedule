@@ -55,15 +55,19 @@ export default function CreateTask() {
 
   useLayoutEffect(() => {
     if (activeUser) {
-      fetch(utils.apiBaseUrl + `/supervisees?user=${activeUser}`).then(res => {
-        res.json().then(data => {
-          const users = Array.from(data);
-          users.push(activeUser);
-          const output = [];
-          users.forEach(user => { if (userData[user]) output.push({ name: userData[user].name, user: user }) });
-          setUserWithName(output);
-        });
-      });
+      try {
+        fetch(utils.apiBaseUrl + `/supervisees?user=${activeUser}`).then(res => {
+          res.json().then(data => {
+            const users = Array.from(data);
+            users.push(activeUser);
+            const output = [];
+            users.forEach(user => { if (userData[user]) output.push({ name: userData[user].name, user: user }) });
+            setUserWithName(output);
+          });
+        }).catch(err => console.log(err));
+      } catch (err) {
+        console.log(err);
+      }      
     }
   }, [activeUser]);
   return (
