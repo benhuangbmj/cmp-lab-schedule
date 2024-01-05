@@ -15,7 +15,7 @@ const allFields = ['username', ...textFields, ...checkboxFields, ...popupFields]
 export default function Admin() {
 
   const userData = useSelector(state => state.userData.items);
-  const usernames = Object.keys(userData);
+  
 
   const handleReset = () => {
     formUtils.reset();
@@ -26,25 +26,32 @@ export default function Admin() {
   }
   const resetCount = useRef(0);
   const [loaded, setLoaded] = useState(false);
-  const defaultValues = useMemo(() => {
-    const entries =
-      usernames
-        .map(user => Object.entries(userData[user])
-          .map(([field, value]) => [`${user} ${field}`, value]))
-        .flat();
-    const output = Object.fromEntries(entries);
-    return output;
-  }, [userData]);
-
+  const [usernames, setUsernames] = useState();
   const formUtils = useForm({
     criteriaMode: 'all',
   })
-
-
+  
+  const defaultValues = useMemo(() => {
+    if (Array.isArray(usernames)) {
+      const entries =
+        usernames
+          .map(user => Object.entries(userData[user])
+            .map(([field, value]) => [`${user} ${field}`, value]))
+          .flat();
+      const output = Object.fromEntries(entries);
+      return output;
+    }
+  }, [usernames]);  
 
   useEffect(() => {
-    formUtils.reset(defaultValues);
-    setLoaded(true);
+    setUsernames(Object.keys(userData))
+  }, [userData]);
+
+  useEffect(() => {
+    if(defaultValues != null) {
+      formUtils.reset(defaultValues);
+      setLoaded(true);
+    }
   }, [defaultValues]);
 
   useEffect(() => {
@@ -53,7 +60,7 @@ export default function Admin() {
   useEffect(() => {
   })//delete
 
-  if (loaded)
+  if (loaded && Array.isArray(usernames))
     return (
       <>
         <div style={{ overflow: 'hidden', marginTop: '12pt', height: '24pt', width: '800px' }}>
