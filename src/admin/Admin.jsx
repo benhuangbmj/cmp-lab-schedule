@@ -2,7 +2,10 @@ import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState, useMemo } from 'react';
 
+import { fieldOptions } from '/src/util';
+
 import InputText  from '/src/util-components/InputText.jsx';
+import InputCheckbox from '/src/util-components/InputCheckbox.jsx';
 
 export default function Admin() {
   const userData = useSelector(state => state.userData.items);
@@ -20,7 +23,8 @@ export default function Admin() {
 
 
 
-  const displayFields = ['name', 'subject', 'password', 'roles'];
+  const textFields = ['name', 'subject', 'password'];
+  const checkboxFields = ['roles'];
   // displayFields add 'links', 'schedule', 'courses'
 
   const formUtils = useForm({
@@ -28,13 +32,17 @@ export default function Admin() {
   })
 
   const handleUpdate = (data) => {
-    
+    console.log(data);
   }
 
   useEffect(() => {
     formUtils.reset(defaultValues);
     setLoaded(true);
   }, [defaultValues]);
+
+  useEffect(() => {
+    console.log(fieldOptions);
+  },[])
 
   if (loaded)
     return (
@@ -44,7 +52,8 @@ export default function Admin() {
           {usernames.map(username =>
             <div key={username}>
               <span>{username}</span>
-              {displayFields.map(field => <InputText key={field} name={`${username} ${field}`} utils={formUtils} />)}
+              {textFields.map(field => <InputText key={field} name={`${username} ${field}`} utils={formUtils} />)}
+              {checkboxFields.map(field => <InputCheckbox key={field} name={`${username} ${field}`} utils={formUtils}/>)}
             </div>
           )}
           <button type='submit'>Update</button>
