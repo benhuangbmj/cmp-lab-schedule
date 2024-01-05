@@ -94,8 +94,9 @@ export const generateVerificationCode = (digits=4) => {
 }
 export { sortByLastName, days, times, schema, courseOptions, icons, makeLogo, blankForm, };
 
+export const apiBaseUrl = 'https://3d64b95a-1830-4deb-a296-7328fbea73f2-00-2nqzg05jzqy5l.picard.replit.dev',
 
 export default {
-  apiBaseUrl: 'https://3d64b95a-1830-4deb-a296-7328fbea73f2-00-2nqzg05jzqy5l.picard.replit.dev',
+  apiBaseUrl: apiBaseUrl,
   generateVerificationCode: generateVerificationCode,
 }
