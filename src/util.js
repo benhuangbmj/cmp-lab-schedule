@@ -1,3 +1,6 @@
+import bcrypt from 'bcryptjs';
+
+const saltRounds = 10;
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const times = Array.from(Array(13), (e, i) => (6 + Math.floor(i / 4)) + ":" + (i % 4 ? (i % 4) * 15 : "00") + " PM");
 const schema = {
@@ -132,6 +135,8 @@ export const sortGenerator = (arr, ref, keyGenerator, descending, setDescending,
   return output;
 }
 
+export const encrypt = (text) => bcrypt.hashSync(text, saltRounds);
+
 export default {
   apiBaseUrl: apiBaseUrl,
   generateVerificationCode: generateVerificationCode,
@@ -140,4 +145,5 @@ export default {
   signHelper: signHelper,
   toSortedHelper: toSortedHelper,
   sortGenerator: sortGenerator,
+  encrypt: encrypt,
 }
