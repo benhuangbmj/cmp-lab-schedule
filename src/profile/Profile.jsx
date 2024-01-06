@@ -306,7 +306,6 @@ export default function Profile({ info, fetchInfo }) {
 
   useEffect(() => {
     displayInfo(selected);
-    console.log(userData[activeUser].roles.admin);
   }, [])
   return (
     <main> 
@@ -356,14 +355,14 @@ export default function Profile({ info, fetchInfo }) {
                     <label>{e=='password'?'new passowrd':e}{e == 'username' && <sup style={{ color: "red" }}>*</sup>}: </label>
                     {
                       e == 'username' && selected ?
-                        <input readOnly type='text' className='read-only' name={e} {...register(e)} /> : e == "username" ?
+                        <input readOnly type='text' className='read-only' {...register(e)} /> : e == "username" ?
                           <>
-                            <input type='text' name={e} {...register(e, { required: "Username is required." })}/>
+                            <input type='text' {...register(e, { required: "Username is required." })}/>
                             {errors.username ? <p className='errorMessage'>{errors.username.message}</p> : null}
                           </> :
-                          <input type={e=='password'?'password':"text"} name={e} {...register(e)} />
+                          <input type={e=='password'?'password':"text"} {...register(e)} />
                     }
-                  </p> : Object.keys(dataSchema[e]).map(link => <p key={link}><label style={{textTransform: 'capitalize'}}>{link}: </label><input type='url' name={link} {...register(link)}/> </p>) 
+                  </p> : Object.keys(dataSchema[e]).map(link => <p key={link}><label style={{textTransform: 'capitalize'}}>{link}: </label><input type='url' {...register(link)}/> </p>) 
                 )
               }
             }
