@@ -102,8 +102,42 @@ export const fieldOptions = {
   links: Object.keys(schema.links),
 }
 
+export const sortCriterionHelper = (c, d, sign) => {
+  if (c < d) return sign*-1;
+  if (c > d) return sign*1;
+  return 0;
+}
+
+export const signHelper = (key, sortHelper, descending, setDescending) => {
+  const sign = descending === key? -1 : 1;  
+  sortHelper(sign);
+  if (sign == -1) setDescending();
+  else setDescending(key);
+}
+
+export const toSortedHelper = (arr, ref, sign, keyGenerator, setSorted = null) => {
+  const output = arr.toSorted((a,b) => {      
+      const [c, d] = [ref[keyGenerator(a)], ref[keyGenerator(b)]];
+      return sortCriterionHelper(c,d, sign);
+    })
+  if (setSorted) setSorted(output);
+  else return output;
+}
+
+export const sortGenerator = (arr, ref, keyGenerator, descending, setDescending, setSorted) => {
+  const output = (key) => {
+    const myToSorted = (sign) => toSortedHelper(arr, ref, sign, keyGenerator, setSorted);
+    signHelper(key, myToSorted, descending, setDescending);
+  }
+  return output;
+}
+
 export default {
   apiBaseUrl: apiBaseUrl,
   generateVerificationCode: generateVerificationCode,
   fieldOptions: fieldOptions,
+  sortCriterionHelper: sortCriterionHelper,
+  signHelper: signHelper,
+  toSortedHelper: toSortedHelper,
+  sortGenerator: sortGenerator,
 }
