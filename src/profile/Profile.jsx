@@ -231,7 +231,7 @@ export default function Profile({ info, fetchInfo }) {
       }
     });
   };
-  const handleSelect = (currSelected) => {    
+  const handleSelect = (currSelected) => {
     if (currSelected) {
       const user = currSelected.value
       resetAll();
@@ -322,7 +322,11 @@ export default function Profile({ info, fetchInfo }) {
         </form>
         {errorsLogin.pw? <p className='errorMessage'>{errorsLogin.pw.message}</p> : <p className='errorMessage'>&nbsp;</p>}        
       </div>*/
-        userData[activeUser].roles.admin && <SelectUser info={info} handleSelect={handleSelect} />
+        userData[activeUser].roles.admin && <> 
+          <SelectUser info={info} handleSelect={handleSelect} />
+          <button type='button' onClick={() => handleSelect(null)}>Create New User</button>
+        </>
+      
       }
       {selected && <p style={{width: 'fit-content', textAlign: 'left', margin: 'auto',}}>Last Update: {info[selected].lastUpdate}</p>}
       <div className='flexbox-row card-profile-frame'>
