@@ -4,10 +4,10 @@ import 'reactjs-popup/dist/index.css';
 import bcrypt from 'bcryptjs';
 
 import {update} from '/src/api-operations';
-import {generateVerificationCode} from '/src/util.js';
-import utils from '/src/util.js';
+import {generateVerificationCode} from '/src/utils.js';
+import utils from '/src/utils.js';
 import myContentful from '/src/api-operations.js';
-import sendEmail from './sendEmail';
+import sendEmail from '/src/utils/sendEmail';
 
 
 import Popup from 'reactjs-popup';
