@@ -19,6 +19,7 @@
     "@redux-devtools/extension": "^3.2.6",
     "@reduxjs/toolkit": "^2.0.1",
     "bcryptjs": "^2.4.3",
+    "lodash": "^4.17.21",
     "qrcode": "^1.5.3",
     "react-hook-form": "^7.46.2",
     "react-javascript": "file:",
