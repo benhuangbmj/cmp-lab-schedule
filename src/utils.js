@@ -111,6 +111,7 @@ export const sortCriterionHelper = (c, d, sign) => {
   return 0;
 }
 
+//sort helpers and generators
 export const signHelper = (key, sortHelper, descending, setDescending) => {
   const sign = descending === key? -1 : 1;  
   sortHelper(sign);
@@ -134,10 +135,10 @@ export const sortGenerator = (arr, ref, keyGenerator, descending, setDescending,
   }
   return output;
 }
+//////////////////////////////////////////////////
 
 export const encrypt = (text) => bcrypt.hashSync(text, saltRounds);
 
-const arrToObj = ['roles'];
 
 const processPassword = (data, key) => {
   if(data[key] === '') {
@@ -146,6 +147,9 @@ const processPassword = (data, key) => {
     data[key] = utils.encrypt(data[key]);
   }
 }
+
+//get update data schema-ready
+const arrToObj = ['roles'];
 
 const processArrToObj = (data, key) => {
   if (Array.isArray(data[key])) {
@@ -183,6 +187,7 @@ export const getReadyForUpdate = (usernames, data) => {
   prepareData(usernames, data);
   return convertData(usernames, data);
 }
+////////////////////////////////////////////////////
 
 export default {
   apiBaseUrl: apiBaseUrl,

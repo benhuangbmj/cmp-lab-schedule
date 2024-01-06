@@ -1,5 +1,5 @@
 import {useState, useRef, useEffect} from 'react';
-import {days, times} from '../util'
+import {days, times} from '/src/utils'
 import {update} from '../api-operations';
 
 import Timetable from './Timetable'
