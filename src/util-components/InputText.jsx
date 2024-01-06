@@ -1,5 +1,5 @@
 import {ErrorMessage} from '@hookform/error-message';
-export default function InputText({name, utils, options}) {
+export default function InputText({id, name, utils, options}) {
   const {
     register,
     formState: {errors},
@@ -7,7 +7,7 @@ export default function InputText({name, utils, options}) {
   
   return (
     <span style = {{border: '1px solid'}}>
-      <input {...register(name, options)}></input>
+      <input id={id} {...register(name, options)}></input>
       <ErrorMessage 
       errors = {errors} 
       name ={ name }
