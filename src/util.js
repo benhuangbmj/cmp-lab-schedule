@@ -1,3 +1,6 @@
+import bcrypt from 'bcryptjs';
+
+const saltRounds = 10;
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const times = Array.from(Array(13), (e, i) => (6 + Math.floor(i / 4)) + ":" + (i % 4 ? (i % 4) * 15 : "00") + " PM");
 const schema = {
@@ -132,6 +135,55 @@ export const sortGenerator = (arr, ref, keyGenerator, descending, setDescending,
   return output;
 }
 
+export const encrypt = (text) => bcrypt.hashSync(text, saltRounds);
+
+const arrToObj = ['roles'];
+
+const processPassword = (data, key) => {
+  if(data[key] === '') {
+    delete data[key];
+  } else {
+    data[key] = utils.encrypt(data[key]);
+  }
+}
+
+const processArrToObj = (data, key) => {
+  if (Array.isArray(data[key])) {
+    data[key] = (Object.fromEntries(data[key].map((val) => [val, true])));          
+  } else {
+    data[key] = {};
+  }
+}
+
+const prepareData = (usernames, data) => {
+  usernames.forEach((user) => {
+    arrToObj.forEach((field) => {
+      const key = `${user} ${field}`;
+      processArrToObj(data, key);
+    })
+    const key = `${user} password`;
+    processPassword(data, key);
+    delete data[`${user} username`];
+  })
+}
+
+const convertData = (usernames, data) => {
+  const output = {};
+  usernames.forEach((user) => {
+    output[user] = {};
+  })
+  Object.keys(data).forEach((key) => {
+    const [user, field] = key.split(' ');
+    output[user][field] = data[key];
+  })
+  return output;
+}
+
+export const getReadyForUpdate = (usernames, data) => {
+  prepareData(usernames, data);
+  return convertData(usernames, data);
+}
+
 export default {
   apiBaseUrl: apiBaseUrl,
   generateVerificationCode: generateVerificationCode,
@@ -140,4 +192,6 @@ export default {
   signHelper: signHelper,
   toSortedHelper: toSortedHelper,
   sortGenerator: sortGenerator,
+  encrypt: encrypt,
+  getReadyForUpdate: getReadyForUpdate,
 }

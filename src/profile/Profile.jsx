@@ -12,7 +12,7 @@ import { schema as dataSchema, courseOptions, blankForm } from '/src/util';
 
 
 
-//import SelectTutor from './util-components/SelectTutor';
+import SelectUser from '/src/util-components/SelectUser';
 //import IDCard from './IDcard/IDCard';
 import CardDisplay from '/src/IDcard/CardDisplay';
 import Scheduling from '/src/scheduling/Scheduling';
@@ -43,18 +43,20 @@ export default function Profile({ info, fetchInfo }) {
     formState: {errors: errorsLogin},
   } = useForm();
 */
+  const activeUser = useSelector(state => state.active.user);
+  const userData = useSelector(state => state.userData.items)
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState('Upload');
   const [profile, setProfile] = useState();
-  const [selected, setSelected] = useState(useSelector(state => state.active.user));
+  const [selected, setSelected] = useState(activeUser);
   const [loggedIn, setLoggedIn] = useState(true);
   const currUser = useRef();
   const newUsername = watch('username');
 
   const resetAll = () => {
     reset(blankForm);
-    resetLogin({pw: null});
-    setLoggedIn(false);
+    //resetLogin({pw: null});
+    //setLoggedIn(false);
     setNewPic();
     setProfile();
   }
@@ -229,7 +231,7 @@ export default function Profile({ info, fetchInfo }) {
       }
     });
   };
-  const handleSelect = (currSelected) => {    
+  const handleSelect = (currSelected) => {
     if (currSelected) {
       const user = currSelected.value
       resetAll();
@@ -306,7 +308,8 @@ export default function Profile({ info, fetchInfo }) {
     displayInfo(selected);
   }, [])
   return (
-    <main> {/*      
+    <main> 
+      {/*      
       <div className="login">
         <SelectTutor info={info} handleSelect={handleSelect} />
         
@@ -318,7 +321,13 @@ export default function Profile({ info, fetchInfo }) {
           <ResetPassword disabled={selected == null} user={selected} fetchInfo={fetchInfo} info={info}/>
         </form>
         {errorsLogin.pw? <p className='errorMessage'>{errorsLogin.pw.message}</p> : <p className='errorMessage'>&nbsp;</p>}        
-      </div>*/}
+      </div>*/
+        userData[activeUser].roles.admin && <> 
+          <SelectUser info={info} handleSelect={handleSelect} />
+          <button type='button' onClick={() => handleSelect(null)}>Create New User</button>
+        </>
+      
+      }
       {selected && <p style={{width: 'fit-content', textAlign: 'left', margin: 'auto',}}>Last Update: {info[selected].lastUpdate}</p>}
       <div className='flexbox-row card-profile-frame'>
         {(selected && loggedIn)? 
@@ -350,14 +359,14 @@ export default function Profile({ info, fetchInfo }) {
                     <label>{e=='password'?'new passowrd':e}{e == 'username' && <sup style={{ color: "red" }}>*</sup>}: </label>
                     {
                       e == 'username' && selected ?
-                        <input readOnly type='text' className='read-only' name={e} {...register(e)} /> : e == "username" ?
+                        <input readOnly type='text' className='read-only' {...register(e)} /> : e == "username" ?
                           <>
-                            <input type='text' name={e} {...register(e, { required: "Username is required." })}/>
+                            <input type='text' {...register(e, { required: "Username is required." })}/>
                             {errors.username ? <p className='errorMessage'>{errors.username.message}</p> : null}
                           </> :
-                          <input type={e=='password'?'password':"text"} name={e} {...register(e)} />
+                          <input type={e=='password'?'password':"text"} {...register(e)} />
                     }
-                  </p> : Object.keys(dataSchema[e]).map(link => <p key={link}><label style={{textTransform: 'capitalize'}}>{link}: </label><input type='url' name={link} {...register(link)}/> </p>) 
+                  </p> : Object.keys(dataSchema[e]).map(link => <p key={link}><label style={{textTransform: 'capitalize'}}>{link}: </label><input type='url' {...register(link)}/> </p>) 
                 )
               }
             }
