@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 import { getSingleAsset, update } from '/src/api-operations';
-import { schema as dataSchema, courseOptions, blankForm } from '/src/util';
+import { schema as dataSchema, courseOptions, blankForm } from '/src/utils';
 //import {PDFViewer, Document, Page, Text, View, StyleSheet} from '@react-pdf/renderer';
 
 
@@ -18,7 +18,7 @@ import CardDisplay from '/src/IDcard/CardDisplay';
 import Scheduling from '/src/scheduling/Scheduling';
 //import ResetPassword from 'src/management/ResetPassword';
 
-import sendEmail from '/src/management/sendEmail';
+import sendEmail from '/src/utils/sendEmail';
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;

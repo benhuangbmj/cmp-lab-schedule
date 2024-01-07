@@ -1,4 +1,4 @@
-import { sortByLastName, days } from './util'
+import { sortByLastName, days } from './utils'
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const cmaToken = import.meta.env.VITE_CMA_TOKEN;

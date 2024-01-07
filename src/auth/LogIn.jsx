@@ -2,7 +2,7 @@ import '/src/App.css';
 
 import bcrypt from 'bcryptjs';
 
-import { generateVerificationCode } from '/src/util.js';
+import { generateVerificationCode } from '/src/utils.js';
 import { update2_0 } from '/src/api-operations.js';
 import {fetchKey} from '/src/api-operations.js';
 
@@ -14,7 +14,7 @@ import {selectActive, updateActive} from '/src/reducers/activeReducer.js';
 import {useLocation, Navigate} from 'react-router-dom';
 
 
-import ResetPassword from '/src/management/ResetPassword';
+import ResetPassword from './ResetPassword';
 
 
 

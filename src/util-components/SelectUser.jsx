@@ -1,5 +1,5 @@
 import {memo} from 'react';
-import {sortByLastName} from '../util';
+import {sortByLastName} from '../utils';
 
 import Select from "react-select";
 import makeAnimated from "react-select/animated";

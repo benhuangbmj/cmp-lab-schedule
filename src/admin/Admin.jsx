@@ -1,38 +1,26 @@
+import devTools from '/src/devTools';//delete
+
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState, useMemo, useRef } from 'react';
 
-import utils, { fieldOptions } from '/src/util';
+import utils, { fieldOptions } from '/src/utils';
 
 import InputText from '/src/util-components/InputText.jsx';
 import InputCheckbox from '/src/util-components/InputCheckbox.jsx';
+import InputTextPopup from '/src/util-components/InputTextPopup.jsx';
+
 
 const textFields = ['name', 'subject', 'password'];
 const checkboxFields = ['roles'];
-const popupFields = ['links', 'schedule', 'courses'];
-const allFields = ['username', ...textFields, ...checkboxFields, ...popupFields];
+const popupFields = ['schedule', 'courses'];
+const popupTextFields = ['links'];
+const allFields = ['username', ...textFields, ...checkboxFields, ...popupTextFields, ...popupFields];
+const registerOptions = {}
 
 export default function Admin() {
-
   const userData = useSelector(state => state.userData.items);
 
-  const handleSortByField = (field) => {
-    if (textFields.concat(['username']).includes(field)) {
-      const formValues = formUtils.getValues();
-      const myKeyGen = (b) => `${b} ${field}`;
-      utils.sortGenerator(usernames, formValues, myKeyGen, descending, setDescending, setUsernames)(field);
-      setCurrValues(formUtils.getValues())
-    }
-  }
-
-  const handleReset = (values) => {
-    formUtils.reset(values);
-    resetCount.current++;
-  }
-  const handleUpdate = (data) => {
-    console.log(data);
-  }  
-  
   const resetCount = useRef(0);
   const [loaded, setLoaded] = useState(false);
   const [usernames, setUsernames] = useState();
@@ -41,7 +29,7 @@ export default function Admin() {
   const formUtils = useForm({
     criteriaMode: 'all',
   })
-  
+
   const defaultValues = useMemo(() => {
     if (Array.isArray(usernames)) {
       let entries =
@@ -53,14 +41,31 @@ export default function Admin() {
       const output = Object.fromEntries(entries);
       return output;
     }
-  }, [usernames]);  
+  }, [usernames]);
+
+  const handleSortByField = (field) => {
+    if (textFields.concat(['username']).includes(field)) {
+      const formValues = formUtils.getValues();
+      const myKeyGen = (b) => `${b} ${field}`;
+      utils.sortGenerator(usernames, formValues, myKeyGen, descending, setDescending, setUsernames)(field);
+      setCurrValues(formUtils.getValues());
+    }
+  }
+  const handleReset = (values) => {
+    formUtils.reset(values);
+    resetCount.current++;
+  }
+  const handleUpdate = (data) => {
+    console.log(data)//delete
+    data = utils.getReadyForUpdate(usernames, data);
+  }
 
   useEffect(() => {
     setUsernames(Object.keys(userData).sort())
   }, [userData]);
 
   useEffect(() => {
-    if(defaultValues != null) {
+    if (defaultValues != null) {
       formUtils.reset(defaultValues);
       setLoaded(true);
     }
@@ -71,32 +76,37 @@ export default function Admin() {
   }, [descending])
 
   useEffect(() => {
-    
+
   }, [])//delete
 
   useEffect(() => {
-    
-  })//delete
 
-  
+  })//delete
 
   if (loaded && Array.isArray(usernames))
     return (
       <>
-        <div style={{ overflow: 'hidden', marginTop: '12pt', height: '24pt', width: '800px' }}>
-          {allFields.map(field => <span style={{ display: 'inline-block', border: '1px solid', marginRight: '1in', marginBottom: '24pt' }} key={field} onClick={() => {handleSortByField(field)}} >{field}</span>)}
+        <div style={{ overflow: 'hidden', marginTop: '12pt', height: '24pt', width: '950px' }}>
+          {allFields.map(field => <span style={{ display: 'inline-block', border: '1px solid', marginRight: '1in', marginBottom: '24pt' }} key={field} onClick={() => { handleSortByField(field) }} >{field}</span>)}
         </div>
 
         <form onSubmit={formUtils.handleSubmit(handleUpdate)}>
-          {usernames.map(username =>
-            <div key={username}>
-              <span>{username}</span>
-              {textFields.map(field => <InputText key={field} name={`${username} ${field}`} utils={formUtils} />)}
-              {checkboxFields.map(field => <InputCheckbox key={field} name={`${username} ${field}`} utils={formUtils} values={fieldOptions[field]} isReset={resetCount.current} />)}
-            </div>
+          {usernames.map(username => {
+            const fieldNameGen = (field) => `${username} ${field}`;
+            return (
+              <div key={username}>
+                <span>{username}</span>
+                {textFields.map(field => <InputText key={field} name={fieldNameGen(field)} utils={formUtils} options={registerOptions} />)}
+                {checkboxFields.map(field => <InputCheckbox key={field} name={fieldNameGen(field)} utils={formUtils} values={fieldOptions[field]} isReset={resetCount.current} options={registerOptions} />)}
+                {popupTextFields.map(field => {                  
+                  return (<InputTextPopup key={field} supField={fieldNameGen(field)} utils={formUtils} options={registerOptions}/>)
+                })}
+              </div>
+            )
+          }
           )}
           <button type='submit'>Update</button>
-          <button type='button' onClick={() => {handleReset(defaultValues)}}>Reset</button>
+          <button type='button' onClick={() => { handleReset(defaultValues) }}>Reset</button>
         </form>
       </>
     )
