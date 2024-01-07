@@ -1,4 +1,4 @@
-import utils from '/src/util'
+import utils from '/src/utils'
 
 import { io } from 'socket.io-client';
 import { useEffect, useState, useRef, useCallback } from 'react';

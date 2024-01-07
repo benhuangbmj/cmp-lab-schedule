@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet, Image, Font } from '@react-pdf/renderer';
 import { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
-import { icons, makeLogo } from '../util';
+import { icons, makeLogo } from '../utils';
 
 
 const cardTitle = ' STUDENT TUTOR ';

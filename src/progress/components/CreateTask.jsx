@@ -1,6 +1,6 @@
 import '/src/App.css';
 
-import utils from '/src/util';
+import utils from '/src/utils';
 
 import { useState, useEffect, useLayoutEffect } from 'react';
 import { useForm } from 'react-hook-form';

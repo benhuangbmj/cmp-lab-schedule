@@ -1,6 +1,6 @@
 import './App.css';
 
-import utils from '/src/util';
+import utils from '/src/utils';
 
 import { useState, useEffect, useCallback} from 'react';
 import { Route, Routes, Link, NavLink } from "react-router-dom";
