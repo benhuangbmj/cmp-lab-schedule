@@ -18,7 +18,6 @@ const handleOnClose = (e, ref, isDirty) => {
 
 export default function inputTextPopup({ supField, utils, options }) {
   const popupRef = useRef();
-
   const {
     getValues: getSupValues,
     setValue: setSupValue,
@@ -31,11 +30,22 @@ export default function inputTextPopup({ supField, utils, options }) {
     { defaultValues: defaultValues }
   );
 
+  const handleConfirm = () => {
+    const subValues = subUtils.getValues();
+    setSupValue(supField, subValues);
+    popupRef.current.close();
+  }
+
+  const handleDiscard = () => {
+    subUtils.reset();
+    popupRef.current.close();
+  }
+
   return (
     <span>
       <button type='button' onClick={() => popupRef.current.open()}>Social Media</button>
       <Popup ref={popupRef} onClose={(e) => handleOnClose(e, popupRef, !_.isEqual(subUtils.getValues(), subUtils.formState.defaultValues))}>
-        <div className='modal'>
+        <form className='modal'>
           {subFields.map((field) => {
             return (
               <p key={field}>
@@ -44,10 +54,10 @@ export default function inputTextPopup({ supField, utils, options }) {
               </p>
             )
           })}
-          <button type='button' onClick={() => subUtils.reset()}>Confirm</button>
-          <button type='button' onClick={() => subUtils.reset()}>Reset</button>
-          <button type='button' onClick={() => { subUtils.reset(); popupRef.current.close() }}>Discard</button>
-        </div>
+          <button type='button' onClick={handleConfirm} >Confirm</button>
+          <button type='button' onClick={() => { subUtils.reset() }}>Reset</button>
+          <button type='button' onClick={handleDiscard}>Discard</button>
+        </form>
       </Popup>
     </span>
   )

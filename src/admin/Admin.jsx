@@ -15,7 +15,7 @@ const textFields = ['name', 'subject', 'password'];
 const checkboxFields = ['roles'];
 const popupFields = ['schedule', 'courses'];
 const popupTextFields = ['links'];
-const allFields = ['username', ...textFields, ...checkboxFields, ...popupFields];
+const allFields = ['username', ...textFields, ...checkboxFields, ...popupTextFields, ...popupFields];
 const registerOptions = {}
 
 export default function Admin() {
@@ -56,7 +56,7 @@ export default function Admin() {
     resetCount.current++;
   }
   const handleUpdate = (data) => {
-    devTools.listEntriesOf(data)//delete
+    console.log(data)//delete
     data = utils.getReadyForUpdate(usernames, data);
   }
 
@@ -86,7 +86,7 @@ export default function Admin() {
   if (loaded && Array.isArray(usernames))
     return (
       <>
-        <div style={{ overflow: 'hidden', marginTop: '12pt', height: '24pt', width: '800px' }}>
+        <div style={{ overflow: 'hidden', marginTop: '12pt', height: '24pt', width: '950px' }}>
           {allFields.map(field => <span style={{ display: 'inline-block', border: '1px solid', marginRight: '1in', marginBottom: '24pt' }} key={field} onClick={() => { handleSortByField(field) }} >{field}</span>)}
         </div>
 
