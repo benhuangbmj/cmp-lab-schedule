@@ -13,8 +13,9 @@ import InputTextPopup from '/src/util-components/InputTextPopup.jsx';
 
 const textFields = ['name', 'subject', 'password'];
 const checkboxFields = ['roles'];
-const popupFields = ['schedule', 'courses'];
+const popupFields = ['schedule'];
 const popupTextFields = ['links'];
+const popupCheckboxFields = ['courses'];
 const allFields = ['username', ...textFields, ...checkboxFields, ...popupTextFields, ...popupFields];
 const registerOptions = {}
 

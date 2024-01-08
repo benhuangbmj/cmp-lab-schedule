@@ -199,4 +199,5 @@ export default {
   sortGenerator: sortGenerator,
   encrypt: encrypt,
   getReadyForUpdate: getReadyForUpdate,
+  courseOptions: courseOptions,
 }
