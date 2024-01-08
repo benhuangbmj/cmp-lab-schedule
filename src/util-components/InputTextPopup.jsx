@@ -2,19 +2,12 @@ import 'reactjs-popup/dist/index.css';
 import _ from 'lodash';
 
 import { useForm } from 'react-hook-form';
-import { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
-import Popup from 'reactjs-popup';
 import InputText from './InputText';
+import MyPopup from './MyPopup';
 
-const handleOnClose = (e, ref, isDirty) => {
-  if (e && isDirty) {
-    const confirmed = confirm('Your change has not been saved.');
-    if (!confirmed) {
-      ref.current.open();
-    }
-  }
-}
+
 
 export default function inputTextPopup({ supField, utils, options }) {
   const popupRef = useRef();
@@ -30,6 +23,15 @@ export default function inputTextPopup({ supField, utils, options }) {
     { defaultValues: defaultValues }
   );
 
+  const handleOnClose = (e, ref, isDirty) => {
+    if (e && isDirty) {
+      const confirmed = confirm('Your change has not been saved.');
+      if (!confirmed) {
+        ref.current.open();
+      }
+    }
+  }
+
   const handleConfirm = () => {
     const subValues = subUtils.getValues();
     setSupValue(supField, subValues);
@@ -41,24 +43,25 @@ export default function inputTextPopup({ supField, utils, options }) {
     popupRef.current.close();
   }
 
+  const myOnClose = (e) => {
+    handleOnClose(e, popupRef, !_.isEqual(subUtils.getValues(), defaultValues));
+  }
+
   return (
-    <span>
-      <button type='button' onClick={() => popupRef.current.open()}>Social Media</button>
-      <Popup ref={popupRef} onClose={(e) => handleOnClose(e, popupRef, !_.isEqual(subUtils.getValues(), subUtils.formState.defaultValues))}>
-        <form className='modal'>
-          {subFields.map((field) => {
-            return (
-              <p key={field}>
-                <label htmlFor={field}>{field}</label>
-                <InputText id={field} name={field} utils={subUtils} options={options} />
-              </p>
-            )
-          })}
-          <button type='button' onClick={handleConfirm} >Confirm</button>
-          <button type='button' onClick={() => { subUtils.reset() }}>Reset</button>
-          <button type='button' onClick={handleDiscard}>Discard</button>
-        </form>
-      </Popup>
-    </span>
+    <MyPopup ref={popupRef} myOnClose={myOnClose} trigger={'Social Media'}>
+      <form className='modal'>
+        {subFields.map((field) => {
+          return (
+            <p key={field}>
+              <label htmlFor={field}>{field}</label>
+              <InputText id={field} name={field} utils={subUtils} options={options} />
+            </p>
+          )
+        })}
+        <button type='button' onClick={handleConfirm} >Confirm</button>
+        <button type='button' onClick={() => { subUtils.reset() }}>Reset</button>
+        <button type='button' onClick={handleDiscard}>Discard</button>
+      </form>
+    </MyPopup>
   )
 }
