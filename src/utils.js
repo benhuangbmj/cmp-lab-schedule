@@ -141,10 +141,10 @@ export const encrypt = (text) => bcrypt.hashSync(text, saltRounds);
 
 
 const processPassword = (data, key) => {
-  if(data[key] === '') {
+  if(!data[key] || data[key] === '') {
     delete data[key];
   } else {
-    data[key] = utils.encrypt(data[key]);
+    data[key] = encrypt(data[key]);
   }
 }
 
