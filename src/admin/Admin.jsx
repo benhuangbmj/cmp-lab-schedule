@@ -38,7 +38,7 @@ export default function Admin() {
           .map(user => Object.entries(userData[user])
             .map(([field, value]) => [`${user} ${field}`, value]))
           .flat();
-      entries = entries.concat(usernames.map(username => [`${username} username`, username]));
+      entries = entries.concat(usernames.map(username => [[`${username} username`, username], [`${username} password`, null]]).flat());
       const output = Object.fromEntries(entries);
       return output;
     }
