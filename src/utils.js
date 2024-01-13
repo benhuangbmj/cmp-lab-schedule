@@ -83,7 +83,7 @@ const sortByLastName = (arr, levels) => {
     }
   });
 }
-export const generateVerificationCode = (digits=4) => {
+export const generateVerificationCode = (digits = 4) => {
   const codeArr = Array(digits).fill();
   codeArr.forEach((e, i) => {
     codeArr[i] = Math.floor(Math.random() * 10);
@@ -97,7 +97,7 @@ export const generateVerificationCode = (digits=4) => {
 }
 export { sortByLastName, days, times, schema, courseOptions, icons, makeLogo, blankForm, };
 
-export const apiBaseUrl = 'https://3d64b95a-1830-4deb-a296-7328fbea73f2-00-2nqzg05jzqy5l.picard.replit.dev';
+export const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 export const fieldOptions = {
   roles: Object.keys(schema.roles),
@@ -106,24 +106,24 @@ export const fieldOptions = {
 }
 
 export const sortCriterionHelper = (c, d, sign) => {
-  if (c < d) return sign*-1;
-  if (c > d) return sign*1;
+  if (c < d) return sign * -1;
+  if (c > d) return sign * 1;
   return 0;
 }
 
 //sort helpers and generators
 export const signHelper = (key, sortHelper, descending, setDescending) => {
-  const sign = descending === key? -1 : 1;  
+  const sign = descending === key ? -1 : 1;
   sortHelper(sign);
   if (sign == -1) setDescending();
   else setDescending(key);
 }
 
 export const toSortedHelper = (arr, ref, sign, keyGenerator, setSorted = null) => {
-  const output = arr.toSorted((a,b) => {      
-      const [c, d] = [ref[keyGenerator(a)], ref[keyGenerator(b)]];
-      return sortCriterionHelper(c,d, sign);
-    })
+  const output = arr.toSorted((a, b) => {
+    const [c, d] = [ref[keyGenerator(a)], ref[keyGenerator(b)]];
+    return sortCriterionHelper(c, d, sign);
+  })
   if (setSorted) setSorted(output);
   else return output;
 }
@@ -141,7 +141,7 @@ export const encrypt = (text) => bcrypt.hashSync(text, saltRounds);
 
 
 const processPassword = (data, key) => {
-  if(!data[key] || data[key] === '') {
+  if (!data[key] || data[key] === '') {
     delete data[key];
   } else {
     data[key] = encrypt(data[key]);
@@ -153,7 +153,7 @@ const arrToObj = ['roles'];
 
 const processArrToObj = (data, key) => {
   if (Array.isArray(data[key])) {
-    data[key] = (Object.fromEntries(data[key].map((val) => [val, true])));          
+    data[key] = (Object.fromEntries(data[key].map((val) => [val, true])));
   } else {
     data[key] = {};
   }
