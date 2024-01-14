@@ -6,7 +6,7 @@ import store from './store'
 import { Provider } from 'react-redux'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <BrowserRouter>
+    <BrowserRouter basename='/home'>
       <Provider store={store}>
         <App />
       </Provider>
