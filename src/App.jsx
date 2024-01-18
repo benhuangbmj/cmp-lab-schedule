@@ -66,8 +66,7 @@ export default function App() {
   } else {
     return (
       <>
-        <nav>
-          <NavLink to="/">Schedule</NavLink> | <NavLink to="/profile" >Profile</NavLink> | <NavLink to="/admin">Administration</NavLink> |<NavLink to="/experimental">Experimental</NavLink>
+        <nav style={{height:'18pt'}}>
           <div className='topnav-right'>
             {
               !active.user?
@@ -76,7 +75,11 @@ export default function App() {
               </NavLink> :
               <SignOut />
             }
-          </div> 
+          </div>
+          {active.user && <> 
+            <NavLink to="/">Schedule</NavLink> | <NavLink to="/profile" >Profile</NavLink> | <NavLink to="/admin">Administration</NavLink> |<NavLink to="/experimental">Experimental</NavLink>
+          </>}
+           
         </nav>
         <Routes>
           <Route path='/' element={<Schedule shift={shifts} courses={courseTutor} />} />
