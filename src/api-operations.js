@@ -142,7 +142,7 @@ const update = async (targetKey, keys, value, fetchInfo, backup = false) => {
         });
     });
 };
-
+//changelog: update2_0 doesn't call fetchInfo. 
 export const update2_0 = async (targetKey, keys, value) => {
   const entryId = databaseId;
   let res = await fetch(`https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`, {
