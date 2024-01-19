@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
-import { getSingleAsset, update } from '/src/api-operations';
+import { getSingleAsset, update, fetchKey } from '/src/api-operations';
 import { schema as dataSchema, courseOptions, blankForm } from '/src/utils';
 //import {PDFViewer, Document, Page, Text, View, StyleSheet} from '@react-pdf/renderer';
 
@@ -207,7 +207,7 @@ export default function Profile({ info, fetchInfo }) {
     update('transform',[selected,'profilePic'], newRotate, fetchInfo);    
   }
   
-  const handleUpdate = (data) => {
+  const handleUpdate = async (data) => {
     const username = data.username;
     delete data.username;
     const links = {};
@@ -216,15 +216,14 @@ export default function Profile({ info, fetchInfo }) {
       delete data[key];
     });
     data.links = links;
-    if(data.password != "") {
+    if(data.password && data.password != "") {
       data.password = bcrypt.hashSync(data.password, 10);
       setLoggedIn(false);
-    } else {
-      data.password = info[selected].password;
+    } else if (selected) {
+      data.password = await fetchKey(selected, 'password');
     }
     data.lastUpdate = new Date().toString();
     data = Object.assign(dataSchema, data);
-    console.log(data);//delete
     update(username, [], data, fetchInfo).then(() => {
       if(!selected) {
         resetAll();
