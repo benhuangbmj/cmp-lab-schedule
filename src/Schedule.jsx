@@ -45,17 +45,41 @@ const Schedule = ({ shift, courses }) => {
   )
 };
 
-function Tutors({ info }) {
+function Tutors({ info }) {  
+  const [amGroup, pmGroup] = [[[],[]],[[],[]]];
+  const n = info[0].length;
+  for(let i = 0; i < n; i++) {
+    function categorize(arr) {
+      arr[0].push(info[0][i]);
+      arr[1].push(info[1][i]);
+    }
+    const tutor = info[0][i];
+    if(/\bAM\b/.test(tutor)) {
+      categorize(amGroup);
+    } else {
+      categorize(pmGroup);
+    }
+  }
+
+  function Populate({info}) {
+    return (
+      <>   
+        {info[0].map((e, i) =>
+          <div className="left-align" key={e}>
+            <div className='profile-pic-small'>
+              <img className="profilePic" src={info[1][i] ? info[1][i] : 'https://www.messiah.edu/images/4_see_your_possibilities_anew.jpg'} />
+            </div>
+            <pre>{e}</pre>
+          </div>
+        )}
+      </>
+    )
+  }
   return (
     <td>
-      {info[0].map((e, i) =>
-        <div className="left-align" key={e}>
-          <div className='profile-pic-small'>
-            <img className="profilePic" src={info[1][i] ? info[1][i] : 'https://www.messiah.edu/images/4_see_your_possibilities_anew.jpg'} />
-          </div>
-          <pre>{e}</pre>
-        </div>
-      )}
+      <Populate info={amGroup} />
+      {amGroup[0].length>0 && <div style={{height:'2pt', backgroundColor:'black'}}></div>}   
+      <Populate info={pmGroup} />
     </td>
   )
 }
@@ -77,4 +101,5 @@ function Personnel({ courses }) {
   )
 }
 
-export default Schedule;
+export default Schedule;/*
+*/
