@@ -1,8 +1,10 @@
 import './App.css';
 import { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-const Schedule = ({ shift, courses }) => {
+const Schedule = ({ shift, courses }) => {  
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
   const currDate = new Date();
   const toPrint = useRef();
@@ -101,5 +103,4 @@ function Personnel({ courses }) {
   )
 }
 
-export default Schedule;/*
-*/
+export default Schedule;
