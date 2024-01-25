@@ -35,7 +35,7 @@ export default function IDCard({ user, setRerender, canvas }) {
     },
     image: {
       border: borderSetting,
-      objectFit: 'fill',
+      objectFit: 'cover',
       transform: user.profilePic && user.profilePic.transform? user.profilePic.transform: 'rotate(0deg)',
       width: toAdjustMargin? ih:iw,
       height: toAdjustMargin? iw:ih,
