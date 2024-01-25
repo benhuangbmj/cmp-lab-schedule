@@ -27,7 +27,7 @@ export default function CardDisplay({ pageSize, info, pageOrientation, toolbar=f
         children={
           <Document>
             <Page size={pageSize} orientation={pageOrientation} style={styles.page}>
-              {Object.keys(info).map(e => <IDCard key={e} user={info[e]} setRerender={setRerender} canvas={canvas}/>)}
+              {Object.keys(info).map(e => !info[e].inactive && <IDCard key={e} user={info[e]} setRerender={setRerender} canvas={canvas}/>)}
             </Page>
           </Document>} >
       </PDFViewer>
