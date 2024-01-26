@@ -3,8 +3,31 @@ import { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import {sortCriterionHelper} from '/src/utils';
+dayjs.extend(customParseFormat);
 
-const Schedule = ({ shift, courses }) => {  
+function parseTime(time) {
+  return dayjs(time, 'h:mm A');
+}
+
+function processUserInfo(info) {
+  const combinedInfo = info[0].map((e, i) => [e, info[1][i]]);
+  const timeRegEx = /\d+:\d+\s[AP]M/g;
+  combinedInfo.sort((a, b) => {
+    let [timeA, timeB] = [a[0].match(timeRegEx)[0], b[0].match(timeRegEx)[0]];
+    [timeA, timeB] = [parseTime(timeA) ,parseTime(timeB)];
+    if(sortCriterionHelper(timeA, timeB)) {
+      return sortCriterionHelper(timeA, timeB);
+    } else {      
+      [timeA, timeB] = [a[0].match(timeRegEx)[1], b[0].match(timeRegEx)[1]];
+      [timeA, timeB] = [parseTime(timeA) ,parseTime(timeB)];      
+      return sortCriterionHelper(timeA, timeB);
+    }
+  });
+  return combinedInfo;
+}
+
+const Schedule = ({ shift, courses }) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
   const currDate = new Date();
   const toPrint = useRef();
@@ -47,31 +70,35 @@ const Schedule = ({ shift, courses }) => {
   )
 };
 
-function Tutors({ info }) {  
-  const [amGroup, pmGroup] = [[[],[]],[[],[]]];
-  const n = info[0].length;
+function Tutors({ info }) { 
+  const [amGroup, pmGroup] = [[], []];
+
+  //Sort the users according to the start and end time.
+  const combinedInfo = processUserInfo(info);
+
+  const n = combinedInfo.length;
+
+  //Split AM and PM groups. 
   for(let i = 0; i < n; i++) {
     function categorize(arr) {
-      arr[0].push(info[0][i]);
-      arr[1].push(info[1][i]);
+      arr.push(combinedInfo[i]);
     }
-    const tutor = info[0][i];
+    const tutor = combinedInfo[i][0];
     if(/\bAM\b/.test(tutor)) {
       categorize(amGroup);
     } else {
       categorize(pmGroup);
     }
   }
-
   function Populate({info}) {
     return (
       <>   
-        {info[0].map((e, i) =>
-          <div className="left-align" key={e}>
+        {info.map((e, i) =>
+          <div className="left-align" key={e[0]}>
             <div className='profile-pic-small'>
-              <img className="profilePic" src={info[1][i] ? info[1][i] : 'https://www.messiah.edu/images/4_see_your_possibilities_anew.jpg'} />
+              <img className="profilePic" src={e[1] ? e[1] : 'https://www.messiah.edu/images/4_see_your_possibilities_anew.jpg'} />
             </div>
-            <pre>{e}</pre>
+            <pre>{e[0]}</pre>
           </div>
         )}
       </>
@@ -80,7 +107,7 @@ function Tutors({ info }) {
   return (
     <td>
       <Populate info={amGroup} />
-      {amGroup[0].length>0 && <div style={{height:'2pt', backgroundColor:'black'}}></div>}   
+      {amGroup.length>0 && <div style={{height:'2pt', backgroundColor:'black'}}></div>}   
       <Populate info={pmGroup} />
     </td>
   )
