@@ -27,7 +27,7 @@ function processUserInfo(info) {
   return combinedInfo;
 }
 
-const Schedule = ({ shift, courses }) => {
+export default function Schedule({ shift, courses }) {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
   const currDate = new Date();
   const toPrint = useRef();
@@ -70,7 +70,13 @@ const Schedule = ({ shift, courses }) => {
   )
 };
 
-function Tutors({ info }) { 
+function Tutors({ info }) {
+  function getSubject(str) {
+    const subjectRegEx = /(?<=\()[\w\W]*(?=\))/i;
+    let subject = str.match(subjectRegEx)[0];
+    subject = subject.replace('\/', '-').toLowerCase();
+    return subject;
+  }
   const [amGroup, pmGroup] = [[], []];
 
   //Sort the users according to the start and end time.
@@ -90,7 +96,7 @@ function Tutors({ info }) {
       categorize(pmGroup);
     }
   }
-  function Populate({info}) {
+  function Populate({info}) {   
     return (
       <>   
         {info.map((e, i) =>
@@ -98,7 +104,7 @@ function Tutors({ info }) {
             <div className='profile-pic-small'>
               <img className="profilePic" src={e[1] ? e[1] : 'https://www.messiah.edu/images/4_see_your_possibilities_anew.jpg'} />
             </div>
-            <pre>{e[0]}</pre>
+            <pre className={getSubject(e[0])}>{e[0]}</pre>
           </div>
         )}
       </>
@@ -129,5 +135,3 @@ function Personnel({ courses }) {
     </div>
   )
 }
-
-export default Schedule;
