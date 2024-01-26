@@ -38,7 +38,7 @@ blankForm = Object.assign(blankForm, schema.links);
 blankForm.profilePic = null;
 delete blankForm.links;
 
-const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH180', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT281', 'STAT291', 'STAT292', 'PHYS201', 'PHYS202', 'PHYS211', 'PHYS212', 'MATH105', 'CIS284'];
+const courseOptions = ['MATH102', 'MATH107', 'MATH108', 'MATH111', 'MATH112', 'MATH180', 'MATH198', 'MATH211', 'MATH261', 'MATH270', 'MATH308', 'STAT269', 'STAT281', 'STAT291', 'STAT292', 'PHYS201', 'PHYS202', 'PHYS211', 'PHYS212', 'MATH105', 'CIS284', 'CIS181'];
 
 courseOptions.sort();
 
@@ -105,7 +105,7 @@ export const fieldOptions = {
   links: Object.keys(schema.links),
 }
 
-export const sortCriterionHelper = (c, d, sign) => {
+export const sortCriterionHelper = (c, d, sign=1) => {
   if (c < d) return sign * -1;
   if (c > d) return sign * 1;
   return 0;
@@ -115,8 +115,10 @@ export const sortCriterionHelper = (c, d, sign) => {
 export const signHelper = (key, sortHelper, descending, setDescending) => {
   const sign = descending === key ? -1 : 1;
   sortHelper(sign);
-  if (sign == -1) setDescending();
-  else setDescending(key);
+  if(setDescending) {
+    if (sign == -1) setDescending();
+    else setDescending(key);
+  }
 }
 
 export const toSortedHelper = (arr, ref, sign, keyGenerator, setSorted = null) => {
