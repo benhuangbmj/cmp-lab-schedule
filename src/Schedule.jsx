@@ -141,12 +141,12 @@ function Personnel({ courses }) {
       <h2 style={{ margin: '1.5rem 0 0 0', fontSize: '16pt', fontFamily: 'Hand-of-Sean' }}>Who can help you?</h2>
       {categories.map((subject,i) => {
         return (
-          <div>
+          <div key={subjects[i]}>
             <div className='flexbox-row' style={{textAlign: 'left'}}>
               <h3 className={subjects[i].toLowerCase()  + ' subject-title'}>{subjects[i]}</h3>
               <div className='divider-line'></div> 
             </div>           
-            <div className="course-grid" key={subjects[i]}>            
+            <div className="course-grid">            
               {subject.map(e => {
                 const arr = e.split(':');
                 return (
