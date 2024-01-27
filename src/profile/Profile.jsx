@@ -307,7 +307,7 @@ export default function Profile({ info, fetchInfo }) {
     displayInfo(selected);
   }, [])
   return (
-    <main> 
+    <main style={{textAlign: 'center'}}> 
       {/*      
       <div className="login">
         <SelectTutor info={info} handleSelect={handleSelect} />
