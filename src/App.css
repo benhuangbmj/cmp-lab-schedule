@@ -27,6 +27,14 @@
   margin: auto;
 }
 
+.flexbox-column {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
 form {
   margin: auto;
 }
@@ -44,10 +52,6 @@ form {
   grid-template-rows: 3rem repeat(3,2.5rem);
   grid-gap: 5px;
   margin: auto;
-}
-
-main {
-  text-align: center;  
 }
 
 table,tbody,thead {
@@ -85,7 +89,7 @@ pre {
   display: inline-block;
   width: 1in;
   height: 1in;
-  margin: 1rem 1in 1rem 1in;
+  margin: 0 .2in 0 .2in;
 }
 
 ul {
@@ -194,4 +198,28 @@ input[type='file'] {
 
 .statistics {
   color: green;
+}
+
+.designing {
+  border: 1px solid red;
+}
+
+.subject-title {
+  display: inline-block;  
+  margin: 6pt 6pt 6pt 0pt;
+  flex-grow: 0;
+}
+
+.divider-line {
+  display: inline-block;  
+  height: 2pt;
+  background: linear-gradient(to right, red, blue);
+  flex-grow: 1;  
+}
+
+.letter-size {
+  height: 11in;
+  width: 8.5in;
+  padding: .5in .25in .5in .25in;
+  box-sizing: border-box;
 }
