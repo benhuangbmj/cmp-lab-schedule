@@ -35,12 +35,12 @@ export default function Schedule({ shift, courses }) {
     content: () => toPrint.current
   })
   return (
-    <main>
-      <div ref={toPrint} className='letter-size  flexbox-column' style={{textAlign: 'center'}}>
+    <main style={{textAlign: 'center'}}>
+      <div ref={toPrint} className='schedule-container letter-size flexbox-row'>
         <h1 style={{margin: "0"}}>
         <img className='qr-code' src='src/img/static-qr-code-6939aa416818b250434bfed8a036658a.png' />
-        <div style={{display: 'inline-block', position:'relative', top: '-30px'}}>
-          CMP Tutor Schedule<br/>{currDate.getMonth() >= 6 ? "Fall" : "Spring"} {currDate.getFullYear()}
+        <div style={{display: 'inline-block', position:'relative', top: '-20px', fontSize: '30pt'}}>
+          CMP Lounge Schedule<br/>{currDate.getMonth() >= 6 ? "Fall" : "Spring"} {currDate.getFullYear()}
         </div>        
         <img className='qr-code' src='src/img/qr-code.png' />
         </h1>
@@ -116,7 +116,7 @@ function Tutors({ info }) {
   return (
     <td>
       <Populate info={amGroup} />
-      {amGroup.length>0 && <div style={{height:'2pt', backgroundColor:'black'}}></div>}   
+      {amGroup.length>0 && <div className='table-divider'></div>}   
       <Populate info={pmGroup} />
     </td>
   )
@@ -138,7 +138,7 @@ function Personnel({ courses }) {
   })
   return (
     <div>
-      <h2 style={{ margin: '.5rem 0 -0.5rem 0' }}>Who can help you?</h2>
+      <h2 style={{ margin: '1.5rem 0 0 0', fontSize: '16pt', fontFamily: 'Hand-of-Sean' }}>Who can help you?</h2>
       {categories.map((subject,i) => {
         return (
           <div>

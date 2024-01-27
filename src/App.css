@@ -1,3 +1,35 @@
+
+:root {
+  --cis-color: #0B7367;
+  --math-color: #11698c;
+  --phys-color: #614495;
+  --stat-color: #A63738;
+  --institutional-navy: #002856;
+  --institutional-green: #0B7367;
+}
+
+@font-face {
+  font-family: 'Priori';
+  src: url('./public/zPrioriSansOT-Regular.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Aptifer-Slab';
+  src: url('./public/Aptifer Slab LT Pro.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Hand-of-Sean';
+  src: url('./public/Hand_Of_Sean_Demo.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 .card-holder {
   display: inline-block;
   border: 1px solid black;
@@ -73,7 +105,7 @@ th, td {
 }
 
 pre {  
-  font-family: Times, Monospace;
+  font-family: Aptifer-Slab, Monospace;
   display: inline-block;
   margin: auto;
   font-size: 0.8rem;
@@ -180,24 +212,24 @@ input[type='file'] {
 }
 
 .math {
-  color: blue;
+  color: var(--math-color);
 }
 .math-stat {
-  background: -webkit-linear-gradient(45deg, blue 0%, green 100%);  
+  background: -webkit-linear-gradient(45deg, var(--math-color) 0%, var(--stat-color) 100%);  
   -webkit-background-clip: text;  
   -webkit-text-fill-color: transparent;
 }
 
 .physics {
-  color: brown;
+  color: var(--phys-color);
 }
 
 .cis {
-  color: orange;
+  color: var(--cis-color);
 }
 
 .statistics {
-  color: green;
+  color: var(--stat-color);
 }
 
 .designing {
@@ -208,12 +240,14 @@ input[type='file'] {
   display: inline-block;  
   margin: 6pt 6pt 6pt 0pt;
   flex-grow: 0;
+  font-size: 12pt;
+  font-family: Hand-of-Sean;
 }
 
 .divider-line {
   display: inline-block;  
   height: 2pt;
-  background: linear-gradient(to right, red, blue);
+  background: linear-gradient(to right, var(--institutional-navy), var(--institutional-green));
   flex-grow: 1;  
 }
 
@@ -222,4 +256,15 @@ input[type='file'] {
   width: 8.5in;
   padding: .5in .25in .5in .25in;
   box-sizing: border-box;
+}
+
+.schedule-container {
+  text-align: center;
+  color: var(--institutional-navy);
+  font-family: Priori;
+}
+
+.table-divider {
+  height: 2pt;
+  background-color: var(--institutional-navy);
 }
