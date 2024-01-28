@@ -19,8 +19,8 @@ export default function InputCheckbox({ name, utils, options, values, isReset}) 
   
   return values.map((val) =>
     <span key={val}>
-      <label>{val}</label>
-      <input type='checkbox' label={val} value={val} {...register(name, options)} />
+      <label htmlFor={`${name} ${val}`}>{val}</label>
+      <input type='checkbox' id={`${name} ${val}`} value={val} {...register(name, options)} />
       <ErrorMessage 
       errors = {errors} 
       name ={ name }

@@ -1,4 +1,3 @@
-
 :root {
   --cis-color: #0B7367;
   --math-color: #11698c;
@@ -267,4 +266,16 @@ input[type='file'] {
 .table-divider {
   height: 2pt;
   background-color: var(--institutional-navy);
+}
+
+.non-select {
+  user-select: none;
+  -webkit-user-select: none;
+  ms-user-select: none;
+}
+
+label {
+  user-select: none;
+  -webkit-user-select: none;
+  ms-user-select: none;
 }

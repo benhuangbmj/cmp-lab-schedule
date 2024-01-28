@@ -96,7 +96,8 @@ export default function Admin() {
             const fieldNameGen = (field) => `${username} ${field}`;
             return (
               <div key={username}>
-                <span>{username}</span>
+                <input type='checkbox' id={username}/>
+                <label htmlFor={username}>{username}</label>
                 {textFields.map(field => <InputText key={field} name={fieldNameGen(field)} utils={formUtils} options={registerOptions} />)}
                 {checkboxFields.map(field => <InputCheckbox key={field} name={fieldNameGen(field)} utils={formUtils} values={fieldOptions[field]} isReset={resetCount.current} options={registerOptions} />)}
                 {popupTextFields.map(field => {                  

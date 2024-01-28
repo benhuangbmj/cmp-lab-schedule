@@ -379,7 +379,7 @@ export default function Profile({ info, fetchInfo }) {
           <div>
             <label style={{display:'block'}}>courses: </label>
             <div className='course-container'>
-              {courseOptions.map(e =><div key={e}><input type='checkbox' label={e} value={e} {...register('courses')} /><label className='small-label'>{e} </label></div>)}
+              {courseOptions.map(e =><div key={e}><input type='checkbox' id={e} value={e} {...register('courses')} /><label htmlFor={e} className='small-label'>{e}</label></div>)}
             </div>  
           </div>    
         <button type='submit' disabled={!selected? false : loggedIn? false : true} >{selected ? "Update" : "Create"}</button>
