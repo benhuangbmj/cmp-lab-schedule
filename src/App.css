@@ -10,21 +10,21 @@
 
 @font-face {
   font-family: 'Priori';
-  src: url('./public/zPrioriSansOT-Regular.otf');
+  src: url('/zPrioriSansOT-Regular.otf');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Aptifer-Slab';
-  src: url('./public/Aptifer Slab LT Pro.otf');
+  src: url('/Aptifer Slab LT Pro.otf');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Hand-of-Sean';
-  src: url('./public/Hand_Of_Sean_Demo.ttf');
+  src: url('/Hand_Of_Sean_Demo.ttf');
   font-weight: normal;
   font-style: normal;
 }

@@ -9,12 +9,12 @@ const [cw, ch] = [4, 3];
 const [iw, ih] = ['0.96in', '1.28in'];
 const [companyBackground, display, borderSetting] = ['#002856', 'initial', "none"];
 
-Font.register({ family: 'Priori', src: 'public/zPrioriSansOT-Regular.otf' });
-Font.register({ family: 'Priori', fontWeight: 'bold', src: 'public/PrioriSansOT-Bold.otf' });
-Font.register({ family: 'Priori', fontWeight: 'light', src: 'public/PrioriSansOT-Light.otf' });
-Font.register({ family: 'Priori-Black', src: 'public/PrioriSansOT-Black.otf' });
-Font.register({ family: 'Aptifer-Slab', src: 'public/Aptifer Slab LT Pro.otf' });
-Font.register({ family: 'Aptifer-Slab-Black', src: 'public/Aptifer Slab LT Pro Black.otf' });
+Font.register({ family: 'Priori', src: '/zPrioriSansOT-Regular.otf' });
+Font.register({ family: 'Priori', fontWeight: 'bold', src: '/PrioriSansOT-Bold.otf' });
+Font.register({ family: 'Priori', fontWeight: 'light', src: '/PrioriSansOT-Light.otf' });
+Font.register({ family: 'Priori-Black', src: '/PrioriSansOT-Black.otf' });
+Font.register({ family: 'Aptifer-Slab', src: '/Aptifer Slab LT Pro.otf' });
+Font.register({ family: 'Aptifer-Slab-Black', src: '/Aptifer Slab LT Pro Black.otf' });
 
 
 
