@@ -28,6 +28,9 @@
   font-style: normal;
 }
 
+main {
+  text-align: center
+}
 
 .card-holder {
   display: inline-block;
@@ -53,7 +56,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;  
   margin: auto;
 }
@@ -62,8 +65,8 @@
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: stretch;
+  justify-content: space-around;
+  margin: auto;
 }
 
 form {
@@ -89,9 +92,6 @@ table,tbody,thead {
   margin: auto;  
 }
 
-table {
-}
-
 th, td {
   vertical-align: bottom;
 }
@@ -103,15 +103,14 @@ th, td {
 .preformatted {  
   font-family: Aptifer-Slab, Monospace;
   display: inline-block;
-  margin: auto;
-  font-size: .8rem;
-  /*overflow-x: auto;*/
+  text-align: left;
+  font-size: .9rem;
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
   word-wrap: break-word;
-  vertical-align: text-top;  
+  vertical-align: top;
 }
 
 
@@ -140,20 +139,16 @@ ul {
 }
 
 .profile-pic-small {
-  height: 2rem;
-  width: 1.6rem;
+  height: 2.4rem;
+  width: calc(2.4rem/1.25);
   display: inline-block;
-  margin-right: .5rem;
-  text-align: left;
-  vertical-align: text-top;
+  vertical-align: top;
 }
 
 .left-align{
   text-align: left;    
   width: 95%;
   margin: auto;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
 }
 
 .profile-container {
@@ -253,7 +248,7 @@ input[type='file'] {
 .letter-size {
   height: 11in;
   width: 8.5in;
-  padding: 0in .25in 0in .25in;
+  padding: 0.25in .25in 0.25in .25in;
   box-sizing: border-box;
 }
 
@@ -284,4 +279,12 @@ label {
 .checkbox-group {
   display: inline-block;
   margin: 0 2.5pt 0 2.5pt;
+}
+
+.institutional-navy {
+  color: var(--institutional-navy);
+}
+
+.table-schedule {
+  border: 5px solid var(--institutional-navy);
 }
