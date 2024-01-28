@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { days } from '/src/utils'
 import {sortCriterionHelper} from '/src/utils';
 import Table from 'react-bootstrap/Table';
 
@@ -29,7 +30,6 @@ function processUserInfo(info) {
 }
 
 export default function Schedule({ shift, courses }) {
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
   const currDate = new Date();
   const toPrint = useRef();
   const handlePrint = useReactToPrint({
@@ -38,7 +38,7 @@ export default function Schedule({ shift, courses }) {
   //style={{margin: '-16pt 0 -16pt 0'}} top: '20px',
   return (
     <main>
-      <div ref={toPrint} className='schedule-container letter-size flexbox-column designing'>
+      <div ref={toPrint} className='schedule-container letter-size flexbox-column'>
         <h1>
           <img className='qr-code' src='src/img/static-qr-code-6939aa416818b250434bfed8a036658a.png' />
           <div style={{display: 'inline-block', fontSize: '30pt', verticalAlign: 'bottom'}}>
@@ -58,18 +58,8 @@ export default function Schedule({ shift, courses }) {
                   })
                 }
               </tr>
-            </thead>
-            <tbody className='table-schedule'>
-              <tr className='table-schedule'>
-                {days.map((e, i) => {
-                  return (
-                    <td className='table-schedule'>
-                      <Tutors key={e} info={shift[i]} />
-                    </td>
-                  )
-                })}
-              </tr>
-            </tbody>
+            </thead>            
+              <Content info={shift}/>           
           </Table>
         </div>
         <div>
@@ -81,53 +71,70 @@ export default function Schedule({ shift, courses }) {
   )
 };
 
-function Tutors({ info }) {
+function Tutor({user}) {
   function getSubject(str) {
     const subjectRegEx = /(?<=\()[\w\W]*(?=\))/i;
     let subject = str.match(subjectRegEx)[0];
     subject = subject.replace('\/', '-').toLowerCase();
     return subject;
   }
-  const [amGroup, pmGroup] = [[], []];
-
-  //Sort the users according to the start and end time.
-  const combinedInfo = processUserInfo(info);
-
-  const n = combinedInfo.length;
-
-  //Split AM and PM groups. 
-  for(let i = 0; i < n; i++) {
-    function categorize(arr) {
-      arr.push(combinedInfo[i]);
-    }
-    const tutor = combinedInfo[i][0];
-    if(/\bAM\b/.test(tutor)) {
-      categorize(amGroup);
-    } else {
-      categorize(pmGroup);
-    }
-  }
-  function Populate({info}) {   
-    return (
-      <div>   
-        {info.map((e, i) =>
-          <div className="flexbox-row" key={e[0]} style={{marginTop: '.5rem', marginBottom: '.5rem'}}>
-            <div className='profile-pic-small'>
-              <img className="profilePic" src={e[1] ? e[1] : 'https://www.messiah.edu/images/4_see_your_possibilities_anew.jpg'} style={!e[1]? {objectFit: 'contain'}:{}}/>            
-            </div>
-            <span className={getSubject(e[0]) + ' preformatted'} style={{textAlign: 'right'}}>{e[0]}</span>
-          </div>
-        )}
+  return (
+    <div className="flexbox-row" style={{marginTop: '.5rem', marginBottom: '.5rem'}}>
+      <div className='profile-pic-small'>
+        <img className="profilePic" src={user[1] ? user[1] : 'https://www.messiah.edu/images/4_see_your_possibilities_anew.jpg'} style={!user[1]? {objectFit: 'contain'}:{}}/>
       </div>
-    )
+      <span className={getSubject(user[0]) + ' preformatted'} style={{textAlign: 'right'}}>{user[0]}</span>
+    </div>)
+}
+
+function Content({ info }) {
+  const [amGroup, pmGroup] = [Array.from(Array(info.length), () =>[]) , Array.from(Array(info.length), () =>[])];  
+
+   
+  for(let i = 0; i < info.length; i++) {
+    //Sort the users according to the start and end time.
+    const combinedInfo = processUserInfo(info[i]);
+    //
+
+    //Split AM and PM groups.
+    for(let j = 0; j < combinedInfo.length; j++) {
+      function categorize(arr) {
+        arr[i].push(combinedInfo[j]);
+      }
+      const tutor = combinedInfo[j];
+      if(/\bAM\b/.test(tutor)) {
+        categorize(amGroup);
+      } else {
+        categorize(pmGroup);
+      }
+    }
+    //
   }
   return (
-    <div>    
-      <Populate info={amGroup} />
-      {amGroup.length>0 && <div className='table-divider'></div>}   
-      <Populate info={pmGroup} />
-    </div>
-  )
+    <tbody>
+      <tr>
+        {amGroup.map((day, i) => {        
+          if(day.length > 0) {
+            return <td>
+              {day.map((user) => <Tutor user={user}/>)}
+            </td>
+          } else {
+            return <td rowspan='0'>
+              {pmGroup[i].map((user) => <Tutor user={user}/>)}
+            </td>
+          }
+        })}
+      </tr>
+      <tr>
+        {pmGroup.map((day,i) => {        
+          if(day.length > 0 && amGroup[i].length > 0) {
+            return <td rowspan={1}>
+              {day.map((user) => <Tutor user={user}/>)}
+            </td>
+          }
+        })}
+      </tr>
+    </tbody>)
 }
 
 

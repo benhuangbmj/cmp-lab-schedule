@@ -104,13 +104,12 @@ th, td {
   font-family: Aptifer-Slab, Monospace;
   display: inline-block;
   text-align: left;
-  font-size: .9rem;
+  font-size: .8rem;
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
   word-wrap: break-word;
-  vertical-align: top;
 }
 
 
@@ -141,8 +140,7 @@ ul {
 .profile-pic-small {
   height: 2.4rem;
   width: calc(2.4rem/1.25);
-  display: inline-block;
-  vertical-align: top;
+  display: inline-block;  
 }
 
 .left-align{
@@ -165,6 +163,7 @@ ul {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  vertical-align: top;
 }
 
 input[type='file'] {
@@ -287,4 +286,5 @@ label {
 
 .table-schedule {
   border: 5px solid var(--institutional-navy);
+  font-size: 2rem;
 }

@@ -22,7 +22,6 @@ const allFields = ['username', ...textFields, ...checkboxFields, ...popupTextFie
 const registerOptions = {}
 
 export default function Admin() {
-  import('bootstrap/dist/css/bootstrap.min.css');
   const userData = useSelector(state => state.userData.items);
 
   const resetCount = useRef(0);
