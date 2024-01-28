@@ -115,12 +115,12 @@ function Content({ info }) {
       <tr>
         {amGroup.map((day, i) => {        
           if(day.length > 0) {
-            return <td>
-              {day.map((user) => <Tutor user={user}/>)}
+            return <td key={'am ' + days[i]}>
+              {day.map((user) => <Tutor key={user[0] + days[i]} user={user}/>)}
             </td>
           } else {
-            return <td rowspan='0'>
-              {pmGroup[i].map((user) => <Tutor user={user}/>)}
+            return <td key={'pm ' + days[i]} rowSpan='0'>
+              {pmGroup[i].map((user) => <Tutor key={user[0] + days[i]} user={user}/>)}
             </td>
           }
         })}
@@ -128,8 +128,8 @@ function Content({ info }) {
       <tr>
         {pmGroup.map((day,i) => {        
           if(day.length > 0 && amGroup[i].length > 0) {
-            return <td rowspan={1}>
-              {day.map((user) => <Tutor user={user}/>)}
+            return <td key={'pm ' + days[i]}>
+              {day.map((user) => <Tutor key={user[0] + days[i]} user={user}/>)}
             </td>
           }
         })}

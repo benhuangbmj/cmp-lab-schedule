@@ -98,19 +98,19 @@ export default function Admin() {
           </thead>
           <tbody>
             {usernames.map((username, i) => {
-              const fieldNameGen = (field) => `${username} ${field}`;
+              const fieldNameGen = (field) => `${username} ${field}`;              
               return (
-                <tr key={username}>
+                <tr key={username + ' row'}>
                   <td>
                     <input type='checkbox' id={username}/> {i+1}
                   </td>
                   <td>
                     <label htmlFor={username}>{username}</label>
                   </td>
-                  {textFields.map(field => <td><InputText key={field} name={fieldNameGen(field)} utils={formUtils} options={registerOptions} /></td>)}
-                  {checkboxFields.map(field => <td className=''><InputCheckbox key={field} name={fieldNameGen(field)} utils={formUtils} values={fieldOptions[field]} isReset={resetCount.current} options={registerOptions} /></td>)}
+                  {textFields.map(field => <td key={field + ` ${username}`}><InputText name={fieldNameGen(field)} utils={formUtils} options={registerOptions} /></td>)}
+                  {checkboxFields.map(field => <td key={field + ` ${username}`}><InputCheckbox  name={fieldNameGen(field)} utils={formUtils} values={fieldOptions[field]} isReset={resetCount.current} options={registerOptions} /></td>)}
                   {popupTextFields.map(field => {                  
-                    return (<td><InputTextPopup key={field} supField={fieldNameGen(field)} utils={formUtils} options={registerOptions}/></td>)
+                    return (<td key={field + ` ${username}`}><InputTextPopup supField={fieldNameGen(field)} utils={formUtils} options={registerOptions}/></td>)
                   })}
                 </tr>
               )
