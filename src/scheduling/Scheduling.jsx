@@ -5,12 +5,10 @@ import {update} from '../api-operations';
 import Timetable from './Timetable'
 
 export default function Scheduling({info, fetchInfo, selected}) {  
-  const cleanSlate = Array.from(Array(13), () => Array.from(Array(4), ()=>false));
-  const [slots, setSlots] = useState(cleanSlate);
+  const cleanSlate = Array.from(times, () => Array.from(Array(4), ()=>false));
+  const [slots, setSlots] = useState(cleanSlate);  
   const tutorSlots = useRef();
   
-  
-
   const handleReset = () => {
     const resetSlots = Array.from(tutorSlots.current);
     setSlots(resetSlots);
@@ -19,25 +17,7 @@ export default function Scheduling({info, fetchInfo, selected}) {
   const handleClear = () => {
     setSlots(cleanSlate);
   }
-/*
-  const handleSelect = (option) => {
-    if(option) {
-      if(selected != option.value) {
-        if(info[option.value].schedule) {
-          setSlots(info[option.value].schedule);
-          tutorSlots.current = JSON.parse(JSON.stringify(info[option.value].schedule));
-        } else {
-          setSlots(cleanSlate);
-          tutorSlots.current = cleanSlate;
-        }
-        
-        setSelected(option.value);
-      }
-    } else {
-      setSelected();
-    }
-  };
-*/
+
   const handleUpdate = () => {
     const createSchedule = () => {
       const tutorDays = [];
@@ -46,7 +26,7 @@ export default function Scheduling({info, fetchInfo, selected}) {
         let currTimes = '';
         let begin;
         let end;
-        for(let i = 0; i < 13; i++) {
+        for(let i = 0; i < times.length; i++) {
           if(slots[i][j]) {
             end = begin? times[i] : null;
             begin = begin? begin:times[i];
@@ -74,8 +54,14 @@ export default function Scheduling({info, fetchInfo, selected}) {
   useEffect(() => {
     if(selected) {
       if(info[selected].schedule) {
-        setSlots(info[selected].schedule);
-        tutorSlots.current = JSON.parse(JSON.stringify(info[selected].schedule));
+        let schedule = info[selected].schedule;
+        //Write a script to update the current database so that the concrete data will be consistent with the schema.
+        if(schedule.length < 57) {
+          schedule = Array.from(Array(53 - schedule.length), () => Array(4).fill(false)).concat(schedule).concat(Array.from(Array(4), () => Array(4).fill(false)));
+        }
+        //
+        setSlots(schedule);
+        tutorSlots.current = JSON.parse(JSON.stringify(schedule));
       } else {
         setSlots(cleanSlate);
         tutorSlots.current = cleanSlate;
@@ -86,13 +72,13 @@ export default function Scheduling({info, fetchInfo, selected}) {
     }
   }, [selected]);
   return (      
-        <main>          
-          <Timetable tutor={selected?info[selected].name:null} slots={slots} setSlots = {setSlots}/>
-          <div>
-            <button disabled={selected==null} type='button' style={{display: 'inline-block'}}  onClick={handleUpdate}>Update</button>
-            <button type='button' style={{display: 'inline-block'}}  onClick={handleReset}>Reset</button>
-            <button type='button' style={{display: 'inline-block'}}  onClick={handleClear}>Clear</button>
-          </div>          
-        </main>         
+    <main>          
+      <Timetable tutor={selected?info[selected].name:null} slots={slots} setSlots = {setSlots}/>
+      <div>
+        <button disabled={selected==null} type='button' style={{display: 'inline-block'}}  onClick={handleUpdate}>Update</button>
+        <button type='button' style={{display: 'inline-block'}}  onClick={handleReset}>Reset</button>
+        <button type='button' style={{display: 'inline-block'}}  onClick={handleClear}>Clear</button>
+      </div>          
+    </main>         
   )
 }

@@ -2,7 +2,7 @@ import styles from './timetable-style.module.css'
 import {useMemo, useRef, useEffect} from 'react';
 import {days, times} from '../utils'
 
-export default function Timetable({tutor, slots, setSlots}) {  
+export default function Timetable({tutor, slots, setSlots}) {
   const mouseDown = useRef(false);
 
   useEffect(() => {

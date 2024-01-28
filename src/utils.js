@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 
 const saltRounds = 10;
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
-const times = Array.from(Array(13), (e, i) => (6 + Math.floor(i / 4)) + ":" + (i % 4 ? (i % 4) * 15 : "00") + " PM");
+const times = Array.from(Array(57), (e, i) => generateTime(i));
 const schema = {
   password: null,
   name: null,
@@ -190,6 +190,16 @@ export const getReadyForUpdate = (usernames, data) => {
   return convertData(usernames, data);
 }
 ////////////////////////////////////////////////////
+
+
+function generateTime(i) {
+  const h24 = 8 + Math.floor(i / 4);
+  const h = h24 < 13? h24%13 : h24%13 + 1;
+  const mm = i % 4 ? (i % 4) * 15 : "00";
+  let time = h + ":" + mm;
+  time += h24 < 12? " AM" : " PM";
+  return time;
+}
 
 export default {
   apiBaseUrl: apiBaseUrl,
