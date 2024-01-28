@@ -86,35 +86,34 @@ form {
 }
 
 table,tbody,thead {
-  margin: auto;
-  width: 100%;
+  margin: auto;  
 }
 
 table {
-  border: solid;
 }
 
 th, td {
-  width: auto;
-  border: 1px solid;
+  vertical-align: bottom;
 }
 
 .topnav-right {
   float: right;
 }
 
-pre {  
+.preformatted {  
   font-family: Aptifer-Slab, Monospace;
   display: inline-block;
   margin: auto;
-  font-size: 0.8rem;
+  font-size: .8rem;
   /*overflow-x: auto;*/
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
-  word-wrap: break-word;  
+  word-wrap: break-word;
+  vertical-align: text-top;  
 }
+
 
 .qr-code {
   display: inline-block;
@@ -146,6 +145,7 @@ ul {
   display: inline-block;
   margin-right: .5rem;
   text-align: left;
+  vertical-align: text-top;
 }
 
 .left-align{
@@ -253,7 +253,7 @@ input[type='file'] {
 .letter-size {
   height: 11in;
   width: 8.5in;
-  padding: .5in .25in .5in .25in;
+  padding: 0in .25in 0in .25in;
   box-sizing: border-box;
 }
 
@@ -278,4 +278,10 @@ label {
   user-select: none;
   -webkit-user-select: none;
   ms-user-select: none;
+  margin-left: 5pt;
+}
+
+.checkbox-group {
+  display: inline-block;
+  margin: 0 2.5pt 0 2.5pt;
 }

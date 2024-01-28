@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { useRef } from 'react';
 
 import Popup from 'reactjs-popup';
+import Form from 'react-bootstrap/Form';
 
 const handleOnClose = (e, ref, isDirty) => {
   if (e && isDirty) {
@@ -14,10 +15,7 @@ const handleOnClose = (e, ref, isDirty) => {
   }
 }
 
-
-
-export default function MyPopup({ children, trigger, title, supUtils, subUtils, supField}) {
-  !title && (title = trigger);
+export default function MyPopup({children, supUtils, subUtils, supField}) {
   const popupRef = useRef();
   const {
     setValue: setSupValue,
@@ -38,11 +36,10 @@ export default function MyPopup({ children, trigger, title, supUtils, subUtils, 
 
   return (
     <span>
-      <button type='button' onClick={() => popupRef.current.open()}>{trigger}</button>
+      <button type='button' onClick={() => popupRef.current.open()}>open</button>
       <Popup ref={popupRef} onClose={(e) => handleOnClose(e, popupRef, !_.isEqual(subUtils.getValues(), defaultValues))}>
-        <h2>{trigger}</h2>
         <input autoFocus style={{ display: 'none' }} />
-        <form className='modal'>
+        <form style={{padding: '1rem 1rem 1rem 1rem'}}>
           {children}
           <button type='button' onClick={handleConfirm} >Confirm</button>
           <button type='button' onClick={() => { subUtils.reset() }}>Reset</button>

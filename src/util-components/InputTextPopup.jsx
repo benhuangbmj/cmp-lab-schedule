@@ -15,7 +15,7 @@ export default function inputTextPopup({ supField, utils, options }) {
   );
 
   return (
-    <MyPopup trigger={'Social Media'} supUtils={utils} subUtils={subUtils} supField = {supField}> 
+    <MyPopup supUtils={utils} subUtils={subUtils} supField = {supField}> 
       {subFields.map((field) => {
         return (
           <p key={field}>

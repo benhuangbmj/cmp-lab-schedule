@@ -1,3 +1,4 @@
+
 import devTools from '/src/devTools';//delete
 
 import { useSelector } from 'react-redux';
@@ -9,6 +10,7 @@ import utils, { fieldOptions } from '/src/utils';
 import InputText from '/src/util-components/InputText.jsx';
 import InputCheckbox from '/src/util-components/InputCheckbox.jsx';
 import InputTextPopup from '/src/util-components/InputTextPopup.jsx';
+import Table from 'react-bootstrap/Table';
 
 
 const textFields = ['name', 'subject', 'password'];
@@ -16,10 +18,11 @@ const checkboxFields = ['roles'];
 const popupFields = ['schedule'];
 const popupTextFields = ['links'];
 const popupCheckboxFields = ['courses'];
-const allFields = ['username', ...textFields, ...checkboxFields, ...popupTextFields, ...popupFields];
+const allFields = ['username', ...textFields, ...checkboxFields, ...popupTextFields, ...popupFields, ...popupCheckboxFields];
 const registerOptions = {}
 
 export default function Admin() {
+  import('bootstrap/dist/css/bootstrap.min.css');
   const userData = useSelector(state => state.userData.items);
 
   const resetCount = useRef(0);
@@ -86,31 +89,39 @@ export default function Admin() {
 
   if (loaded && Array.isArray(usernames))
     return (
-      <>
-        <div style={{ overflow: 'hidden', marginTop: '12pt', height: '24pt', width: '950px' }}>
-          {allFields.map(field => <span style={{ display: 'inline-block', border: '1px solid', marginRight: '1in', marginBottom: '24pt' }} key={field} onClick={() => { handleSortByField(field) }} >{field}</span>)}
-        </div>
-
-        <form onSubmit={formUtils.handleSubmit(handleUpdate)}>
-          {usernames.map(username => {
-            const fieldNameGen = (field) => `${username} ${field}`;
-            return (
-              <div key={username}>
-                <input type='checkbox' id={username}/>
-                <label htmlFor={username}>{username}</label>
-                {textFields.map(field => <InputText key={field} name={fieldNameGen(field)} utils={formUtils} options={registerOptions} />)}
-                {checkboxFields.map(field => <InputCheckbox key={field} name={fieldNameGen(field)} utils={formUtils} values={fieldOptions[field]} isReset={resetCount.current} options={registerOptions} />)}
-                {popupTextFields.map(field => {                  
-                  return (<InputTextPopup key={field} supField={fieldNameGen(field)} utils={formUtils} options={registerOptions}/>)
-                })}
-              </div>
-            )
-          }
-          )}
-          <button type='submit'>Update</button>
-          <button type='button' onClick={() => { handleReset(defaultValues) }}>Reset</button>
-        </form>
-      </>
+      <form onSubmit={formUtils.handleSubmit(handleUpdate)}>
+        <Table striped borderless hover size='sm' style={{textAlign:'center'}}>
+          <thead className='non-select'>
+            <tr>
+              <th><input type='checkbox'/> #</th>
+              {allFields.map(field => <th key={field} onClick={() => { handleSortByField(field) }}>{field}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {usernames.map((username, i) => {
+              const fieldNameGen = (field) => `${username} ${field}`;
+              return (
+                <tr key={username}>
+                  <td>
+                    <input type='checkbox' id={username}/> {i+1}
+                  </td>
+                  <td>
+                    <label htmlFor={username}>{username}</label>
+                  </td>
+                  {textFields.map(field => <td><InputText key={field} name={fieldNameGen(field)} utils={formUtils} options={registerOptions} /></td>)}
+                  {checkboxFields.map(field => <td className=''><InputCheckbox key={field} name={fieldNameGen(field)} utils={formUtils} values={fieldOptions[field]} isReset={resetCount.current} options={registerOptions} /></td>)}
+                  {popupTextFields.map(field => {                  
+                    return (<td><InputTextPopup key={field} supField={fieldNameGen(field)} utils={formUtils} options={registerOptions}/></td>)
+                  })}
+                </tr>
+              )
+            }
+            )}
+            </tbody>            
+        </Table>
+        <button type='submit'>Update</button>
+        <button type='button' onClick={() => { handleReset(defaultValues) }}>Reset</button>
+      </form>
     )
   else return <div>Loading...</div>
 }

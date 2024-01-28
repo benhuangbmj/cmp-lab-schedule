@@ -1,9 +1,10 @@
-import './App.css';
 import { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import {sortCriterionHelper} from '/src/utils';
+import Table from 'react-bootstrap/Table';
+
 dayjs.extend(customParseFormat);
 
 function parseTime(time) {
@@ -37,20 +38,20 @@ export default function Schedule({ shift, courses }) {
   return (
     <main style={{textAlign: 'center'}}>
       <div ref={toPrint} className='schedule-container letter-size flexbox-row'>
-        <h1 style={{margin: "0"}}>
+        <h1 style={{margin: '-16pt 0 -16pt 0'}} >
         <img className='qr-code' src='src/img/static-qr-code-6939aa416818b250434bfed8a036658a.png' />
-        <div style={{display: 'inline-block', position:'relative', top: '-20px', fontSize: '30pt'}}>
+        <div style={{display: 'inline-block', position:'relative', top: '20px', fontSize: '30pt'}}>
           CMP Lounge Schedule<br/>{currDate.getMonth() >= 6 ? "Fall" : "Spring"} {currDate.getFullYear()}
         </div>        
         <img className='qr-code' src='src/img/qr-code.png' />
         </h1>
-        <table>
+        <Table size='sm' bordered striped='columns'>
           <thead>
             <tr>
               {
                 days.map(e => {
                   return (
-                    <th key={e}>{e}</th>
+                    <th key={e}><span className='institutional-navy'>{e}</span></th>
                   )
                 })
               }
@@ -60,12 +61,14 @@ export default function Schedule({ shift, courses }) {
             <tr>
               {days.map((e, i) => {
                 return (
-                  <Tutors key={e} info={shift[i]} />
+                  <td>
+                    <Tutors key={e} info={shift[i]} />
+                  </td>
                 )
               })}
             </tr>
           </tbody>
-        </table>
+        </Table>
         <Personnel courses={courses} />
       </div>
       <button type='button' onClick={handlePrint}>Print the schedule</button>
@@ -101,24 +104,24 @@ function Tutors({ info }) {
   }
   function Populate({info}) {   
     return (
-      <>   
+      <div>   
         {info.map((e, i) =>
           <div className="left-align" key={e[0]}>
             <div className='profile-pic-small'>
               <img className="profilePic" src={e[1] ? e[1] : 'https://www.messiah.edu/images/4_see_your_possibilities_anew.jpg'} style={!e[1]? {objectFit: 'contain'}:{}}/>            
             </div>
-            <pre className={getSubject(e[0])}>{e[0]}</pre>
+            <span className={getSubject(e[0]) + ' preformatted'}>{e[0]}</span>
           </div>
         )}
-      </>
+      </div>
     )
   }
   return (
-    <td>
+    <>    
       <Populate info={amGroup} />
       {amGroup.length>0 && <div className='table-divider'></div>}   
       <Populate info={pmGroup} />
-    </td>
+    </>
   )
 }
 
@@ -138,7 +141,7 @@ function Personnel({ courses }) {
   })
   return (
     <div>
-      <h2 style={{ margin: '1.5rem 0 0 0', fontSize: '16pt', fontFamily: 'Hand-of-Sean' }}>Who can help you?</h2>
+      <h2 style={{ margin: '-6pt 0 -6pt 0', fontSize: '16pt', fontFamily: 'Hand-of-Sean' }}>Who can help you?</h2>
       {categories.map((subject,i) => {
         return (
           <div key={subjects[i]}>
@@ -150,7 +153,7 @@ function Personnel({ courses }) {
               {subject.map(e => {
                 const arr = e.split(':');
                 return (
-                  <pre key={e} className={subjects[i].toLowerCase()} style={{ width: '100%', textAlign: 'left', height: '100%', fontSize: '8pt' }}><strong>{arr[0]}</strong>:{arr[1]} </pre>
+                  <span key={e} className={subjects[i].toLowerCase() + ' preformatted'} style={{ width: '100%', textAlign: 'left', height: '100%', fontSize: '8pt' }}><strong>{arr[0]}</strong>:{arr[1]} </span>
                 )
               })}
             </div>
