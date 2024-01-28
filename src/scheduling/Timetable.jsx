@@ -1,9 +1,18 @@
 import styles from './timetable-style.module.css'
-import {useMemo, useRef, useEffect} from 'react';
+import {useRef, useEffect, useState} from 'react';
 import {days, times} from '../utils'
+
+function restrict(i) {
+  if(i >=40 && i < 53) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 export default function Timetable({tutor, slots, setSlots}) {
   const mouseDown = useRef(false);
+  const [extended, setExtended] = useState(false);
 
   useEffect(() => {
     document.addEventListener("mouseup", HandleMouseUp)
@@ -29,15 +38,30 @@ export default function Timetable({tutor, slots, setSlots}) {
       setSlots(newSlots);        
     }    
   }
+
+  const handleExtend = () => {
+    setExtended(state => !state);
+  }
+
   return (    
     <div className={styles.container}>
       <h2>{tutor? `${tutor}'s Schedule` : ''}</h2>
+      <button style={{marginBottom: '.5rem'}} type='button' onClick={handleExtend}>{extended? 'Contract': 'Extend'}</button>
       <table className={styles.timetable}>
         <tbody>
           <tr>
             {days.map(e => <th key={e}>{e}</th>)}
           </tr>
-          {times.map((time,i) => <tr key={i}>{days.map((day, j) => <td key={j} style={{backgroundColor: slots[i][j]==true?'grey':null}} onMouseDown={tutor && handleMouseDown} onMouseEnter={tutor && handleMouseEnter} data-pos={[i,j]}>{time}</td>)}</tr>)}
+          {
+            times.map((time,i) => {
+              if(extended || restrict(i)) {
+                return (
+                  <tr key={i}>{days.map((day, j) => <td key={j} style={{backgroundColor: slots[i][j]==true?'grey':null}} onMouseDown={tutor && handleMouseDown} onMouseEnter={tutor && handleMouseEnter} data-pos={[i,j]}>{time}</td>)}
+                  </tr>
+                )
+              }
+            })
+          }
         </tbody>
       </table>
     </div>
