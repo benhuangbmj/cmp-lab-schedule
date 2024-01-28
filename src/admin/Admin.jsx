@@ -11,6 +11,7 @@ import InputText from '/src/util-components/InputText.jsx';
 import InputCheckbox from '/src/util-components/InputCheckbox.jsx';
 import InputTextPopup from '/src/util-components/InputTextPopup.jsx';
 import Table from 'react-bootstrap/Table';
+import Form from 'react-bootstrap/Form';
 
 
 const textFields = ['name', 'subject', 'password'];
@@ -18,7 +19,8 @@ const checkboxFields = ['roles'];
 const popupFields = ['schedule'];
 const popupTextFields = ['links'];
 const popupCheckboxFields = ['courses'];
-const allFields = ['username', ...textFields, ...checkboxFields, ...popupTextFields, ...popupFields, ...popupCheckboxFields];
+const switchFields = ['inactive'];
+const allFields = ['username', ...textFields, ...checkboxFields, ...popupTextFields, ...popupFields, ...popupCheckboxFields, ...switchFields];
 const registerOptions = {}
 
 export default function Admin() {
@@ -29,6 +31,7 @@ export default function Admin() {
   const [usernames, setUsernames] = useState();
   const [descending, setDescending] = useState('username');
   const [currValues, setCurrValues] = useState();
+  const [selectAll, setSelectAll] = useState(false);
   const formUtils = useForm({
     criteriaMode: 'all',
   })
@@ -42,6 +45,7 @@ export default function Admin() {
           .flat();
       entries = entries.concat(usernames.map(username => [[`${username} username`, username], [`${username} password`, null]]).flat());
       const output = Object.fromEntries(entries);
+      output.selected = false;
       return output;
     }
   }, [usernames]);
@@ -60,6 +64,9 @@ export default function Admin() {
   }
   const handleUpdate = (data) => {
     console.log(data)//delete
+    const selected = data.selected;
+    console.log('selected: ', selected);
+    delete data.selected;
     data = utils.getReadyForUpdate(usernames, data);
   }
 
@@ -79,11 +86,14 @@ export default function Admin() {
   }, [descending])
 
   useEffect(() => {
+    formUtils.setValue('selected', selectAll? usernames : false);
+  }, [selectAll])
+
+  useEffect(() => {
 
   }, [])//delete
 
   useEffect(() => {
-
   })//delete
 
   if (loaded && Array.isArray(usernames))
@@ -92,7 +102,7 @@ export default function Admin() {
         <Table striped borderless hover size='sm' style={{textAlign:'center'}}>
           <thead className='non-select'>
             <tr>
-              <th><input type='checkbox'/> #</th>
+              <th><input type='checkbox' onClick={() => setSelectAll(state => !state)}/> #</th>
               {allFields.map(field => <th key={field} onClick={() => { handleSortByField(field) }}>{field}</th>)}
             </tr>
           </thead>
@@ -102,15 +112,24 @@ export default function Admin() {
               return (
                 <tr key={username + ' row'}>
                   <td>
-                    <input type='checkbox' id={username}/> {i+1}
+                    <input type='checkbox' id={username} value={username} checked={selectAll} {...formUtils.register('selected')}/> {i+1}
                   </td>
                   <td>
                     <label htmlFor={username}>{username}</label>
                   </td>
-                  {textFields.map(field => <td key={field + ` ${username}`}><InputText name={fieldNameGen(field)} utils={formUtils} options={registerOptions} /></td>)}
-                  {checkboxFields.map(field => <td key={field + ` ${username}`}><InputCheckbox  name={fieldNameGen(field)} utils={formUtils} values={fieldOptions[field]} isReset={resetCount.current} options={registerOptions} /></td>)}
+                  {textFields.map(field => <td key={fieldNameGen(field)}><InputText name={fieldNameGen(field)} utils={formUtils} options={registerOptions} /></td>)}
+                  {checkboxFields.map(field => <td key={fieldNameGen(field)}><InputCheckbox  name={fieldNameGen(field)} utils={formUtils} values={fieldOptions[field]} isReset={resetCount.current} options={registerOptions} /></td>)}
                   {popupTextFields.map(field => {                  
-                    return (<td key={field + ` ${username}`}><InputTextPopup supField={fieldNameGen(field)} utils={formUtils} options={registerOptions}/></td>)
+                    return (<td key={fieldNameGen(field)}><InputTextPopup supField={fieldNameGen(field)} utils={formUtils} options={registerOptions}/></td>)
+                  })}
+                  {popupFields.map(field => {
+                    return (<td key={fieldNameGen(field)}></td>)
+                  })}
+                  {popupCheckboxFields.map(field => {
+                    return (<td key={fieldNameGen(field)}></td>)
+                  })}
+                  {switchFields.map(field => {
+                    return (<td key={fieldNameGen(field)}><Form.Switch {...formUtils.register(fieldNameGen(field))}/></td>)
                   })}
                 </tr>
               )

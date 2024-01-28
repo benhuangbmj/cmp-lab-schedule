@@ -1,4 +1,4 @@
-import 'reactjs-popup/dist/index.css';
+//import 'reactjs-popup/dist/index.css';
 import _ from 'lodash';
 
 import { useRef } from 'react';
@@ -38,8 +38,9 @@ export default function MyPopup({children, supUtils, subUtils, supField}) {
     <span>
       <button type='button' onClick={() => popupRef.current.open()}>open</button>
       <Popup ref={popupRef} onClose={(e) => handleOnClose(e, popupRef, !_.isEqual(subUtils.getValues(), defaultValues))}>
-        <input autoFocus style={{ display: 'none' }} />
+        <input autoFocus style={{ display: 'none' }} />        
         <form style={{padding: '1rem 1rem 1rem 1rem'}}>
+          <h2 style={{textAlign: 'center'}} >{_.capitalize(supField.split(' ')[1])}</h2>
           {children}
           <button type='button' onClick={handleConfirm} >Confirm</button>
           <button type='button' onClick={() => { subUtils.reset() }}>Reset</button>
