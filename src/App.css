@@ -1,35 +1,35 @@
 :root {
-  --cis-color: #0B7367;
+  --cis-color: #0b7367;
   --math-color: #11698c;
   --phys-color: #614495;
-  --stat-color: #A63738;
+  --stat-color: #a63738;
   --institutional-navy: #002856;
-  --institutional-green: #0B7367;
+  --institutional-green: #0b7367;
 }
 
 @font-face {
-  font-family: 'Priori';
-  src: url('/zPrioriSansOT-Regular.otf');
+  font-family: "Priori";
+  src: url("/zPrioriSansOT-Regular.otf");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Aptifer-Slab';
-  src: url('/Aptifer Slab LT Pro.otf');
+  font-family: "Aptifer-Slab";
+  src: url("/Aptifer Slab LT Pro.otf");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Hand-of-Sean';
-  src: url('/Hand_Of_Sean_Demo.ttf');
+  font-family: "Hand-of-Sean";
+  src: url("/Hand_Of_Sean_Demo.ttf");
   font-weight: normal;
   font-style: normal;
 }
 
 main {
-  text-align: center
+  text-align: center;
 }
 
 .card-holder {
@@ -48,24 +48,27 @@ main {
 .course-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-gap: .5rem;
+  grid-gap: 0.5rem;
   justify-content: center;
 }
 
 .flexbox-row {
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;  
+  align-items: center;
   margin: auto;
 }
 
 .flexbox-column {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
+  align-items: center;
   margin: auto;
 }
 
@@ -74,25 +77,28 @@ form {
 }
 
 .input-holder {
-  max-width: 350px; 
+  /*max-width: 350px; */
   text-align: right;
 }
 .input-timetable-frame {
-   max-width: 650px;
+  /*max-width: 650px;*/
 }
 
 .login {
   display: grid;
-  grid-template-rows: 3rem repeat(3,2.5rem);
+  grid-template-rows: 3rem repeat(3, 2.5rem);
   grid-gap: 5px;
   margin: auto;
 }
 
-table,tbody,thead {
-  margin: auto;  
+table,
+tbody,
+thead {
+  margin: auto;
 }
 
-th, td {
+th,
+td {
   vertical-align: bottom;
 }
 
@@ -100,11 +106,11 @@ th, td {
   float: right;
 }
 
-.preformatted {  
+.preformatted {
   font-family: Aptifer-Slab, Monospace;
   display: inline-block;
   text-align: left;
-  font-size: .8rem;
+  font-size: 0.8rem;
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -pre-wrap;
@@ -112,12 +118,11 @@ th, td {
   word-wrap: break-word;
 }
 
-
 .qr-code {
   display: inline-block;
   width: 1in;
   height: 1in;
-  margin: 0 .2in 0 .2in;
+  margin: 0 0.2in 0 0.2in;
 }
 
 ul {
@@ -139,12 +144,12 @@ ul {
 
 .profile-pic-small {
   height: 2.4rem;
-  width: calc(2.4rem/1.25);
-  display: inline-block;  
+  width: calc(2.4rem / 1.25);
+  display: inline-block;
 }
 
-.left-align{
-  text-align: left;    
+.left-align {
+  text-align: left;
   width: 95%;
   margin: auto;
 }
@@ -156,7 +161,7 @@ ul {
   border: 1px solid black;
   margin: 1rem auto;
   line-height: 1.6in;
-  object-fit: cover;  
+  object-fit: cover;
 }
 
 .profilePic {
@@ -166,7 +171,7 @@ ul {
   vertical-align: top;
 }
 
-input[type='file'] {
+input[type="file"] {
   color: rgba(0, 0, 0, 0);
 }
 
@@ -191,25 +196,24 @@ input[type='file'] {
 
 .course-container {
   width: 25rem;
-  margin: 0.5rem auto 1rem auto;
-  display: flex;
-  flex-flow: row wrap;
   justify-content: flex-start;
 }
 
-.course-container>div {
+.course-container > div {
   width: 25%;
   text-align: left;
-  line-height: 1.5rem;
-  margin: 0px;
 }
 
 .math {
   color: var(--math-color);
 }
 .math-stat {
-  background: -webkit-linear-gradient(45deg, var(--math-color) 0%, var(--stat-color) 100%);  
-  -webkit-background-clip: text;  
+  background: -webkit-linear-gradient(
+    45deg,
+    var(--math-color) 0%,
+    var(--stat-color) 100%
+  );
+  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -230,7 +234,7 @@ input[type='file'] {
 }
 
 .subject-title {
-  display: inline-block;  
+  display: inline-block;
   margin: 6pt 6pt 6pt 0pt;
   flex-grow: 0;
   font-size: 12pt;
@@ -238,16 +242,20 @@ input[type='file'] {
 }
 
 .divider-line {
-  display: inline-block;  
+  display: inline-block;
   height: 2pt;
-  background: linear-gradient(to right, var(--institutional-navy), var(--institutional-green));
-  flex-grow: 1;  
+  background: linear-gradient(
+    to right,
+    var(--institutional-navy),
+    var(--institutional-green)
+  );
+  flex-grow: 1;
 }
 
 .letter-size {
   height: 11in;
   width: 8.5in;
-  padding: 0.25in .25in 0.25in .25in;
+  padding: 0.25in 0.25in 0.25in 0.25in;
   box-sizing: border-box;
 }
 
@@ -287,4 +295,14 @@ label {
 .table-schedule {
   border: 5px solid var(--institutional-navy);
   font-size: 2rem;
+}
+
+.sticky-top {
+  position: -webkit-sticky;
+  position: sticky;
+  width: fit-content;
+}
+
+.padding-1rem {
+  padding: 1rem 1rem;
 }
