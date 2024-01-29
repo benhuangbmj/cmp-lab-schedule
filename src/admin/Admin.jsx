@@ -69,6 +69,10 @@ export default function Admin() {
     delete data.selected;
     data = utils.getReadyForUpdate(usernames, data);
   }
+  const handleInactivate = () => {
+    const selected = formUtils.getValues('selected');
+    console.log(selected);
+  }
 
   useEffect(() => {
     setUsernames(Object.keys(userData).sort())
@@ -112,7 +116,7 @@ export default function Admin() {
               return (
                 <tr key={username + ' row'}>
                   <td>
-                    <input type='checkbox' id={username} value={username} checked={selectAll} {...formUtils.register('selected')}/> {i+1}
+                    <input type='checkbox' id={username} value={username} {...formUtils.register('selected')}/> {i+1}
                   </td>
                   <td>
                     <label htmlFor={username}>{username}</label>
@@ -139,6 +143,7 @@ export default function Admin() {
         </Table>
         <button type='submit'>Update</button>
         <button type='button' onClick={() => { handleReset(defaultValues) }}>Reset</button>
+        <button type='button' onClick={handleInactivate}>Inactivate</button>
       </form>
     )
   else return <div>Loading...</div>
