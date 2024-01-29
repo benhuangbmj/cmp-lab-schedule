@@ -50,6 +50,15 @@ export default function Admin() {
     }
   }, [usernames]);
 
+  const setInative = (boolean) => {
+    const selected = formUtils.getValues('selected');
+    if(selected) {
+      selected.forEach(user => {
+        formUtils.setValue(`${user} inactive`, boolean);
+      })
+    }
+  }
+
   const handleSortByField = (field) => {
     if (textFields.concat(['username']).includes(field)) {
       const formValues = formUtils.getValues();
@@ -70,8 +79,11 @@ export default function Admin() {
     data = utils.getReadyForUpdate(usernames, data);
   }
   const handleInactivate = () => {
-    const selected = formUtils.getValues('selected');
-    console.log(selected);
+    setInative(true);
+  }
+
+  const handleActivate = () => {
+    setInative(false);
   }
 
   useEffect(() => {
@@ -144,6 +156,7 @@ export default function Admin() {
         <button type='submit'>Update</button>
         <button type='button' onClick={() => { handleReset(defaultValues) }}>Reset</button>
         <button type='button' onClick={handleInactivate}>Inactivate</button>
+        <button type='button' onClick={handleActivate}>Activate</button>
       </form>
     )
   else return <div>Loading...</div>
