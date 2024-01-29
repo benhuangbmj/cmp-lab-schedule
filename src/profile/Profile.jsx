@@ -193,53 +193,53 @@ formState: {errors: errorsLogin},
       }
     }
     return (
-      <span>
-        <label>Change Profile Picture </label>
+      <div>
         <input
+          style={{ width: "102px" }}
           disabled={loggedIn || newUsername ? false : true}
           type="file"
           accept="image/*"
           onChange={handleChangeProfile}
         />
-        <button
-          type="button"
-          disabled={loggedIn && newPic ? false : true}
-          className="file-input-button"
-          onClick={uploadPic}
-        >
-          {uploadStatus}
-        </button>
-        <button
-          type="button"
-          disabled={loggedIn && profile ? false : true}
-          style={{ marginLeft: "5px" }}
-          onClick={() => {
-            alert("This feature is under construction.");
-          }}
-        >
-          Remove
-        </button>
-        <button
-          type="button"
-          disabled={loggedIn && profile ? false : true}
-          style={{ marginLeft: "5px" }}
-          onClick={() => {
-            handleRotate(true);
-          }}
-        >
-          Rotate Clockwise
-        </button>
-        <button
-          type="button"
-          disabled={loggedIn && profile ? false : true}
-          style={{ marginLeft: "5px" }}
-          onClick={() => {
-            handleRotate(false);
-          }}
-        >
-          Rotate Counterclockwise
-        </button>
-      </span>
+        <div className="flexbox-row" style={{ width: "fit-content" }}>
+          <button
+            type="button"
+            disabled={loggedIn && newPic ? false : true}
+            onClick={uploadPic}
+          >
+            {uploadStatus}
+          </button>
+          <button
+            type="button"
+            disabled={loggedIn && profile ? false : true}
+            onClick={() => {
+              alert("This feature is under construction.");
+            }}
+          >
+            Remove
+          </button>
+        </div>
+        <div className="flexbox-row" style={{ width: "fit-content" }}>
+          <button
+            type="button"
+            disabled={loggedIn && profile ? false : true}
+            onClick={() => {
+              handleRotate(true);
+            }}
+          >
+            Rotate Clockwise
+          </button>
+          <button
+            type="button"
+            disabled={loggedIn && profile ? false : true}
+            onClick={() => {
+              handleRotate(false);
+            }}
+          >
+            Rotate Counterclockwise
+          </button>
+        </div>
+      </div>
     );
   }
 
@@ -369,7 +369,7 @@ formState: {errors: errorsLogin},
   }, []);
   return (
     <main>
-      <div className="flexbox-column padding-1rem">
+      <div className="flexbox-column padding-1rem" style={{ width: "800px" }}>
         <form onSubmit={handleSubmit(handleUpdate)} style={{ width: "100%" }}>
           <div
             className="sticky-top flexbox-column"
@@ -397,8 +397,9 @@ formState: {errors: errorsLogin},
             {userData[activeUser].roles.admin && (
               <>
                 <SelectUser info={info} handleSelect={handleSelect} />
+                <span> or </span>
                 <button type="button" onClick={() => handleSelect(null)}>
-                  Create New User
+                  Create a New User
                 </button>
               </>
             )}
