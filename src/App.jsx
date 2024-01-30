@@ -24,6 +24,7 @@ export default function App() {
   const [info, setInfo] = useState(null);
   const [courseTutor, setCourseTutor] = useState(null);
   const [shifts, setShifts] = useState(null);
+  const [navbar, setNavbar] = useState(true);
 
   const active = useSelector(selectActive);
 
@@ -67,31 +68,35 @@ export default function App() {
   } else {
     return (
       <div>
-        <div>
-          <nav>
-            <div className="topnav-right">
-              {!active.user ? (
-                <NavLink to="/login">
-                  <button type="button"> Log in </button>
-                </NavLink>
-              ) : (
-                <SignOut />
-              )}
-            </div>
-            {active.user && (
-              <div>
-                <NavLink to="/">Schedule</NavLink> |{" "}
-                <NavLink to="/profile">Profile</NavLink> |{" "}
-                <NavLink to="/admin">Administration</NavLink> |
-                <NavLink to="/experimental">Experimental</NavLink>
-              </div>
+        <nav style={{ display: navbar ? "initial" : "none" }}>
+          <div className="topnav-right">
+            {!active.user ? (
+              <NavLink to="/login">
+                <button type="button"> Log in </button>
+              </NavLink>
+            ) : (
+              <SignOut />
             )}
-          </nav>
-        </div>
+          </div>
+          {active.user && (
+            <div>
+              <NavLink to="/">Schedule</NavLink> |{" "}
+              <NavLink to="/profile">Profile</NavLink> |{" "}
+              <NavLink to="/admin">Administration</NavLink> |
+              <NavLink to="/experimental">Experimental</NavLink>
+            </div>
+          )}
+        </nav>
         <Routes>
           <Route
             path="/"
-            element={<Schedule shift={shifts} courses={courseTutor} />}
+            element={
+              <Schedule
+                shift={shifts}
+                courses={courseTutor}
+                setNavbar={setNavbar}
+              />
+            }
           />
           <Route
             path="/profile"

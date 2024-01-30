@@ -1,12 +1,14 @@
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { days } from "/src/utils";
 import { sortCriterionHelper } from "/src/utils";
+import { useSelector } from "react-redux";
 import Table from "react-bootstrap/Table";
 
 dayjs.extend(customParseFormat);
+const currDate = new Date();
 
 function parseTime(time) {
   return dayjs(time, "h:mm A");
@@ -29,12 +31,25 @@ function processUserInfo(info) {
   return combinedInfo;
 }
 
-export default function Schedule({ shift, courses }) {
-  const currDate = new Date();
+export default function Schedule({ shift, courses, setNavbar }) {
+  const [onScreen, setOnScreen] = useState("none");
+  const activeUser = useSelector((state) => state.active.user);
+  const userData = useSelector((state) => state.userData.items);
   const toPrint = useRef();
   const handlePrint = useReactToPrint({
     content: () => toPrint.current,
   });
+
+  function handleToggleNavbar() {
+    setNavbar((state) => !state);
+  }
+
+  useEffect(() => {
+    if (userData && activeUser && userData[activeUser].roles.admin) {
+      setOnScreen("initial");
+    }
+  }, [activeUser, userData]);
+
   return (
     <main>
       <div
@@ -80,9 +95,22 @@ export default function Schedule({ shift, courses }) {
           <Personnel courses={courses} />
         </div>
       </div>
-      <button type="button" onClick={handlePrint}>
-        Print the schedule
-      </button>
+      <div style={{ marginTop: "100px" }}>
+        <button
+          type="button"
+          style={{ display: onScreen }}
+          onClick={handlePrint}
+        >
+          Print the schedule
+        </button>
+        <button
+          type="button"
+          style={{ display: onScreen }}
+          onClick={handleToggleNavbar}
+        >
+          Toggle navbar
+        </button>
+      </div>
     </main>
   );
 }
