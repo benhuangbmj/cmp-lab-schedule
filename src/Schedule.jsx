@@ -55,6 +55,7 @@ export default function Schedule({ shift, courses, setNavbar }) {
       <div
         ref={toPrint}
         className="schedule-container letter-size flexbox-column"
+        style={{ flexWrap: "nowrap" }}
       >
         <h1>
           <img
