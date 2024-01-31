@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useForm } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 import { useSelector } from "react-redux";
 
 import { getSingleAsset, update, fetchKey } from "/src/api-operations";
@@ -28,15 +29,12 @@ export default function Profile({ info, fetchInfo }) {
     watch,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  /*
-const {
-register: registerLogin,
-handleSubmit: handleSubmitLogin,
-reset: resetLogin,
-formState: {errors: errorsLogin},
-} = useForm();
-*/
+    setError,
+    clearErrors,
+  } = useForm({
+    reValidateMode: "onSubmit",
+  });
+
   const activeUser = useSelector((state) => state.active.user);
   const userData = useSelector((state) => state.userData.items);
   const [newPic, setNewPic] = useState();
@@ -46,6 +44,13 @@ formState: {errors: errorsLogin},
   const [loggedIn, setLoggedIn] = useState(true);
   const currUser = useRef();
   const newUsername = watch("username");
+
+  function generateUsernameError() {
+    setError("username", {
+      type: "conflict",
+      message: "The username already exists.",
+    });
+  }
 
   const resetAll = () => {
     reset(blankForm);
@@ -313,15 +318,12 @@ formState: {errors: errorsLogin},
 
   const displayInfo = (user) => {
     setProfile();
-    if (info[user].profilePic) {
+    if (info[user] && info[user].profilePic) {
       setProfile(info[user].profilePic.url);
     }
-    const initialVal = Object.assign(
-      {},
-      { username: user },
-      info[user],
-      info[user].links,
-    );
+    const initialVal = info[user]
+      ? Object.assign({}, { username: user }, info[user], info[user].links)
+      : dataSchema;
     delete initialVal.links;
     delete initialVal.password;
     reset(initialVal);
@@ -356,6 +358,15 @@ formState: {errors: errorsLogin},
       alert("Action terminated.");
     }
   };
+
+  useEffect(() => {
+    if (!selected) {
+      clearErrors();
+      if (Object.hasOwn(userData, newUsername)) {
+        generateUsernameError();
+      }
+    }
+  }, [newUsername]);
 
   useEffect(() => {
     if (newPic) {
@@ -452,7 +463,7 @@ formState: {errors: errorsLogin},
                 {["username"].concat(Object.keys(dataSchema)).map((e) => {
                   if (display.includes(e)) {
                     return e != "links" ? (
-                      <p key={e}>
+                      <div key={e}>
                         <label>
                           {e == "password" ? "new passowrd" : e}
                           {e == "username" && (
@@ -473,6 +484,13 @@ formState: {errors: errorsLogin},
                               type="text"
                               {...register(e, {
                                 required: "Username is required.",
+                                pattern: {
+                                  value: /^\D/,
+                                  message:
+                                    "Username cannot start with numbers.",
+                                },
+                                validate: (value) =>
+                                  !Object.hasOwn(userData, value),
                               })}
                             />
                             {errors.username ? (
@@ -487,15 +505,15 @@ formState: {errors: errorsLogin},
                             {...register(e)}
                           />
                         )}
-                      </p>
+                      </div>
                     ) : (
                       Object.keys(dataSchema[e]).map((link) => (
-                        <p key={link}>
+                        <div key={link}>
                           <label style={{ textTransform: "capitalize" }}>
                             {link}:{" "}
                           </label>
                           <input type="url" {...register(link)} />{" "}
-                        </p>
+                        </div>
                       ))
                     );
                   }
