@@ -86,7 +86,10 @@ export default function App() {
               <NavLink className="nav-link" to="/">
                 <Navbar.Brand>CMP-Lab@Messiah</Navbar.Brand>
               </NavLink>
-              <Navbar.Toggle aria-controls="basic-navbar-nav" />
+              <Navbar.Toggle
+                aria-controls="basic-navbar-nav"
+                style={{ display: active.user ? "initial" : "none" }}
+              />
               <Navbar.Collapse>
                 {active.user && (
                   <Nav>
