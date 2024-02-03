@@ -12,6 +12,7 @@ import SelectUser from "/src/util-components/SelectUser";
 
 import CardDisplay from "/src/IDcard/CardDisplay";
 import Scheduling from "/src/scheduling/Scheduling";
+import ChangePic from "./ChangePic";
 
 import sendEmail from "/src/utils/sendEmail";
 
@@ -59,7 +60,7 @@ export default function Profile({ info, fetchInfo }) {
     setNewPic();
     setProfile();
   };
-
+  /*
   function ChangeProfile() {
     function handleChangeProfile(e) {
       setNewPic(e.target.files[0]);
@@ -247,7 +248,7 @@ export default function Profile({ info, fetchInfo }) {
       </div>
     );
   }
-
+*/
   const handleRotate = (clockwise) => {
     const newDeg = clockwise ? 90 : -90;
     const currInfo = info[selected];
@@ -426,7 +427,7 @@ export default function Profile({ info, fetchInfo }) {
               </p>
             )}
             <div className="flexbox-column card-profile-frame">
-              <ChangeProfile />
+              <ChangePic />
               {selected && loggedIn
                 ? [
                     <img
