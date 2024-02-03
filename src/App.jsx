@@ -88,7 +88,7 @@ export default function App() {
               </NavLink>
               <Navbar.Toggle
                 aria-controls="basic-navbar-nav"
-                style={{ display: active.user ? "initial" : "none" }}
+                style={!active.user ? { display: "none" } : {}}
               />
               <Navbar.Collapse>
                 {active.user && (
