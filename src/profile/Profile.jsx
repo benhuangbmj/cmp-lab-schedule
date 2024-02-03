@@ -38,6 +38,7 @@ export default function Profile({ info, fetchInfo }) {
 
   const activeUser = useSelector((state) => state.active.user);
   const userData = useSelector((state) => state.userData.items);
+  const [renew, setRenew] = useState(0);
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState("Upload");
   const [profile, setProfile] = useState();
@@ -248,7 +249,7 @@ export default function Profile({ info, fetchInfo }) {
       </div>
     );
   }
-*/
+*/ /*
   const handleRotate = (clockwise) => {
     const newDeg = clockwise ? 90 : -90;
     const currInfo = info[selected];
@@ -266,7 +267,7 @@ export default function Profile({ info, fetchInfo }) {
     }
     update("transform", [selected, "profilePic"], newRotate, fetchInfo);
   };
-
+*/
   const handleUpdate = async (data) => {
     const username = data.username;
     delete data.username;
@@ -370,15 +371,15 @@ export default function Profile({ info, fetchInfo }) {
   }, [newUsername]);
 
   useEffect(() => {
-    if (newPic) {
-      const newPicURL = URL.createObjectURL(newPic);
-      setProfile(newPicURL);
-    }
-  }, [newPic]);
-
-  useEffect(() => {
     displayInfo(selected);
   }, []);
+
+  useEffect(() => {
+    if (renew) {
+      fetchInfo();
+    }
+  }, [renew]);
+
   return (
     <main>
       <div className="flexbox-column padding-1rem" style={{ width: "800px" }}>
@@ -427,37 +428,18 @@ export default function Profile({ info, fetchInfo }) {
               </p>
             )}
             <div className="flexbox-column card-profile-frame">
-              <ChangePic />
-              {selected && loggedIn
-                ? [
-                    <img
-                      key="profile"
-                      className="profile-container"
-                      src={
-                        profile
-                          ? profile
-                          : "https://www.messiah.edu/images/stained_glass_circle1_multicolor.jpg"
-                      }
-                    />,
-                    <div key="IDCard" className="card-holder">
-                      <CardDisplay
-                        pageSize={[220, 290]}
-                        pageOrientation="landscape"
-                        info={{ user: info[selected] }}
-                      />
-                    </div>,
-                  ]
-                : [
-                    <div key="profile" className="profile-container">
-                      <span style={{ position: "absolute" }}>profile</span>
-                      <span style={{ position: "relative", top: "20px" }}>
-                        picture
-                      </span>
-                    </div>,
-                    <div key="IDCard" className="card-holder">
-                      ID card
-                    </div>,
-                  ]}
+              <ChangePic selected={selected} setRenew={setRenew} />
+              {selected && loggedIn ? (
+                <div className="card-holder">
+                  <CardDisplay
+                    pageSize={[220, 290]}
+                    pageOrientation="landscape"
+                    info={{ user: info[selected] }}
+                  />
+                </div>
+              ) : (
+                <div className="card-holder">ID card</div>
+              )}
             </div>
             <div className="flexbox-column">
               <div className="input-holder">
