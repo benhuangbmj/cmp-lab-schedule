@@ -69,6 +69,9 @@ export default function Profile({ info, fetchInfo }) {
       delete data[key];
     });
     data.links = links;
+    if (typeof data.password == "string") {
+      data.password = data.password.trim();
+    }
     if (data.password && data.password != "") {
       data.password = bcrypt.hashSync(data.password, 10);
       setLoggedIn(false);
