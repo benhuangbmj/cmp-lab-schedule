@@ -100,10 +100,7 @@ thead {
 th,
 td {
   vertical-align: bottom;
-}
-
-.topnav-right {
-  float: right;
+  width: auto;
 }
 
 .preformatted {
@@ -297,4 +294,13 @@ label {
 
 .padding-1rem {
   padding: 1rem 1rem;
+}
+
+.bk-institutional-navy {
+  background-color: var(--institutional-navy);
+}
+
+.navbar {
+  width: fit-content;
+  display: inline-block;
 }

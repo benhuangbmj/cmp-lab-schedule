@@ -4,13 +4,18 @@ import "./App.css";
 import utils from "/src/utils";
 
 import { useState, useEffect, useCallback } from "react";
-import { Route, Routes, Link, NavLink } from "react-router-dom";
+import { Route, Routes, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { selectActive, updateActive } from "/src/reducers/activeReducer.js";
 import { fetchUserData } from "/src/reducers/userDataReducer";
 
 import { fetchInfo as preFetchInfo, fetchKey } from "./api-operations.js";
+
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import Container from "react-bootstrap/Container";
+import NavDropdown from "react-bootstrap/NavDropdown";
 
 import Schedule from "./Schedule";
 import Profile from "./profile/Profile";
@@ -68,25 +73,51 @@ export default function App() {
   } else {
     return (
       <div>
-        <nav style={{ display: navbar ? "initial" : "none" }}>
-          <div className="topnav-right">
-            {!active.user ? (
-              <NavLink to="/login">
-                <button type="button"> Log in </button>
+        <Navbar
+          style={{ display: navbar ? "initial" : "none" }}
+          data-bs-theme="dark"
+          expand="md"
+          sticky="top"
+        >
+          <div className="flexbox-row bk-institutional-navy">
+            <div
+              className="flexbox-row"
+              style={{ justifyContent: "flex-start", margin: 0 }}
+            >
+              <NavLink className="nav-link" to="/">
+                <Navbar.Brand>CMP-Lab@Messiah</Navbar.Brand>
               </NavLink>
-            ) : (
-              <SignOut />
-            )}
-          </div>
-          {active.user && (
-            <div>
-              <NavLink to="/">Schedule</NavLink> |{" "}
-              <NavLink to="/profile">Profile</NavLink> |{" "}
-              <NavLink to="/admin">Administration</NavLink> |
-              <NavLink to="/experimental">Experimental</NavLink>
+              <Navbar.Toggle aria-controls="basic-navbar-nav" />
+              <Navbar.Collapse>
+                {active.user && (
+                  <Nav>
+                    <NavLink className="nav-link" to="/">
+                      Schedule
+                    </NavLink>
+                    <NavLink className="nav-link" to="/profile">
+                      Profile
+                    </NavLink>
+                    <NavLink className="nav-link" to="/admin">
+                      Administration
+                    </NavLink>
+                    <NavLink className="nav-link" to="/experimental">
+                      Experimental
+                    </NavLink>
+                  </Nav>
+                )}
+              </Navbar.Collapse>
             </div>
-          )}
-        </nav>
+            <Nav>
+              {!active.user ? (
+                <NavLink className="nav-link" to="/login">
+                  <button type="button"> Log in </button>
+                </NavLink>
+              ) : (
+                <SignOut />
+              )}
+            </Nav>
+          </div>
+        </Navbar>
         <Routes>
           <Route
             path="/"
