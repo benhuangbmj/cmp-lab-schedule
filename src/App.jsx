@@ -14,8 +14,7 @@ import { fetchInfo as preFetchInfo, fetchKey } from "./api-operations.js";
 
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import Container from "react-bootstrap/Container";
-import NavDropdown from "react-bootstrap/NavDropdown";
+import Button from "react-bootstrap/Button";
 
 import Schedule from "./Schedule";
 import Profile from "./profile/Profile";
@@ -109,8 +108,14 @@ export default function App() {
             </div>
             <Nav>
               {!active.user ? (
-                <NavLink className="nav-link" to="/login">
-                  <button type="button"> Log in </button>
+                <NavLink
+                  className="nav-link"
+                  to="/login"
+                  style={{ padding: "0" }}
+                >
+                  <Button variant="outline-light" size="sm">
+                    Log in
+                  </Button>
                 </NavLink>
               ) : (
                 <SignOut />

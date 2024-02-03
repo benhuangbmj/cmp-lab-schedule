@@ -1,6 +1,8 @@
 import { useDispatch } from "react-redux";
 import { updateActive } from "/src/reducers/activeReducer";
 
+import Button from "react-bootstrap/Button";
+
 export default function SignOut() {
   const dispatch = useDispatch();
   const handleSignOut = () => {
@@ -10,8 +12,8 @@ export default function SignOut() {
     document.cookie = `activeStatus=; expires=${past.toUTCString()}`;
   };
   return (
-    <button type="button" onClick={handleSignOut}>
+    <Button variant="outline-light" onClick={handleSignOut} size="sm">
       Sign out
-    </button>
+    </Button>
   );
 }
