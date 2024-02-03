@@ -185,7 +185,7 @@ export default function ChangePic({ selected, setRenew }) {
     }
   }
   return (
-    <div className="designing">
+    <div>
       {selected ? (
         <img
           className="profile-container"
@@ -203,7 +203,6 @@ export default function ChangePic({ selected, setRenew }) {
       )}
       <input
         style={{ width: "102px", display: "block", margin: "auto" }}
-        className="designing"
         type="file"
         accept="image/*"
         onChange={handleChangeProfile}
