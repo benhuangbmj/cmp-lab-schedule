@@ -83,13 +83,6 @@ form {
   width: fit-content;
 }
 
-.login {
-  display: grid;
-  grid-template-rows: 3rem repeat(3, 2.5rem);
-  grid-gap: 5px;
-  margin: auto;
-}
-
 table,
 tbody,
 thead {
