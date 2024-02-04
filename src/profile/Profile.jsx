@@ -174,10 +174,13 @@ export default function Profile({ info, fetchInfo }) {
 
   return (
     <main>
-      <div className="flexbox-column padding-1rem" style={{ width: "800px" }}>
+      <div
+        className="flexbox-column padding-1rem designing"
+        style={{ width: "45rem" }}
+      >
         <form onSubmit={handleSubmit(handleUpdate)} style={{ width: "100%" }}>
           <div
-            className="sticky-top flexbox-column"
+            className="sticky-top flexbox-column designing"
             style={{ margin: "0", float: "left", top: "50px" }}
           >
             <button
@@ -198,18 +201,22 @@ export default function Profile({ info, fetchInfo }) {
               Backup
             </button>
           </div>
-          <div style={{ position: "relative", top: "0" }}>
+          <div
+            className="designing"
+            style={{ position: "relative", top: "0", borderColor: "blue" }}
+          >
             {userData[activeUser].roles.admin && (
-              <>
+              <div className="designing" style={{ borderColor: "green" }}>
                 <SelectUser info={info} handleSelect={handleSelect} />
                 <span> or </span>
                 <button type="button" onClick={() => handleSelect(null)}>
                   Create a New User
                 </button>
-              </>
+              </div>
             )}
             {selected && (
               <p
+                className="designing"
                 style={{
                   width: "fit-content",
                   textAlign: "left",
@@ -219,7 +226,7 @@ export default function Profile({ info, fetchInfo }) {
                 Last Update: {info[selected].lastUpdate}
               </p>
             )}
-            <div className="flexbox-column card-profile-frame">
+            <div className="flexbox-column card-profile-frame designing">
               <ChangePic selected={selected} setRenew={setRenew} />
               {selected && loggedIn ? (
                 <div className="card-holder">
@@ -233,8 +240,8 @@ export default function Profile({ info, fetchInfo }) {
                 <div className="card-holder">ID card</div>
               )}
             </div>
-            <div className="flexbox-column">
-              <div className="input-holder">
+            <div className="flexbox-column designing">
+              <div className="input-holder designing">
                 {["username"].concat(Object.keys(dataSchema)).map((e) => {
                   if (display.includes(e)) {
                     return e != "links" ? (
@@ -300,15 +307,14 @@ export default function Profile({ info, fetchInfo }) {
                 })}
               </div>
             </div>
-            <div style={{ width: "25rem", margin: "auto" }}>
+            <div className="designing" style={{ margin: "auto" }}>
               <Scheduling
                 info={info}
                 fetchInfo={fetchInfo}
                 selected={loggedIn ? selected : null}
               />
             </div>
-
-            <div>
+            <div className="designing">
               <h4>courses: </h4>
               <div className="flexbox-row course-container padding-1rem">
                 {courseOptions.map((e) => (
