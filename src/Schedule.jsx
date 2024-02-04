@@ -224,7 +224,7 @@ function Personnel({ courses }) {
       </h2>
       {categories.map((subject, i) => {
         return (
-          <div key={subjects[i]}>
+          <div className="personnel" key={subjects[i]}>
             <div className="flexbox-row" style={{ textAlign: "left" }}>
               <h3 className={subjects[i].toLowerCase() + " subject-title"}>
                 {subjects[i]}
