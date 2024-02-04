@@ -23,7 +23,7 @@ const privilege = import.meta.env.VITE_PRIVILEGE;
 
 const display = ["username", "name", "subject", "links", "password"];
 
-export default function Profile({ info, fetchInfo }) {
+export default function Profile({ info, fetchInfo, user = null }) {
   const {
     register,
     reset,
@@ -42,7 +42,7 @@ export default function Profile({ info, fetchInfo }) {
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState("Upload");
   const [profile, setProfile] = useState();
-  const [selected, setSelected] = useState(activeUser);
+  const [selected, setSelected] = useState(user ? user : activeUser);
   const [loggedIn, setLoggedIn] = useState(true);
   const currUser = useRef();
   const newUsername = watch("username");
@@ -174,14 +174,11 @@ export default function Profile({ info, fetchInfo }) {
 
   return (
     <main>
-      <div
-        className="flexbox-column padding-1rem designing"
-        style={{ width: "45rem" }}
-      >
+      <div className="flexbox-column padding-1rem designing profile-page">
         <form onSubmit={handleSubmit(handleUpdate)} style={{ width: "100%" }}>
           <div
             className="sticky-top flexbox-column designing"
-            style={{ margin: "0", float: "left", top: "50px" }}
+            style={{ margin: "0", float: "left", top: "42px" }}
           >
             <button
               type="submit"
@@ -201,30 +198,20 @@ export default function Profile({ info, fetchInfo }) {
               Backup
             </button>
           </div>
-          <div
-            className="designing"
-            style={{ position: "relative", top: "0", borderColor: "blue" }}
-          >
-            {userData[activeUser].roles.admin && (
-              <div className="designing" style={{ borderColor: "green" }}>
+          <div className="designing" style={{ borderColor: "blue" }}>
+            {!user && userData[activeUser].roles.admin && (
+              <div className="designing center-fit">
                 <SelectUser info={info} handleSelect={handleSelect} />
-                <span> or </span>
+                <p> or </p>
                 <button type="button" onClick={() => handleSelect(null)}>
                   Create a New User
                 </button>
               </div>
             )}
             {selected && (
-              <p
-                className="designing"
-                style={{
-                  width: "fit-content",
-                  textAlign: "left",
-                  margin: "auto",
-                }}
-              >
-                Last Update: {info[selected].lastUpdate}
-              </p>
+              <div className="designing center-fit">
+                <strong>Last Update</strong>: {info[selected].lastUpdate}
+              </div>
             )}
             <div className="flexbox-column card-profile-frame designing">
               <ChangePic selected={selected} setRenew={setRenew} />
@@ -240,72 +227,72 @@ export default function Profile({ info, fetchInfo }) {
                 <div className="card-holder">ID card</div>
               )}
             </div>
-            <div className="flexbox-column designing">
-              <div className="input-holder designing">
-                {["username"].concat(Object.keys(dataSchema)).map((e) => {
-                  if (display.includes(e)) {
-                    return e != "links" ? (
-                      <div key={e}>
-                        <label>
-                          {e == "password" ? "new passowrd" : e}
-                          {e == "username" && (
-                            <sup style={{ color: "red" }}>*</sup>
-                          )}
-                          :{" "}
-                        </label>
-                        {e == "username" && selected ? (
-                          <input
-                            readOnly
-                            type="text"
-                            className="read-only"
-                            {...register(e)}
-                          />
-                        ) : e == "username" ? (
-                          <>
-                            <input
-                              type="text"
-                              {...register(e, {
-                                required: "Username is required.",
-                                pattern: {
-                                  value: /^\D/,
-                                  message:
-                                    "Username cannot start with numbers.",
-                                },
-                                validate: (value) =>
-                                  !Object.hasOwn(userData, value),
-                              })}
-                            />
-                            {errors.username ? (
-                              <p className="errorMessage">
-                                {errors.username.message}
-                              </p>
-                            ) : null}
-                          </>
-                        ) : (
-                          <input
-                            type={e == "password" ? "password" : "text"}
-                            {...register(e)}
-                          />
+            <div className="center-fit designing">
+              {["username"].concat(Object.keys(dataSchema)).map((e) => {
+                if (display.includes(e)) {
+                  return e != "links" ? (
+                    <div className="flexbox-row" key={e}>
+                      <label style={{ marginRight: "1em" }}>
+                        {e == "password" ? "new passowrd" : e}
+                        {e == "username" && (
+                          <sup style={{ color: "red" }}>*</sup>
                         )}
-                      </div>
-                    ) : (
-                      Object.keys(dataSchema[e]).map((link) => {
-                        return (
-                          <div key={link}>
-                            <label
-                              htmlFor={link}
-                              style={{ textTransform: "capitalize" }}
-                            >
-                              {link}:
-                            </label>
-                            <input id={link} type="url" {...register(link)} />
-                          </div>
-                        );
-                      })
-                    );
-                  }
-                })}
-              </div>
+                        :{" "}
+                      </label>
+                      {e == "username" && selected ? (
+                        <input
+                          readOnly
+                          type="text"
+                          className="read-only"
+                          {...register(e)}
+                        />
+                      ) : e == "username" ? (
+                        <>
+                          <input
+                            type="text"
+                            {...register(e, {
+                              required: "Username is required.",
+                              pattern: {
+                                value: /^\D/,
+                                message: "Username cannot start with numbers.",
+                              },
+                              validate: (value) =>
+                                !Object.hasOwn(userData, value),
+                            })}
+                          />
+                          {errors.username ? (
+                            <p className="errorMessage">
+                              {errors.username.message}
+                            </p>
+                          ) : null}
+                        </>
+                      ) : (
+                        <input
+                          type={e == "password" ? "password" : "text"}
+                          {...register(e)}
+                        />
+                      )}
+                    </div>
+                  ) : (
+                    Object.keys(dataSchema[e]).map((link) => {
+                      return (
+                        <div className="flexbox-row" key={link}>
+                          <label
+                            htmlFor={link}
+                            style={{
+                              textTransform: "capitalize",
+                              marginRight: "1em",
+                            }}
+                          >
+                            {link}:
+                          </label>
+                          <input id={link} type="url" {...register(link)} />
+                        </div>
+                      );
+                    })
+                  );
+                }
+              })}
             </div>
             <div className="designing" style={{ margin: "auto" }}>
               <Scheduling
@@ -315,8 +302,8 @@ export default function Profile({ info, fetchInfo }) {
               />
             </div>
             <div className="designing">
-              <h4>courses: </h4>
-              <div className="flexbox-row course-container padding-1rem">
+              <h5>{userData[selected].name}'s Courses: </h5>
+              <div className="designing flexbox-row course-container padding-1rem">
                 {courseOptions.map((e) => (
                   <div key={e}>
                     <input

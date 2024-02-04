@@ -81,7 +81,7 @@ export default function ChangePic({ selected, setRenew }) {
         </div>
       )}
       <input
-        style={{ width: "102px", display: "block", margin: "auto" }}
+        style={{ width: "29%", display: "block", margin: "auto" }}
         type="file"
         accept="image/*"
         onChange={handleChangeProfile}
