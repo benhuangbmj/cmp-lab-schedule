@@ -43,7 +43,7 @@ main {
 }
 
 .card-profile-frame {
-  max-width: 550px;
+  width: 100%;
 }
 
 .course-grid {
