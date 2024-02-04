@@ -178,7 +178,7 @@ export default function Profile({ info, fetchInfo, user = null }) {
         <form onSubmit={handleSubmit(handleUpdate)} style={{ width: "100%" }}>
           <div
             className="sticky-top flexbox-column designing"
-            style={{ margin: "0", float: "left", top: "42px" }}
+            style={{ margin: "0", float: "right", top: "50px" }}
           >
             <button
               type="submit"

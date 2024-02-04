@@ -298,7 +298,7 @@ label {
 
 .center-fit {
   width: fit-content;
-  margin: auto;
+  margin: 0.5em auto;
 }
 
 .profile-page {
@@ -341,10 +341,11 @@ label {
     padding: 0;
   }
   .preformatted {
-    font-size: 0.55em;
+    display: block;
+    font-size: 50%;
   }
   .schedule-cell {
-    width: 4.5em;
+    width: 19.5vw;
     display: block;
     text-align: center;
   }
@@ -365,6 +366,12 @@ label {
     display: none;
   }
   .personnel {
-    width: 95%;
+    width: 95vw;
+  }
+  .designing {
+    border-style: none;
+  }
+  .card-holder {
+    display: none;
   }
 }
