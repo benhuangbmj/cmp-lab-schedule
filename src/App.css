@@ -31,6 +31,8 @@
 main {
   text-align: center;
   height: 100vh;
+  font-family: Priori;
+  font-size: 16pt;
 }
 
 .card-holder {
@@ -78,11 +80,7 @@ form {
 }
 
 .input-holder {
-  /*max-width: 350px; */
-  text-align: right;
-}
-.input-timetable-frame {
-  /*max-width: 650px;*/
+  width: fit-content;
 }
 
 .login {
@@ -135,9 +133,8 @@ ul {
 }
 
 .small-label {
-  font-size: 0.75rem;
-  text-align: left;
-  vertical-align: 2.5px;
+  font-size: 0.8em;
+  vertical-align: 0.1em;
 }
 
 .profile-pic-small {
@@ -185,7 +182,7 @@ ul {
 }
 
 .course-container {
-  width: 25rem;
+  width: 100%;
   justify-content: flex-start;
 }
 
@@ -304,4 +301,22 @@ label {
 .navbar {
   width: fit-content;
   display: inline-block;
+}
+
+.center-fit {
+  width: fit-content;
+  margin: auto;
+}
+
+.profile-page {
+  width: 800px;
+}
+
+@media screen and (max-width: 800px) {
+  main {
+    font-size: 100%;
+  }
+  .profile-page {
+    width: 100%;
+  }
 }
