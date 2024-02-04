@@ -62,13 +62,7 @@ export default function Schedule({ shift, courses, setNavbar }) {
             className="qr-code"
             src="src/img/static-qr-code-6939aa416818b250434bfed8a036658a.png"
           />
-          <div
-            style={{
-              display: "inline-block",
-              fontSize: "30pt",
-              verticalAlign: "bottom",
-            }}
-          >
+          <div className="schedule-title">
             CMP Lounge Schedule
             <br />
             {currDate.getMonth() >= 6 ? "Fall" : "Spring"}{" "}
@@ -96,7 +90,7 @@ export default function Schedule({ shift, courses, setNavbar }) {
           <Personnel courses={courses} />
         </div>
       </div>
-      <div style={{ marginTop: "100px" }}>
+      <div className="schedule-operations">
         <button
           type="button"
           style={{ display: onScreen }}
@@ -124,10 +118,7 @@ function Tutor({ user }) {
     return subject;
   }
   return (
-    <div
-      className="flexbox-row"
-      style={{ marginTop: ".5rem", marginBottom: ".5rem", width: "170px" }}
-    >
+    <div className="flexbox-row schedule-cell">
       <div className="profile-pic-small">
         <img
           className="profilePic"
@@ -139,10 +130,7 @@ function Tutor({ user }) {
           style={!user[1] ? { objectFit: "contain" } : {}}
         />
       </div>
-      <span
-        className={getSubject(user[0]) + " preformatted"}
-        style={{ textAlign: "right" }}
-      >
+      <span className={getSubject(user[0]) + " preformatted shift"}>
         {user[0]}
       </span>
     </div>
@@ -250,7 +238,7 @@ function Personnel({ courses }) {
                   <span
                     key={e}
                     className={subjects[i].toLowerCase() + " preformatted"}
-                    style={{ fontSize: "0.7rem" }}
+                    style={{ fontSize: "0.55em" }}
                   >
                     <strong>{arr[0]}</strong>:{arr[1]}{" "}
                   </span>
