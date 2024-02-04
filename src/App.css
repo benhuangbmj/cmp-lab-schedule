@@ -83,13 +83,6 @@ form {
   width: fit-content;
 }
 
-.login {
-  display: grid;
-  grid-template-rows: 3rem repeat(3, 2.5rem);
-  grid-gap: 5px;
-  margin: auto;
-}
-
 table,
 tbody,
 thead {
@@ -106,7 +99,7 @@ td {
   font-family: Aptifer-Slab, Monospace;
   display: inline-block;
   text-align: left;
-  font-size: 0.8rem;
+  font-size: 0.6em;
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -pre-wrap;
@@ -280,8 +273,8 @@ label {
 }
 
 .table-schedule {
-  border: 5px solid var(--institutional-navy);
-  font-size: 2rem;
+  border: 0.2em solid var(--institutional-navy);
+  font-size: 1em;
 }
 
 .sticky-top {
@@ -312,11 +305,66 @@ label {
   width: 800px;
 }
 
+.schedule-cell {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  width: 175px;
+}
+
+.shift {
+  text-align: right;
+}
+
+.schedule-title {
+  display: inline-block;
+  font-size: 30pt;
+  vertical-align: bottom;
+}
+.schedule-operations {
+  margin-top: 100px;
+}
+
+.personnel {
+  width: 100%;
+  margin: auto;
+}
+
 @media screen and (max-width: 800px) {
   main {
     font-size: 100%;
   }
   .profile-page {
     width: 100%;
+  }
+  .letter-size {
+    width: 100%;
+    padding: 0;
+  }
+  .preformatted {
+    font-size: 0.55em;
+  }
+  .schedule-cell {
+    width: 4.5em;
+    display: block;
+    text-align: center;
+  }
+  .shift {
+    text-align: center;
+  }
+  .profile-pic-small {
+    width: 3em;
+    height: 4em;
+  }
+  .qr-code {
+    display: none;
+  }
+  .schedule-title {
+    font-size: 1em;
+  }
+  .schedule-operations {
+    display: none;
+  }
+  .personnel {
+    width: 95%;
   }
 }
