@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, forwardRef } from "react";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { useSelector } from "react-redux";
@@ -23,7 +23,10 @@ const privilege = import.meta.env.VITE_PRIVILEGE;
 
 const display = ["username", "name", "subject", "links", "password"];
 
-export default function Profile({ info, fetchInfo, user = null }) {
+const Profile = forwardRef(function Profile(
+  { info, fetchInfo, user = null },
+  ref,
+) {
   const {
     register,
     reset,
@@ -174,7 +177,10 @@ export default function Profile({ info, fetchInfo, user = null }) {
 
   return (
     <main>
-      <div className="flexbox-column padding-1rem designing profile-page">
+      <div
+        ref={ref}
+        className="flexbox-column padding-1rem designing profile-page"
+      >
         <form onSubmit={handleSubmit(handleUpdate)} style={{ width: "100%" }}>
           <div
             className="sticky-top flexbox-column designing"
@@ -324,4 +330,6 @@ export default function Profile({ info, fetchInfo, user = null }) {
       </div>
     </main>
   );
-}
+});
+
+export default Profile;
