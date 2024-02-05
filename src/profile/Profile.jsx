@@ -24,7 +24,7 @@ const privilege = import.meta.env.VITE_PRIVILEGE;
 const display = ["username", "name", "subject", "links", "password"];
 
 const Profile = forwardRef(function Profile(
-  { info, fetchInfo, user = null },
+  { info, fetchInfo, user = null, setLoaded },
   ref,
 ) {
   const {
@@ -167,6 +167,8 @@ const Profile = forwardRef(function Profile(
 
   useEffect(() => {
     displayInfo(selected);
+    setLoaded(true);
+    return () => setLoaded(false);
   }, []);
 
   useEffect(() => {

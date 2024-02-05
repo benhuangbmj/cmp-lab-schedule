@@ -335,6 +335,7 @@ label {
   }
   .profile-page {
     width: 100%;
+    height: auto;
   }
   .letter-size {
     width: 100%;

@@ -3,7 +3,13 @@ import "./App.css";
 
 import utils from "/src/utils";
 
-import { useState, useEffect, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useLayoutEffect,
+} from "react";
 import { Route, Routes, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -29,6 +35,9 @@ export default function App() {
   const [courseTutor, setCourseTutor] = useState(null);
   const [shifts, setShifts] = useState(null);
   const [navbar, setNavbar] = useState(true);
+  const [loaded, setLoaded] = useState(false);
+  const [pageHeight, setPageHeight] = useState("auto");
+  const refProfile = useRef();
 
   const active = useSelector(selectActive);
 
@@ -63,6 +72,14 @@ export default function App() {
     checkActive();
   }, []);
 
+  useLayoutEffect(() => {
+    if (loaded) {
+      setPageHeight(refProfile.current.clientHeight + "px");
+    } else {
+      setPageHeight("auto");
+    }
+  });
+
   if (!info) {
     return (
       <main>
@@ -71,7 +88,7 @@ export default function App() {
     );
   } else {
     return (
-      <div>
+      <div style={{ height: pageHeight }}>
         <Navbar
           style={{ display: navbar ? "initial" : "none" }}
           data-bs-theme="dark"
@@ -138,10 +155,16 @@ export default function App() {
             }
           />
           <Route
+            ref={refProfile}
             path="/profile"
             element={
               <ProtectedRoute>
-                <Profile info={info} fetchInfo={fetchInfo} />
+                <Profile
+                  ref={refProfile}
+                  info={info}
+                  fetchInfo={fetchInfo}
+                  setLoaded={setLoaded}
+                />
               </ProtectedRoute>
             }
           />
