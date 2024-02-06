@@ -1,24 +1,31 @@
 import { useRef, useEffect, useState } from "react";
 import readXlsxFile from "read-excel-file";
 import { useSetStates } from "/src/hooks/customHooks.jsx";
+import _ from "lodash";
 
 import Button from "react-bootstrap/Button";
 
 export default function Charts() {
   const fileInputRef = useRef();
-  const refSetStates = useRef({});
-  const endDate = useSetStates('setEndDate', 'today', refSetStates.current);
+  const refSetDates = useRef({});
+  const startDate = useSetStates("startDate", refSetDates);
+  const endDate = useSetStates("endDate", refSetDates);
 
   function handleUpload(e) {
     readXlsxFile(e.target.files[0]).then((rows) => {
       console.log(rows);
     });
   }
-  
+
   function handleSelectDate(e) {
     const selectedDate = new Date(e.target.value);
-    refSetStates.current[e.target.dataset.set_state](selectedDate);
+    refSetDates.current[e.target.dataset.state](selectedDate);
   }
+
+  useEffect(() => {
+    console.log("start", startDate, "end", endDate);
+    console.log(refSetDates.current);
+  }); //remove
 
   return (
     <div>
@@ -34,21 +41,19 @@ export default function Charts() {
         className="non-display"
         onChange={handleUpload}
       />
-      <span>Start date</span>
-      <Button
-        as="input"
-        type="date"
-        variant="outline-dark"
-        onChange={handleSelectDate}
-      />
-      <span>End date</span>
-      <Button
-        as="input"
-        type="date"
-        variant="outline-dark"
-        data-set_state={"setEndDate"}
-        onChange={handleSelectDate}
-      />
+
+      {Object.keys(refSetDates.current).map((key) => (
+        <span key={key} style={{ display: "inline-block" }}>
+          <span>{_.startCase(key)}</span>
+          <Button
+            as="input"
+            type="date"
+            variant="outline-dark"
+            data-state={key}
+            onChange={handleSelectDate}
+          />
+        </span>
+      ))}
     </div>
   );
 }
