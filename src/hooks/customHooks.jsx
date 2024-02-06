@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-export function useSetStates(name, init, setStates) {
+export function useSetStates(name, ref, init = null) {
   const [state, setState] = useState(init);
-  setStates[name] = setState;
+  ref.current[name] = setState;
   return state;
 }
