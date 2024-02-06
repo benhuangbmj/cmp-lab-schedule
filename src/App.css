@@ -329,6 +329,10 @@ label {
   margin: auto;
 }
 
+.non-display {
+  display: none;
+}
+
 @media screen and (max-width: 800px) {
   main {
     font-size: 100%;
