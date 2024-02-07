@@ -1,9 +1,22 @@
 import { useRef, useEffect, useState } from "react";
-import readXlsxFile from "read-excel-file";
 import { useSetStates } from "/src/hooks/customHooks.jsx";
+import Papa from "papaparse";
 import _ from "lodash";
 
 import Button from "react-bootstrap/Button";
+
+const headers = [
+  "id",
+  "starTime",
+  "completionTime",
+  "email",
+  "name",
+  "username",
+  "courses",
+  "rating",
+  "feedback",
+  "words",
+];
 
 export default function Charts() {
   const fileInputRef = useRef();
@@ -12,8 +25,15 @@ export default function Charts() {
   const endDate = useSetStates("endDate", refSetDates);
 
   function handleUpload(e) {
-    readXlsxFile(e.target.files[0]).then((rows) => {
-      console.log(rows);
+    Papa.parse(e.target.files[0], {
+      header: true,
+      skipEmptyLines: true,
+      complete: function (results) {
+        console.log(results);
+      },
+      transformHeader: function (header, i) {
+        return headers[i];
+      },
     });
   }
 
@@ -21,11 +41,6 @@ export default function Charts() {
     const selectedDate = new Date(e.target.value);
     refSetDates.current[e.target.dataset.state](selectedDate);
   }
-
-  useEffect(() => {
-    console.log("start", startDate, "end", endDate);
-    console.log(refSetDates.current);
-  }); //remove
 
   return (
     <div>
@@ -40,6 +55,7 @@ export default function Charts() {
         ref={fileInputRef}
         className="non-display"
         onChange={handleUpload}
+        accept=".csv"
       />
 
       {Object.keys(refSetDates.current).map((key) => (
