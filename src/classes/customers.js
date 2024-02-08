@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export default class Customers {
 	constructor(dataset) {
 		Object.assign(this, dataset);
@@ -21,7 +23,7 @@ export default class Customers {
 		const countsArr = [];
 		counts.forEach((val, key) => {
 			countsArr.push({
-				date: key,
+				date: dayjs(key).format("YYYY-MM-DD"),
 				count: val,
 			});
 		});

@@ -63,6 +63,10 @@ export default function Charts() {
     }
   }, [fullData, startDate, endDate]);
 
+  useEffect(() => {
+    console.log(plot);
+  }, [plot]);
+
   return (
     <div>
       <Button
@@ -92,10 +96,16 @@ export default function Charts() {
           />
         </span>
       ))}
-      <LineChart width={500} height={500} data={plot}>
+      <LineChart
+        className="designing"
+        width={800}
+        height={500}
+        margin={{ bottom: 70, top: 10, right: 50 }}
+        data={plot}
+      >
         <Line type="monotone" dataKey="count" stroke="#8884d8" />
         <CartesianGrid stroke="#ccc" />
-        <XAxis dataKey="date" />
+        <XAxis dataKey="date" angle={60} textAnchor="start" />
         <YAxis />
       </LineChart>
     </div>
