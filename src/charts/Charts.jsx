@@ -1,3 +1,5 @@
+import Customers from "/src/classes/customers";
+
 import { useRef, useEffect, useState } from "react";
 import { useSetStates } from "/src/hooks/customHooks.jsx";
 import Papa from "papaparse";
@@ -44,7 +46,8 @@ export default function Charts() {
       },
       skipEmptyLines: true,
       complete: function (results) {
-        setFullData(results);
+        const customers = new Customers(results, { setPlot: setPlot });
+        setFullData(customers);
       },
     });
   }
@@ -54,28 +57,10 @@ export default function Charts() {
   }
 
   useEffect(() => {
-    const results = fullData;
-    const counts = new Map();
-    results?.data?.forEach((user) => {
-      const date = new Date(user.startTime);
-      if (date >= new Date(startDate) && date <= new Date(endDate)) {
-        const dateStr = date.toDateString();
-        const count = counts.get(dateStr);
-        if (count) {
-          counts.set(dateStr, count + 1);
-        } else {
-          counts.set(dateStr, 1);
-        }
-      }
-    });
-    const countsArr = [];
-    counts.forEach((val, key) => {
-      countsArr.push({
-        date: key,
-        count: val,
-      });
-    });
-    setPlot(countsArr);
+    if (fullData) {
+      fullData.setPlot(startDate, endDate);
+      setPlot(fullData.getPlot());
+    }
   }, [fullData, startDate, endDate]);
 
   return (
