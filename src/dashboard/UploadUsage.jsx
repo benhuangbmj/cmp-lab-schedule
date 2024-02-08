@@ -5,8 +5,8 @@ import Button from "react-bootstrap/Button";
 
 const headers = [
 	"id",
-	"startTime",
-	"completionTime",
+	"start_time",
+	"completion_time",
 	"email",
 	"name",
 	"username",

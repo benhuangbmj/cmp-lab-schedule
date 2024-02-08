@@ -2,15 +2,14 @@ import dayjs from "dayjs";
 
 export default class Customers {
 	constructor(dataset) {
-		Object.assign(this, dataset);
+		this.dataset = Array.from(dataset);
 		this.plot = null;
 		this.yMax = 0;
 	}
 	setPlot(startDate, endDate) {
-		const results = this;
 		const counts = new Map();
-		results?.data?.forEach((customer) => {
-			const date = dayjs(customer.startTime);
+		this.dataset.forEach((customer) => {
+			const date = dayjs(customer.start_time);
 			if (date >= dayjs(startDate) && date <= dayjs(endDate)) {
 				const dateStr = date.format("YYYY-MM-DD");
 				const count = counts.get(dateStr);

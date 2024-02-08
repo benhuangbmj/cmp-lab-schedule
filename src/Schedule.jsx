@@ -7,6 +7,8 @@ import { sortCriterionHelper } from "/src/utils";
 import { useSelector } from "react-redux";
 import Table from "react-bootstrap/Table";
 
+import Charts from "/src/dashboard/Charts";
+
 dayjs.extend(customParseFormat);
 const currDate = new Date();
 
@@ -106,6 +108,7 @@ export default function Schedule({ shift, courses, setNavbar }) {
           Toggle navbar
         </button>
       </div>
+      <Charts />
     </main>
   );
 }
