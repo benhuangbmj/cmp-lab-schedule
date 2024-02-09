@@ -63,13 +63,16 @@ export default function Charts() {
       const url = new URL("usage", base);
       let usageData = await fetch(url);
       usageData = await usageData.json();
-      usageData = new Customers(usageData);
-      setFullData(usageData);
+      if (usageData) {
+        usageData = new Customers(usageData);
+        setFullData(usageData);
+      }
     })();
   }, []);
 
   return (
     <div className="centered">
+      <h1>CMP Lounge Usage</h1>
       {Object.keys(refSetDates.current).map((key) => (
         <span key={key} style={{ display: "inline-block", margin: "1em 2em" }}>
           <span style={{ display: "inline-block", margin: "auto 1em" }}>
@@ -99,7 +102,7 @@ export default function Charts() {
                   angle: -90,
                   position: "insideLeft",
                   offset: 20,
-                  fontSize: 20,
+                  fontSize: 25,
                 }}
                 interval="PreserveEnd"
                 tickCount={
