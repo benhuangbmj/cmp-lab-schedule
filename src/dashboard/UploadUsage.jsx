@@ -9,7 +9,6 @@ const headers = [
 	"completion_time",
 	"email",
 	"name",
-	"username",
 	"courses",
 	"rating",
 	"feedback",

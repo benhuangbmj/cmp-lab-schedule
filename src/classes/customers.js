@@ -5,12 +5,15 @@ export default class Customers {
 		this.dataset = Array.from(dataset);
 		this.plot = null;
 		this.yMax = 0;
+    this.total = 0;
 	}
 	setPlot(startDate, endDate) {
 		const counts = new Map();
+    this.total = 0;
 		this.dataset.forEach((customer) => {
 			const date = dayjs(customer.start_time);
 			if (date >= dayjs(startDate) && date <= dayjs(endDate)) {
+        this.total++;
 				const dateStr = date.format("YYYY-MM-DD");
 				const count = counts.get(dateStr);
 				if (count) {
@@ -39,4 +42,7 @@ export default class Customers {
 	getPlot() {
 		return this.plot;
 	}
+  getTotal() {
+    return this.total;
+  }
 }

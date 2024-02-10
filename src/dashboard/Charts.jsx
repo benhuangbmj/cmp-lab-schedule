@@ -2,11 +2,11 @@ import Customers from "/src/classes/customers";
 
 import { useRef, useEffect, useState } from "react";
 import { useSetStates } from "/src/hooks/customHooks.jsx";
-import Papa from "papaparse";
 import _ from "lodash";
 import dayjs from "dayjs";
 
 import { apiBaseUrl as base } from "/src/utils";
+import {themeColor as color} from "/src/config";
 
 import {
   BarChart,
@@ -15,22 +15,10 @@ import {
   XAxis,
   YAxis,
   ResponsiveContainer,
+  Text,
 } from "recharts";
 
 import Button from "react-bootstrap/Button";
-
-const headers = [
-  "id",
-  "startTime",
-  "completionTime",
-  "email",
-  "name",
-  "username",
-  "courses",
-  "rating",
-  "feedback",
-  "words",
-];
 
 export default function Charts() {
   const refSetDates = useRef({});
@@ -89,16 +77,17 @@ export default function Charts() {
         </span>
       ))}
       {fullData && (
-        <div className="centered chart-container" style={{ height: "300px" }}>
-          <ResponsiveContainer width="100%" height="100%">
+        <div className="centered chart-container" style={{ height: "300px"}}>
+          <span>Total visits: {fullData.total}</span>
+          <ResponsiveContainer width="100%" height="100%">            
             <BarChart margin={{ bottom: 70, right: 50 }} data={plot}>
               <CartesianGrid strokeDasharray="3" />
-              <Bar dataKey="count" fill="#8884d8" />
-              <XAxis dataKey="date" angle={60} textAnchor="start" />
+              <Bar dataKey="count" fill={color.institutional_navy} />
+              <XAxis dataKey="date" angle={60} textAnchor="start"/>
               <YAxis
                 domain={[0, fullData.yMax]}
                 label={{
-                  value: "visitors",
+                  value: "visits",
                   angle: -90,
                   position: "insideLeft",
                   offset: 20,
