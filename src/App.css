@@ -35,6 +35,11 @@ main {
   font-size: 16pt;
 }
 
+.chart-label {
+  display: inline-block;
+  margin: auto 2em;
+}
+
 .card-holder {
   display: inline-block;
   border: 1px solid black;

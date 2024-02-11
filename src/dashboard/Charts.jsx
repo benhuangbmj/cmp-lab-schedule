@@ -6,7 +6,7 @@ import _ from "lodash";
 import dayjs from "dayjs";
 
 import { apiBaseUrl as base } from "/src/utils";
-import {themeColor as color} from "/src/config";
+import { themeColor as color } from "/src/config";
 
 import {
   BarChart,
@@ -77,13 +77,14 @@ export default function Charts() {
         </span>
       ))}
       {fullData && (
-        <div className="centered chart-container" style={{ height: "300px"}}>
-          <span>Total visits: {fullData.total}</span>
-          <ResponsiveContainer width="100%" height="100%">            
+        <div className="centered chart-container" style={{ height: "300px" }}>
+          <span className='chart-label'>Total visits: {fullData.total}</span>
+          <span className='chart-label'>Rating: {fullData.rating}</span>
+          <ResponsiveContainer width="100%" height="100%">
             <BarChart margin={{ bottom: 70, right: 50 }} data={plot}>
               <CartesianGrid strokeDasharray="3" />
               <Bar dataKey="count" fill={color.institutional_navy} />
-              <XAxis dataKey="date" angle={60} textAnchor="start"/>
+              <XAxis dataKey="date" angle={60} textAnchor="start" />
               <YAxis
                 domain={[0, fullData.yMax]}
                 label={{
