@@ -5,7 +5,7 @@ import { useSetStates } from "/src/hooks/customHooks.jsx";
 import _ from "lodash";
 import dayjs from "dayjs";
 
-import { apiBaseUrl as base } from "/src/utils";
+import { apiBaseUrl as base, subjects as subjectsObj } from "/src/utils";
 import { themeColor as color } from "/src/config";
 
 import {
@@ -16,9 +16,14 @@ import {
   YAxis,
   ResponsiveContainer,
   Text,
+  Legend,
 } from "recharts";
 
 import Button from "react-bootstrap/Button";
+
+let subjects = new Set(Object.values(subjectsObj));
+subjects = Array.from(subjects);
+subjects.sort();
 
 export default function Charts() {
   const refSetDates = useRef({});
@@ -43,7 +48,6 @@ export default function Charts() {
     if (fullData) {
       fullData.setPlot(startDate, endDate);
       setPlot(fullData.getPlot());
-      console.log(fullData.distinct); //remove
     }
   }, [fullData, startDate, endDate]);
 
@@ -87,7 +91,34 @@ export default function Charts() {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart margin={{ bottom: 70, right: 50 }} data={plot}>
               <CartesianGrid strokeDasharray="3" />
-              <Bar dataKey="count" fill={color.institutional_navy} />
+              <Bar dataKey="val" fill={color.institutional_navy} />
+              <XAxis dataKey="date" angle={60} textAnchor="start" />
+              <YAxis
+                domain={[0, fullData.yMax]}
+                label={{
+                  value: "visits",
+                  angle: -90,
+                  position: "insideLeft",
+                  offset: 20,
+                  fontSize: 25,
+                }}
+                interval="PreserveEnd"
+                tickCount={
+                  fullData.yMax < 10
+                    ? fullData.yMax + 1
+                    : Math.ceil((fullData.yMax + 1) / 2)
+                }
+              />
+            </BarChart>
+          </ResponsiveContainer>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart margin={{ bottom: 70, right: 50 }} data={plot}>
+              <Legend verticalAlign="top" align="right" />
+              {subjects.map((e) => {
+                return (
+                  <Bar key={e} dataKey={e} stackId="subjects" fill={color[e]} />
+                );
+              })}
               <XAxis dataKey="date" angle={60} textAnchor="start" />
               <YAxis
                 domain={[0, fullData.yMax]}

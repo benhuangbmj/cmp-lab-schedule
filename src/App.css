@@ -37,7 +37,7 @@ main {
 
 .chart-label {
   display: inline-block;
-  margin: auto 2em;
+  margin: auto 1em;
 }
 
 .card-holder {
@@ -388,7 +388,7 @@ label {
   }
   .personnel {
     width: 95vw;
-  } 
+  }
   .designing {
     border-style: none;
   }

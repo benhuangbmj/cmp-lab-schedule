@@ -1,5 +1,9 @@
 import dayjs from "dayjs";
 
+import { subjects } from "/src/utils";
+
+const regexSubject = /^[a-z]+/i;
+
 export default class Customers {
   constructor(dataset) {
     this.dataset = Array.from(dataset);
@@ -7,14 +11,7 @@ export default class Customers {
     this.yMax = 0;
     this.total = 0;
     this.rating = calcRating();
-    this.distinct = calcDistinct();
-    function calcDistinct() {
-      const distinct = new Set();
-      dataset.forEach((e) => {
-        distinct.add(e.email);
-      });
-      return distinct.size;
-    }
+    this.distinct = 0;
     function calcRating() {
       let score = 0;
       let count = 0;
@@ -29,31 +26,58 @@ export default class Customers {
   }
   setPlot(startDate, endDate) {
     const counts = new Map();
+    const dataInScope = [];
     this.total = 0;
     this.dataset.forEach((customer) => {
       const date = dayjs(customer.start_time);
       if (date >= dayjs(startDate) && date <= dayjs(endDate)) {
+        dataInScope.push(customer);
         this.total++;
+        let subject = subjects[customer.courses.match(regexSubject)];
+        if (!subject) subject = "other";
         const dateStr = date.format("YYYY-MM-DD");
         const count = counts.get(dateStr);
         if (count) {
-          counts.set(dateStr, count + 1);
+          count[subject]++;
+          count.val++;
+          counts.set(dateStr, count);
         } else {
-          counts.set(dateStr, 1);
+          const newCount = {
+            val: 1,
+            physics: 0,
+            math: 0,
+            CIS: 0,
+            statistics: 0,
+            other: 0,
+          };
+          newCount[subject]++;
+          counts.set(dateStr, newCount);
         }
       }
+      function calcDistinct(dataset) {
+        const distinct = new Set();
+        dataset.forEach((e) => {
+          distinct.add(e.email);
+        });
+        return distinct.size;
+      }
+      this.distinct = calcDistinct(dataInScope);
     });
     const countsArr = [];
     let currDate = dayjs(startDate);
     let yMax = 0;
     while (currDate <= dayjs(endDate)) {
       const key = currDate.format("YYYY-MM-DD");
-      const val = counts.has(key) ? counts.get(key) : 0;
-      yMax = Math.max(val, yMax);
-      countsArr.push({
-        date: key,
-        count: val,
-      });
+      const count = counts.has(key) ? counts.get(key) : {};
+      yMax = count.val ? Math.max(count.val, yMax) : yMax;
+      countsArr.push(
+        Object.assign(
+          {
+            date: key,
+          },
+          count,
+        ),
+      );
       currDate = currDate.add(1, "day");
     }
     this.plot = countsArr;
