@@ -7,11 +7,19 @@ export default class Customers {
     this.yMax = 0;
     this.total = 0;
     this.rating = calcRating();
+    this.distinct = calcDistinct();
+    function calcDistinct() {
+      const distinct = new Set();
+      dataset.forEach((e) => {
+        distinct.add(e.email);
+      });
+      return distinct.size;
+    }
     function calcRating() {
       let score = 0;
       let count = 0;
       for (let i = 0; i < dataset.length; i++) {
-        if (dataset[i].rating != '') {
+        if (dataset[i].rating != "") {
           score += Number(dataset[i].rating);
           count++;
         }

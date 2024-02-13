@@ -43,6 +43,7 @@ export default function Charts() {
     if (fullData) {
       fullData.setPlot(startDate, endDate);
       setPlot(fullData.getPlot());
+      console.log(fullData.distinct); //remove
     }
   }, [fullData, startDate, endDate]);
 
@@ -78,8 +79,11 @@ export default function Charts() {
       ))}
       {fullData && (
         <div className="centered chart-container" style={{ height: "300px" }}>
-          <span className='chart-label'>Total visits: {fullData.total}</span>
-          <span className='chart-label'>Rating: {fullData.rating}</span>
+          <span className="chart-label">Total visits: {fullData.total}</span>
+          <span className="chart-label">Rating: {fullData.rating}</span>
+          <span className="chart-label">
+            Distinct visitors: {fullData.distinct}
+          </span>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart margin={{ bottom: 70, right: 50 }} data={plot}>
               <CartesianGrid strokeDasharray="3" />
