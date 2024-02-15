@@ -26,6 +26,7 @@ export default class Customers {
   }
   setPlot(startDate, endDate) {
     const counts = new Map();
+    const countsByDay = new Map();
     const dataInScope = [];
     this.total = 0;
     this.dataset.forEach((customer) => {
@@ -36,23 +37,9 @@ export default class Customers {
         let subject = subjects[customer.courses.match(regexSubject)];
         if (!subject) subject = "other";
         const dateStr = date.format("YYYY-MM-DD");
-        const count = counts.get(dateStr);
-        if (count) {
-          count[subject]++;
-          count.val++;
-          counts.set(dateStr, count);
-        } else {
-          const newCount = {
-            val: 1,
-            physics: 0,
-            math: 0,
-            CIS: 0,
-            statistics: 0,
-            other: 0,
-          };
-          newCount[subject]++;
-          counts.set(dateStr, newCount);
-        }
+        const dayStr = date.format("dddd");
+        calcSubject(counts, dateStr, subject);
+        calcSubject(countsByDay, dayStr, subject);
       }
       function calcDistinct(dataset) {
         const distinct = new Set();
@@ -88,5 +75,25 @@ export default class Customers {
   }
   getTotal() {
     return this.total;
+  }
+}
+
+function calcSubject(counts, dateStr, subject) {
+  const count = counts.get(dateStr);
+  if (count) {
+    count[subject]++;
+    count.val++;
+    counts.set(dateStr, count);
+  } else {
+    const newCount = {
+      val: 1,
+      physics: 0,
+      math: 0,
+      CIS: 0,
+      statistics: 0,
+      other: 0,
+    };
+    newCount[subject]++;
+    counts.set(dateStr, newCount);
   }
 }
