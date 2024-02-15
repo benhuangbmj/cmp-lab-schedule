@@ -81,7 +81,7 @@ export default function Charts() {
           />
         </span>
       ))}
-      {fullData && (
+      {plot && (
         <div className="centered chart-container" style={{ height: "300px" }}>
           <span className="chart-label">Total visits: {fullData.total}</span>
           <span className="chart-label">Rating: {fullData.rating}</span>
@@ -89,7 +89,7 @@ export default function Charts() {
             Distinct visitors: {fullData.distinct}
           </span>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart margin={{ bottom: 70, right: 50 }} data={plot}>
+            <BarChart margin={{ bottom: 70, right: 50 }} data={plot.counts}>
               <CartesianGrid strokeDasharray="3" />
               <Bar dataKey="val" fill={color.institutional_navy} />
               <XAxis dataKey="date" angle={60} textAnchor="start" />
@@ -112,7 +112,7 @@ export default function Charts() {
             </BarChart>
           </ResponsiveContainer>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart margin={{ bottom: 70, right: 50 }} data={plot}>
+            <BarChart margin={{ bottom: 70, right: 50 }} data={plot.counts}>
               <Legend verticalAlign="top" align="right" />
               {subjects.map((e) => {
                 return (
@@ -120,6 +120,42 @@ export default function Charts() {
                 );
               })}
               <XAxis dataKey="date" angle={60} textAnchor="start" />
+              <YAxis
+                domain={[0, fullData.yMax]}
+                label={{
+                  value: "visits",
+                  angle: -90,
+                  position: "insideLeft",
+                  offset: 20,
+                  fontSize: 25,
+                }}
+                interval="PreserveEnd"
+                tickCount={
+                  fullData.yMax < 10
+                    ? fullData.yMax + 1
+                    : Math.ceil((fullData.yMax + 1) / 2)
+                }
+              />
+            </BarChart>
+          </ResponsiveContainer>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              margin={{ bottom: 70, right: 50 }}
+              data={plot.countsByDay}
+            >
+              <Legend verticalAlign="top" align="right" />
+              {subjects.map((e) => {
+                return (
+                  <Bar
+                    maxBarSize={20}
+                    key={e}
+                    dataKey={e}
+                    stackId="subjects"
+                    fill={color[e]}
+                  />
+                );
+              })}
+              <XAxis dataKey="day" angle={45} textAnchor="start" />
               <YAxis
                 domain={[0, fullData.yMax]}
                 label={{

@@ -26,7 +26,9 @@ export default class Customers {
   }
   setPlot(startDate, endDate) {
     const counts = new Map();
-    const countsByDay = new Map();
+    const countsByDay = new Map(
+      Array.from(Array(4), (e, i) => [getDayStr(i + 1), getSubjectSchema()]),
+    );
     const dataInScope = [];
     this.total = 0;
     this.dataset.forEach((customer) => {
@@ -67,7 +69,14 @@ export default class Customers {
       );
       currDate = currDate.add(1, "day");
     }
-    this.plot = countsArr;
+    const countsByDayArr = Array.from(countsByDay.entries(), (e) =>
+      Object.assign({ day: e[0] }, e[1]),
+    );
+    countsByDayArr.sort((a, b) => getDayNum(a.day) - getDayNum(b.day));
+    this.plot = {
+      counts: countsArr,
+      countsByDay: countsByDayArr,
+    };
     this.yMax = yMax;
   }
   getPlot() {
@@ -96,4 +105,60 @@ function calcSubject(counts, dateStr, subject) {
     newCount[subject]++;
     counts.set(dateStr, newCount);
   }
+}
+
+function getDayNum(day) {
+  switch (day) {
+    case "Monday":
+      return 1;
+      break;
+    case "Tuesday":
+      return 2;
+      break;
+    case "Wednesday":
+      return 3;
+      break;
+    case "Thursday":
+      return 4;
+      break;
+    case "Friday":
+      return 5;
+      break;
+  }
+}
+
+function getDayStr(num) {
+  switch (num) {
+    case 0:
+      return "Sunday";
+      break;
+    case 1:
+      return "Monday";
+      break;
+    case 2:
+      return "Tuesday";
+      break;
+    case 3:
+      return "Wednesday";
+      break;
+    case 4:
+      return "Thursday";
+      break;
+    case 5:
+      return "Friday";
+      break;
+    case 6:
+      return "Saturday";
+  }
+}
+
+function getSubjectSchema() {
+  return {
+    val: 0,
+    physics: 0,
+    math: 0,
+    CIS: 0,
+    statistics: 0,
+    other: 0,
+  };
 }
