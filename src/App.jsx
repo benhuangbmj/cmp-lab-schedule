@@ -37,7 +37,10 @@ export default function App() {
   const [navbar, setNavbar] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [pageHeight, setPageHeight] = useState("auto");
+  const [navHeight, setNavHeight] = useState();
   const refProfile = useRef();
+  const refNav = useRef();
+  const observer = useRef();
 
   const active = useSelector(selectActive);
 
@@ -70,6 +73,9 @@ export default function App() {
       dispatch(fetchUserData());
     }
     checkActive();
+    observer.current = new MutationObserver((rec) => {
+      setNavHeight(refNav.current.offsetHeight);
+    });
   }, []);
 
   useLayoutEffect(() => {
@@ -88,8 +94,18 @@ export default function App() {
     );
   } else {
     return (
-      <div style={{ height: pageHeight }}>
+      <div
+        onLoad={() => {
+          observer.current.observe(refNav.current, {
+            subtree: true,
+            attributeFilter: ["class"],
+          });
+          setNavHeight(refNav.current.offsetHeight);
+        }}
+        style={{ height: pageHeight }}
+      >
         <Navbar
+          ref={refNav}
           style={{ display: navbar ? "initial" : "none" }}
           data-bs-theme="dark"
           expand="md"
@@ -164,6 +180,7 @@ export default function App() {
                   info={info}
                   fetchInfo={fetchInfo}
                   setLoaded={setLoaded}
+                  navHeight={navHeight}
                 />
               </ProtectedRoute>
             }

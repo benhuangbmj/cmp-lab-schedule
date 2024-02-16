@@ -24,7 +24,7 @@ const privilege = import.meta.env.VITE_PRIVILEGE;
 const display = ["username", "name", "subject", "links", "password"];
 
 const Profile = forwardRef(function Profile(
-  { info, fetchInfo, user = null, setLoaded },
+  { info, fetchInfo, user = null, setLoaded, navHeight },
   ref,
 ) {
   const {
@@ -186,7 +186,7 @@ const Profile = forwardRef(function Profile(
         <form onSubmit={handleSubmit(handleUpdate)} style={{ width: "100%" }}>
           <div
             className="sticky-top flexbox-column designing"
-            style={{ margin: "0", float: "right", top: "50px" }}
+            style={{ margin: "0", float: "right", top: navHeight + 20 + "px" }}
           >
             <button
               type="submit"
