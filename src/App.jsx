@@ -78,9 +78,9 @@ export default function App() {
     });
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (loaded) {
-      setPageHeight(refProfile.current.clientHeight + "px");
+      setPageHeight(refProfile.current?.clientHeight + "px");
     } else {
       setPageHeight("auto");
     }
