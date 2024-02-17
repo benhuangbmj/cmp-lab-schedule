@@ -80,7 +80,7 @@ export default function Scheduling({ info, fetchInfo, selected }) {
     }
   }, [selected]);
   return (
-    <div>
+    <div style={{ width: "87%" }}>
       <Timetable
         tutor={selected ? info[selected].name : null}
         slots={slots}
