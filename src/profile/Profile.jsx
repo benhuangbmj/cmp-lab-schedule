@@ -9,6 +9,15 @@ import { getSingleAsset, update, fetchKey } from "/src/api-operations";
 import { schema as dataSchema, courseOptions, blankForm } from "/src/utils";
 
 import SelectUser from "/src/util-components/SelectUser";
+import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faRotateLeft } from "@fortawesome/free-solid-svg-icons";
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faDatabase } from "@fortawesome/free-solid-svg-icons";
 
 import CardDisplay from "/src/IDcard/CardDisplay";
 import Scheduling from "/src/scheduling/Scheduling";
@@ -188,32 +197,49 @@ const Profile = forwardRef(function Profile(
             className="sticky-top flexbox-column designing"
             style={{ margin: "0", float: "right", top: navHeight + 20 + "px" }}
           >
-            <button
-              type="submit"
-              disabled={!selected ? false : loggedIn ? false : true}
-            >
-              {selected ? "Update" : "Create"}
-            </button>
-            <button type="reset">Reset</button>
-            <button
-              type="button"
-              disabled={loggedIn ? false : true}
-              onClick={handleDelete}
-            >
-              Delete
-            </button>
-            <button type="button" onClick={handleBackup}>
-              Backup
-            </button>
+            <ButtonGroup vertical>
+              <Button
+                type="submit"
+                disabled={!selected ? false : loggedIn ? false : true}
+              >
+                {selected ? (
+                  <span>
+                    <span className="button-text">Update&nbsp;</span>{" "}
+                    <FontAwesomeIcon icon={faPenToSquare} />
+                  </span>
+                ) : (
+                  <span>
+                    <span className="button-text">Create&nbsp;</span>{" "}
+                    <FontAwesomeIcon icon={faUserPlus} />
+                  </span>
+                )}
+              </Button>
+              <Button type="reset">
+                <span className="button-text">Reset&nbsp;&nbsp;</span>{" "}
+                <FontAwesomeIcon icon={faRotateLeft} />
+              </Button>
+              <Button
+                type="Button"
+                disabled={loggedIn ? false : true}
+                onClick={handleDelete}
+              >
+                <span className="button-text">Delete&nbsp;</span>{" "}
+                <FontAwesomeIcon icon={faTrashCan} />
+              </Button>
+              <Button type="Button" onClick={handleBackup}>
+                <span className="button-text">Backup&nbsp;</span>{" "}
+                <FontAwesomeIcon icon={faDatabase} />
+              </Button>
+            </ButtonGroup>
           </div>
           <div className="designing" style={{ borderColor: "blue" }}>
             {!user && userData[activeUser].roles.admin && (
               <div className="designing center-fit">
                 <SelectUser info={info} handleSelect={handleSelect} />
                 <p> or </p>
-                <button type="button" onClick={() => handleSelect(null)}>
+                <Button type="Button" onClick={() => handleSelect(null)}>
                   Create a New User
-                </button>
+                </Button>
               </div>
             )}
             {selected && (
@@ -310,7 +336,10 @@ const Profile = forwardRef(function Profile(
               />
             </div>
             <div className="designing">
-              <h5>{userData[selected].name}'s Courses: </h5>
+              <h5>
+                {userData[selected] ? userData[selected].name + "'s" : ""}{" "}
+                Courses:{" "}
+              </h5>
               <div className="designing flexbox-row course-container padding-1rem">
                 {courseOptions.map((e) => (
                   <div key={e}>

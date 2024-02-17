@@ -398,4 +398,7 @@ label {
   .chart-container {
     width: 100%;
   }
+  .button-text {
+    display: none;
+  }
 }

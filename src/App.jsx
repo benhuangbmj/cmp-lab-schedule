@@ -84,7 +84,7 @@ export default function App() {
     } else {
       setPageHeight("auto");
     }
-  });
+  }, [loaded]);
 
   if (!info) {
     return (
