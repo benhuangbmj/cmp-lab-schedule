@@ -189,7 +189,7 @@ export default function App() {
             path="/admin"
             element={
               <ProtectedRoute role="admin">
-                <Admin />
+                <Admin info={info} fetchInfo={fetchInfo} />
               </ProtectedRoute>
             }
           />

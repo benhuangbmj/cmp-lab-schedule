@@ -6,12 +6,16 @@ import { useEffect, useState, useMemo, useRef } from "react";
 
 import utils, { fieldOptions } from "/src/utils";
 
+import Popup from "reactjs-popup";
+import Button from "react-bootstrap/Button";
+
 import InputText from "/src/util-components/InputText.jsx";
 import InputCheckbox from "/src/util-components/InputCheckbox.jsx";
 import InputTextPopup from "/src/util-components/InputTextPopup.jsx";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import CardDisplay from "/src/IDcard/CardDisplay";
+import Profile from "/src/profile/Profile";
 
 const textFields = ["name", "subject", "password"];
 const checkboxFields = ["roles"];
@@ -30,7 +34,7 @@ const allFields = [
 ];
 const registerOptions = {};
 
-export default function Admin() {
+export default function Admin({ info, fetchInfo }) {
   const userData = useSelector((state) => state.userData.items);
   const resetCount = useRef(0);
   const [loaded, setLoaded] = useState(false);
@@ -96,7 +100,7 @@ export default function Admin() {
     resetCount.current++;
   };
   const handleUpdate = (data) => {
-    console.log(data); //delete
+    console.log(data); //remove
     const selected = data.selected;
     console.log("selected: ", selected);
     delete data.selected;
@@ -129,9 +133,9 @@ export default function Admin() {
     formUtils.setValue("selected", selectAll ? usernames : false);
   }, [selectAll]);
 
-  useEffect(() => {}, []); //delete
+  useEffect(() => {}, []); //remove
 
-  useEffect(() => {}); //delete
+  useEffect(() => {}); //remove
 
   if (loaded && Array.isArray(usernames))
     return (
@@ -177,10 +181,17 @@ export default function Admin() {
                         value={username}
                         {...formUtils.register("selected")}
                       />{" "}
-                      {i + 1}
+                      <label htmlFor={username}>{i + 1}</label>
                     </td>
                     <td>
-                      <label htmlFor={username}>{username}</label>
+                      <Popup trigger={<Button>{username}</Button>} modal>
+                        <Profile
+                          info={info}
+                          fetchInfo={fetchInfo}
+                          user={username}
+                          setLoaded={() => {}}
+                        />
+                      </Popup>
                     </td>
                     {textFields.map((field) => (
                       <td key={fieldNameGen(field)}>
