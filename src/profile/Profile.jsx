@@ -188,13 +188,10 @@ const Profile = forwardRef(function Profile(
 
   return (
     <main>
-      <div
-        ref={ref}
-        className="flexbox-column padding-1rem designing profile-page"
-      >
+      <div ref={ref} className="flexbox-column padding-1rem  profile-page">
         <form onSubmit={handleSubmit(handleUpdate)} style={{ width: "100%" }}>
           <div
-            className="sticky-top flexbox-column designing"
+            className="sticky-top flexbox-column "
             style={{ margin: "0", float: "right", top: navHeight + 20 + "px" }}
           >
             <ButtonGroup vertical>
@@ -232,9 +229,9 @@ const Profile = forwardRef(function Profile(
               </Button>
             </ButtonGroup>
           </div>
-          <div className="designing" style={{ borderColor: "blue" }}>
+          <div className="" style={{ borderColor: "blue", width: "87%" }}>
             {!user && userData[activeUser].roles.admin && (
-              <div className="designing center-fit">
+              <div className=" center-fit">
                 <SelectUser info={info} handleSelect={handleSelect} />
                 <p> or </p>
                 <Button type="Button" onClick={() => handleSelect(null)}>
@@ -243,11 +240,15 @@ const Profile = forwardRef(function Profile(
               </div>
             )}
             {selected && (
-              <div className="designing center-fit">
-                <strong>Last Update</strong>: {info[selected].lastUpdate}
+              <div className=" center-fit">
+                <strong>Last Update</strong>:
+                <br />
+                <span className="shrink-on-mobile">
+                  {info[selected].lastUpdate}
+                </span>
               </div>
             )}
-            <div className="flexbox-column card-profile-frame designing">
+            <div className="flexbox-column card-profile-frame ">
               <ChangePic selected={selected} setRenew={setRenew} />
               {selected && loggedIn ? (
                 <div className="card-holder">
@@ -261,7 +262,7 @@ const Profile = forwardRef(function Profile(
                 <div className="card-holder">ID card</div>
               )}
             </div>
-            <div className="center-fit designing">
+            <div className="center-fit ">
               {["username"].concat(Object.keys(dataSchema)).map((e) => {
                 if (display.includes(e)) {
                   return e != "links" ? (
@@ -328,19 +329,19 @@ const Profile = forwardRef(function Profile(
                 }
               })}
             </div>
-            <div className="designing" style={{ margin: "auto" }}>
+            <div className="" style={{ margin: "auto" }}>
               <Scheduling
                 info={info}
                 fetchInfo={fetchInfo}
                 selected={loggedIn ? selected : null}
               />
             </div>
-            <div className="designing">
+            <div className="">
               <h5>
                 {userData[selected] ? userData[selected].name + "'s" : ""}{" "}
                 Courses:{" "}
               </h5>
-              <div className="designing flexbox-row course-container padding-1rem">
+              <div className=" flexbox-row course-container padding-1rem">
                 {courseOptions.map((e) => (
                   <div key={e}>
                     <input

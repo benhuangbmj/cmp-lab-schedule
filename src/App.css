@@ -401,4 +401,7 @@ label {
   .button-text {
     display: none;
   }
+  .shrink-on-mobile {
+    font-size: 0.8em;
+  }
 }
