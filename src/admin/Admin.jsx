@@ -184,13 +184,26 @@ export default function Admin({ info, fetchInfo }) {
                       <label htmlFor={username}>{i + 1}</label>
                     </td>
                     <td>
-                      <Popup trigger={<Button>{username}</Button>} modal>
-                        <Profile
-                          info={info}
-                          fetchInfo={fetchInfo}
-                          user={username}
-                          setLoaded={() => {}}
-                        />
+                      <Popup
+                        trigger={<Button>{username}</Button>}
+                        lockScroll={true}
+                        modal
+                      >
+                        <div
+                          className="extend-on-mobile"
+                          style={{
+                            paddingTop: "30px",
+                            backgroundColor: "white",
+                          }}
+                        >
+                          <Profile
+                            info={info}
+                            fetchInfo={fetchInfo}
+                            user={username}
+                            setLoaded={() => {}}
+                            scrollable="auto"
+                          />
+                        </div>
                       </Popup>
                     </td>
                     {textFields.map((field) => (

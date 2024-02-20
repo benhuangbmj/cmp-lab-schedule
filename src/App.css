@@ -404,4 +404,8 @@ label {
   .shrink-on-mobile {
     font-size: 0.8em;
   }
+  .extend-on-mobile {
+    width: 75vw;
+    margin-left: -5vw;
+  }
 }

@@ -33,7 +33,14 @@ const privilege = import.meta.env.VITE_PRIVILEGE;
 const display = ["username", "name", "subject", "links", "password"];
 
 const Profile = forwardRef(function Profile(
-  { info, fetchInfo, user = null, setLoaded, navHeight },
+  {
+    info,
+    fetchInfo,
+    user = null,
+    setLoaded,
+    navHeight,
+    scrollable = "visible",
+  },
   ref,
 ) {
   const {
@@ -187,7 +194,7 @@ const Profile = forwardRef(function Profile(
   }, [renew]);
 
   return (
-    <main>
+    <main style={{ overflow: scrollable }}>
       <div ref={ref} className="flexbox-column padding-1rem  profile-page">
         <form onSubmit={handleSubmit(handleUpdate)} style={{ width: "100%" }}>
           <div
