@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { getSingleAsset, update, fetchKey } from "/src/api-operations";
+
+import Button from "react-bootstrap/Button";
+
 import contentfulApi from "/src/api-operations";
 
 export default function ChangePic({ selected, setRenew }) {
@@ -8,6 +10,7 @@ export default function ChangePic({ selected, setRenew }) {
   const [uploadStatus, setUploadStatus] = useState("Upload");
   const [profile, setProfile] = useState();
   const userData = useSelector((state) => state.userData.items);
+  const refInput = useRef();
 
   useEffect(() => {
     if (selected && userData[selected].profilePic)
@@ -81,20 +84,24 @@ export default function ChangePic({ selected, setRenew }) {
         </div>
       )}
       <input
-        style={{ width: "29%", display: "block", margin: "auto" }}
+        ref={refInput}
+        style={{ width: "29%", display: "none", margin: "auto" }}
         type="file"
         accept="image/*"
         onChange={handleChangeProfile}
       />
       <div className="flexbox-row" style={{ width: "fit-content" }}>
-        <button
+        <Button type='button' onClick={() => { refInput.current.click() }}>
+          Choose a picture
+        </Button>
+        <Button
           type="button"
           disabled={newPic ? false : true}
           onClick={uploadPic}
         >
           {uploadStatus}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           disabled={profile ? false : true}
           onClick={() => {
@@ -102,10 +109,10 @@ export default function ChangePic({ selected, setRenew }) {
           }}
         >
           Remove
-        </button>
+        </Button>
       </div>
       <div className="flexbox-row" style={{ width: "fit-content" }}>
-        <button
+        <Button
           type="button"
           disabled={profile ? false : true}
           onClick={() => {
@@ -113,8 +120,8 @@ export default function ChangePic({ selected, setRenew }) {
           }}
         >
           Rotate Clockwise
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           disabled={profile ? false : true}
           onClick={() => {
@@ -122,7 +129,7 @@ export default function ChangePic({ selected, setRenew }) {
           }}
         >
           Rotate Counterclockwise
-        </button>
+        </Button>
       </div>
     </div>
   );
