@@ -193,7 +193,7 @@ const Profile = forwardRef(function Profile(
 
   return (
     <main>
-      <div ref={ref} className="flexbox-column padding-1rem  profile-page">
+      <div ref={ref} className="flexbox-column profile-page" style={{padding: "0px 0px 1em 2em"}}>
         <form onSubmit={handleSubmit(handleUpdate)} style={{ width: "100%" }}>
           <div
             className="sticky-top flexbox-column "

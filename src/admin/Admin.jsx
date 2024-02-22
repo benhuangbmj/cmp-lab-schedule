@@ -193,15 +193,17 @@ export default function Admin({ info, fetchInfo }) {
                       >
                         {close => {
                           return (
-                            <>
-                              <CloseButton style={{ position: 'sticky', top: "7px" }} onClick={close} />
+                            <div>
+                              <div style={{ position: 'fixed' }}>
+                                <CloseButton onClick={close} />
+                              </div>
                               <Profile
                                 info={info}
                                 fetchInfo={fetchInfo}
                                 user={username}
                                 setLoaded={() => { }}
                               />
-                            </>)
+                            </div>)
                         }}
                       </Popup>
                     </td>
