@@ -2,12 +2,17 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 
 import Button from "react-bootstrap/Button";
+import Spinner from 'react-bootstrap/Spinner';
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+
+import {faCamera, faEraser, faFileArrowUp, faRotateRight, faRotateLeft} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import contentfulApi from "/src/api-operations";
 
 export default function ChangePic({ selected, setRenew }) {
   const [newPic, setNewPic] = useState();
-  const [uploadStatus, setUploadStatus] = useState("Upload");
+  const [uploadStatus, setUploadStatus] = useState(false);
   const [profile, setProfile] = useState();
   const userData = useSelector((state) => state.userData.items);
   const refInput = useRef();
@@ -52,7 +57,7 @@ export default function ChangePic({ selected, setRenew }) {
   }
 
   async function uploadPic() {
-    setUploadStatus("Uploading ...");
+    setUploadStatus(true);
     const tutor = userData[selected];
     if (tutor.profilePic && tutor.profilePic.id) {
       var deleted = await contentfulApi.deleteAsset(tutor.profilePic.id);
@@ -61,45 +66,48 @@ export default function ChangePic({ selected, setRenew }) {
     }
     if (deleted) {
       contentfulApi.createAsset(newPic, selected).then(() => {
-        setUploadStatus("Upload");
+        setUploadStatus(false);
         setRenew((state) => state + 1);
       });
     }
   }
   return (
     <div>
-      {selected ? (
-        <img
-          className="profile-container"
-          src={
-            profile
-              ? profile
-              : "https://www.messiah.edu/images/stained_glass_circle1_multicolor.jpg"
-          }
-        />
-      ) : (
-        <div className="profile-container">
-          <span style={{ position: "absolute" }}>profile</span>
-          <span style={{ position: "relative", top: "20px" }}>picture</span>
-        </div>
-      )}
+      <div style={{position: 'relative'}} >
+        {selected ? (
+          <img
+            className="profile-container"
+            src={
+              profile
+                ? profile
+                : "https://www.messiah.edu/images/stained_glass_circle1_multicolor.jpg"
+            }
+          />
+        ) : (
+          <div className="profile-container">
+            <span style={{ position: "absolute" }}>profile</span>
+            <span style={{ position: "relative", top: "20px" }}>picture</span>
+          </div>
+        )}
+        <Button className='rounded-circle' type='button' onClick={() => { refInput.current.click() }} style={{ position: 'absolute', top: "145px", right: "99px" }}>
+          <FontAwesomeIcon icon={faCamera} />
+        </Button>
+      </div>
       <input
         ref={refInput}
-        style={{ width: "29%", display: "none", margin: "auto" }}
+        style={{ display: "none" }}
         type="file"
         accept="image/*"
         onChange={handleChangeProfile}
       />
-      <div className="flexbox-row" style={{ width: "fit-content" }}>
-        <Button type='button' onClick={() => { refInput.current.click() }}>
-          Choose a picture
-        </Button>
+      <ButtonGroup>
         <Button
           type="button"
           disabled={newPic ? false : true}
           onClick={uploadPic}
         >
-          {uploadStatus}
+          <span className="button-text">{uploadStatus? "Uploading..." : "Upload"} &nbsp;</span>{" "} 
+          {uploadStatus? <Spinner size='sm'></Spinner> : <FontAwesomeIcon icon={faFileArrowUp} />}
         </Button>
         <Button
           type="button"
@@ -108,10 +116,9 @@ export default function ChangePic({ selected, setRenew }) {
             alert("This feature is under construction.");
           }}
         >
-          Remove
+          <span className="button-text">Remove &nbsp;</span>{" "}
+          <FontAwesomeIcon icon={faEraser}/>
         </Button>
-      </div>
-      <div className="flexbox-row" style={{ width: "fit-content" }}>
         <Button
           type="button"
           disabled={profile ? false : true}
@@ -119,7 +126,7 @@ export default function ChangePic({ selected, setRenew }) {
             handleRotate(true);
           }}
         >
-          Rotate Clockwise
+          <span className="button-text">Rotate &nbsp;</span>{" "} <FontAwesomeIcon icon={faRotateRight} />
         </Button>
         <Button
           type="button"
@@ -128,9 +135,9 @@ export default function ChangePic({ selected, setRenew }) {
             handleRotate(false);
           }}
         >
-          Rotate Counterclockwise
+          <span className="button-text">Rotate &nbsp;</span>{" "} <FontAwesomeIcon icon={faRotateLeft} />
         </Button>
-      </div>
+      </ButtonGroup>
     </div>
   );
 }
