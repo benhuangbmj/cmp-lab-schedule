@@ -73,7 +73,7 @@ export default function ChangePic({ selected, setRenew }) {
   }
   return (
     <div>
-      <div style={{position: 'relative'}} >
+      <div style={{margin: 'auto', width: 'fit-content', position: 'relative'}} >
         {selected ? (
           <img
             className="profile-container"
@@ -89,7 +89,7 @@ export default function ChangePic({ selected, setRenew }) {
             <span style={{ position: "relative", top: "20px" }}>picture</span>
           </div>
         )}
-        <Button className='rounded-circle' type='button' onClick={() => { refInput.current.click() }} style={{ position: 'absolute', top: "145px", right: "99px" }}>
+        <Button className='rounded-circle' type='button' onClick={() => { refInput.current.click() }} style={{ position: 'absolute', top: "0px", right: "-20px" }}>
           <FontAwesomeIcon icon={faCamera} />
         </Button>
       </div>
