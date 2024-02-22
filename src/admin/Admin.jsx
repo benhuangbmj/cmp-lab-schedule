@@ -8,6 +8,7 @@ import utils, { fieldOptions } from "/src/utils";
 
 import Popup from "reactjs-popup";
 import Button from "react-bootstrap/Button";
+import CloseButton from 'react-bootstrap/CloseButton';
 
 import InputText from "/src/util-components/InputText.jsx";
 import InputCheckbox from "/src/util-components/InputCheckbox.jsx";
@@ -188,14 +189,20 @@ export default function Admin({ info, fetchInfo }) {
                         trigger={<Button>{username}</Button>}
                         lockScroll={true}
                         modal
-                        contentStyle={{ overflowY: "scroll", paddingTop: "50px", height: '100vh', width: 'auto', maxWidth: "90vw" }}
+                        contentStyle={{ overflowY: "scroll", paddingTop: "50px", height: '100vh', width: 'auto' }}
                       >
-                        <Profile
-                          info={info}
-                          fetchInfo={fetchInfo}
-                          user={username}
-                          setLoaded={() => { }}
-                        />
+                        {close => {
+                          return (
+                            <>
+                              <CloseButton style={{ position: 'sticky', top: "7px" }} onClick={close} />
+                              <Profile
+                                info={info}
+                                fetchInfo={fetchInfo}
+                                user={username}
+                                setLoaded={() => { }}
+                              />
+                            </>)
+                        }}
                       </Popup>
                     </td>
                     {textFields.map((field) => (
