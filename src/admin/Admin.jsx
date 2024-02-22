@@ -1,4 +1,4 @@
-import devTools from "/src/devTools"; //delete
+import devTools from "/src/devTools"; //remove
 
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
@@ -133,9 +133,9 @@ export default function Admin({ info, fetchInfo }) {
     formUtils.setValue("selected", selectAll ? usernames : false);
   }, [selectAll]);
 
-  useEffect(() => {}, []); //remove
+  useEffect(() => { }, []); //remove
 
-  useEffect(() => {}); //remove
+  useEffect(() => { }); //remove
 
   if (loaded && Array.isArray(usernames))
     return (
@@ -188,22 +188,14 @@ export default function Admin({ info, fetchInfo }) {
                         trigger={<Button>{username}</Button>}
                         lockScroll={true}
                         modal
+                        contentStyle={{ overflowY: "scroll", paddingTop: "50px", height: '100vh', width: 'auto', maxWidth: "90vw" }}
                       >
-                        <div
-                          className="extend-on-mobile"
-                          style={{
-                            paddingTop: "30px",
-                            backgroundColor: "white",
-                          }}
-                        >
-                          <Profile
-                            info={info}
-                            fetchInfo={fetchInfo}
-                            user={username}
-                            setLoaded={() => {}}
-                            scrollable="auto"
-                          />
-                        </div>
+                        <Profile
+                          info={info}
+                          fetchInfo={fetchInfo}
+                          user={username}
+                          setLoaded={() => { }}
+                        />
                       </Popup>
                     </td>
                     {textFields.map((field) => (

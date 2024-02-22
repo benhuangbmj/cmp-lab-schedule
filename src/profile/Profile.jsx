@@ -37,8 +37,7 @@ const Profile = forwardRef(function Profile(
     fetchInfo,
     user = null,
     setLoaded,
-    navHeight,
-    scrollable = "visible",
+    navHeight
   },
   ref,
 ) {
@@ -160,7 +159,7 @@ const Profile = forwardRef(function Profile(
     displayInfo(selected);
   };
 
-  const handleDelete = function () {
+  const handleDelete = function() {
     const confirm = prompt('Type "Confirm" to proceed to delete the user');
     if (confirm === "Confirm") {
       delete info[selected];
@@ -193,7 +192,7 @@ const Profile = forwardRef(function Profile(
   }, [renew]);
 
   return (
-    <main style={{ overflow: scrollable }}>
+    <main>
       <div ref={ref} className="flexbox-column padding-1rem  profile-page">
         <form onSubmit={handleSubmit(handleUpdate)} style={{ width: "100%" }}>
           <div
