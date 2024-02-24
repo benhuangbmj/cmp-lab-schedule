@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState, useMemo, useRef } from "react";
 
 import utils, { fieldOptions } from "/src/utils";
+import api from "/src//api-operations";
 
 import Popup from "reactjs-popup";
 import Button from "react-bootstrap/Button";
@@ -101,11 +102,10 @@ export default function Admin({ info, fetchInfo }) {
     resetCount.current++;
   };
   const handleUpdate = (data) => {
-    console.log(data); //remove
-    const selected = data.selected;
-    console.log("selected: ", selected);
+    const selected = data.selected;//remove
     delete data.selected;
     data = utils.getReadyForUpdate(usernames, data);
+    api.update(null, null, data, fetchInfo);
   };
   const handleInactivate = () => {
     setInative(true);
@@ -134,9 +134,9 @@ export default function Admin({ info, fetchInfo }) {
     formUtils.setValue("selected", selectAll ? usernames : false);
   }, [selectAll]);
 
-  useEffect(() => { }, []); //remove
+  useEffect(() => {}, []); //remove
 
-  useEffect(() => { }); //remove
+  useEffect(() => {}); //remove
 
   if (loaded && Array.isArray(usernames))
     return (

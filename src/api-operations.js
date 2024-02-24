@@ -340,6 +340,7 @@ export const createAsset = async function (file, title) {
 export { getSingleAsset, update, fetchInfo };
 
 export default {
+  update: update,
   update2_0: update2_0,
   fetchKey: fetchKey,
   deleteAsset: deleteAsset,
