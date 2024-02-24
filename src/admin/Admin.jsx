@@ -108,7 +108,7 @@ export default function Admin({ info, fetchInfo }) {
     resetCount.current++;
   };
   const handleUpdate = (data) => {
-    delete data.selected;
+    delete data.selected;    
     data = utils.getReadyForUpdate(usernames, data);
     api.update(null, null, data, fetchInfo);
   };
@@ -169,7 +169,7 @@ export default function Admin({ info, fetchInfo }) {
                     onClick={() => {
                       handleSortByField(field);
                     }}
-                    className={hiddenOnMobile.includes(field) && "hidden-on-mobile"}
+                    className={hiddenOnMobile.includes(field)? "hidden-on-mobile" : undefined}
                   >
                     {field}
                   </th>

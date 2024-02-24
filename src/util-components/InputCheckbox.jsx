@@ -18,7 +18,7 @@ export default function InputCheckbox({ name, utils, options, values, isReset })
   }, [isReset])
 
   return (
-    <div style={{textAlign: 'left'}} >
+    <div style={{textAlign: 'left', width:"auto"}} >
       {values.map((val) =>
         <span key={val} className='checkbox-group'>
           <input type='checkbox' id={`${name} ${val}`} value={val} {...register(name, options)} />

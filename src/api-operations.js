@@ -123,7 +123,9 @@ const update = async (targetKey, keys, value, fetchInfo, backup = false) => {
         });
         currLevel[targetKey] = value;
       } else {
-        res.fields.tutorInfo["en-US"] = value;
+        Object.keys(value).forEach((user) => {
+          Object.assign(res.fields.tutorInfo["en-US"][user], value[user]);
+        })
       }
       fetch(
         `https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`,
