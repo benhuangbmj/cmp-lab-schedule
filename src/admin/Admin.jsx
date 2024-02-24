@@ -42,7 +42,7 @@ const hiddenOnMobile = [
 ]
 const registerOptions = {};
 
-export default function Admin({ info, fetchInfo }) {
+export default function Admin({ info, fetchInfo, navHeight }) {
   const userData = useSelector((state) => state.userData.items);
   const resetCount = useRef(0);
   const [loaded, setLoaded] = useState(false);
@@ -197,7 +197,8 @@ export default function Admin({ info, fetchInfo }) {
                         trigger={<Button>{username}</Button>}
                         lockScroll={true}
                         modal
-                        contentStyle={{ overflowY: "scroll", paddingTop: "50px", height: '100vh', width: 'auto' }}
+                        closeOnDocumentClick={false}                       
+                        contentStyle={{ overflowY: "scroll", paddingTop: navHeight + 5 + "px", height: '100vh', width: 'auto' }}
                       >
                         {close => {
                           return (
