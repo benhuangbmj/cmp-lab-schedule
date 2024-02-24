@@ -412,4 +412,8 @@ label {
   .hidden-on-mobile {
     display: none;
   }
+  .course-container > div {
+    white-space: nowrap;
+    width: 33%
+  }
 }
