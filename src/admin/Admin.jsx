@@ -108,7 +108,6 @@ export default function Admin({ info, fetchInfo }) {
     resetCount.current++;
   };
   const handleUpdate = (data) => {
-    const selected = data.selected;//remove
     delete data.selected;
     data = utils.getReadyForUpdate(usernames, data);
     api.update(null, null, data, fetchInfo);
@@ -183,13 +182,15 @@ export default function Admin({ info, fetchInfo }) {
                 return (
                   <tr key={username + " row"}>
                     <td>
-                      <input
-                        type="checkbox"
-                        id={username}
-                        value={username}
-                        {...formUtils.register("selected")}
-                      />{" "}
-                      <label htmlFor={username}>{i + 1}</label>
+                      <span className='checkbox-group'>
+                        <input
+                          type="checkbox"
+                          id={username}
+                          value={username}
+                          {...formUtils.register("selected")}
+                        />{" "}
+                        <label htmlFor={username}>{i + 1}</label>
+                      </span>
                     </td>
                     <td>
                       <Popup
