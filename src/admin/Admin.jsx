@@ -34,6 +34,12 @@ const allFields = [
   ...popupCheckboxFields,
   ...switchFields,
 ];
+const hiddenOnMobile = [
+  ...textFields,
+  ...popupTextFields,
+  ...popupFields,
+  ...popupCheckboxFields,
+]
 const registerOptions = {};
 
 export default function Admin({ info, fetchInfo }) {
@@ -134,9 +140,9 @@ export default function Admin({ info, fetchInfo }) {
     formUtils.setValue("selected", selectAll ? usernames : false);
   }, [selectAll]);
 
-  useEffect(() => {}, []); //remove
+  useEffect(() => { }, []); //remove
 
-  useEffect(() => {}); //remove
+  useEffect(() => { }); //remove
 
   if (loaded && Array.isArray(usernames))
     return (
@@ -164,6 +170,7 @@ export default function Admin({ info, fetchInfo }) {
                     onClick={() => {
                       handleSortByField(field);
                     }}
+                    className={hiddenOnMobile.includes(field) && "hidden-on-mobile"}
                   >
                     {field}
                   </th>
@@ -208,7 +215,7 @@ export default function Admin({ info, fetchInfo }) {
                       </Popup>
                     </td>
                     {textFields.map((field) => (
-                      <td key={fieldNameGen(field)}>
+                      <td key={fieldNameGen(field)} className='hidden-on-mobile'>
                         <InputText
                           name={fieldNameGen(field)}
                           utils={formUtils}
@@ -229,7 +236,7 @@ export default function Admin({ info, fetchInfo }) {
                     ))}
                     {popupTextFields.map((field) => {
                       return (
-                        <td key={fieldNameGen(field)}>
+                        <td key={fieldNameGen(field)} className='hidden-on-mobile'>
                           <InputTextPopup
                             supField={fieldNameGen(field)}
                             utils={formUtils}
@@ -239,10 +246,10 @@ export default function Admin({ info, fetchInfo }) {
                       );
                     })}
                     {popupFields.map((field) => {
-                      return <td key={fieldNameGen(field)}></td>;
+                      return <td key={fieldNameGen(field)} className='hidden-on-mobile'></td>;
                     })}
                     {popupCheckboxFields.map((field) => {
-                      return <td key={fieldNameGen(field)}></td>;
+                      return <td key={fieldNameGen(field)} className='hidden-on-mobile'></td>;
                     })}
                     {switchFields.map((field) => {
                       return (

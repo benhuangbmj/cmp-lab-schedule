@@ -409,4 +409,7 @@ label {
     width: 75vw;
     margin-left: -5vw;
   }
+  .hidden-on-mobile {
+    display: none;
+  }
 }
