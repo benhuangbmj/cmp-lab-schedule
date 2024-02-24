@@ -270,7 +270,8 @@ label {
 
 .checkbox-group {
   display: inline-block;
-  margin: 0 2.5pt 0 2.5pt;
+  white-space: nowrap;
+  margin: 0 .5em;
 }
 
 .institutional-navy {
