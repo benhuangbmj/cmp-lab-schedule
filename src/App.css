@@ -5,6 +5,8 @@
   --stat-color: #a63738;
   --institutional-navy: #002856;
   --institutional-green: #0b7367;
+  --light-blue:  #1C8AC2;
+  --gray:  #5B6770;
 }
 
 @font-face {
@@ -33,6 +35,19 @@ main {
   height: 100vh;
   font-family: Priori;
   font-size: 16pt;
+}
+
+.btn-primary, .btn-primary:disabled {
+  background-color: var(--institutional-navy);
+}
+
+.btn-primary:hover {
+  background-color: var(--light-blue);
+}
+
+.form-check-input:checked {
+  background-color: var(--institutional-navy);
+  border-color: var(--institutional-navy);
 }
 
 .chart-label {
