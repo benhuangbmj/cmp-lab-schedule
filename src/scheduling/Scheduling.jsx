@@ -3,6 +3,7 @@ import { days, times } from "/src/utils";
 import { update } from "../api-operations";
 
 import Timetable from "./Timetable";
+import Button from "react-bootstrap/Button";
 
 export default function Scheduling({ info, fetchInfo, selected }) {
   const cleanSlate = Array.from(times, () => Array.from(Array(4), () => false));
@@ -87,28 +88,28 @@ export default function Scheduling({ info, fetchInfo, selected }) {
         setSlots={setSlots}
       />
       <div>
-        <button
+        <Button
           disabled={selected == null}
           type="button"
           style={{ display: "inline-block" }}
           onClick={handleUpdate}
         >
           Update
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           style={{ display: "inline-block" }}
           onClick={handleReset}
         >
           Reset
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           style={{ display: "inline-block" }}
           onClick={handleClear}
         >
           Clear
-        </button>
+        </Button>
       </div>
     </div>
   );

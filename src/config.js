@@ -6,4 +6,5 @@ export const themeColor = {
   other: "#E5AE3A",
   institutional_navy: "#002856",
   institutional_green: "#0b7367",
+  grey: "#5B6770",
 };

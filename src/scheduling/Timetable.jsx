@@ -1,8 +1,10 @@
 import styles from "./timetable-style.module.css";
 import { useRef, useEffect, useState } from "react";
 import { days, times } from "../utils";
+import {themeColor} from "/src/config";
 
 import Table from "react-bootstrap/Table";
+import Button from "react-bootstrap/Button";
 
 function restrict(i) {
   if (i >= 40 && i < 53) {
@@ -48,13 +50,13 @@ export default function Timetable({ tutor, slots, setSlots }) {
   return (
     <div className={styles.container}>
       <h5>{tutor ? `${tutor}'s Schedule` : ""}</h5>
-      <button
+      <Button
         style={{ marginBottom: ".5rem" }}
         type="button"
         onClick={handleExtend}
       >
         {extended ? "Contract" : "Extend"}
-      </button>
+      </Button>
       <Table size="sm" bordered className="non-select">
         <tbody>
           <tr>
@@ -69,9 +71,10 @@ export default function Timetable({ tutor, slots, setSlots }) {
                   {days.map((day, j) => (
                     <td
                       key={j}
-                      style={{
-                        backgroundColor: slots[i][j] == true ? "grey" : null,
-                      }}
+                      style={slots[i][j] == true? {
+                        backgroundColor: themeColor.grey,
+                        color: 'white',
+                      } : {}}
                       onMouseDown={tutor && handleMouseDown}
                       onMouseEnter={tutor && handleMouseEnter}
                       data-pos={[i, j]}

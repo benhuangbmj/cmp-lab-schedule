@@ -194,7 +194,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
                     </td>
                     <td>
                       <Popup
-                        trigger={<Button>{username}</Button>}
+                        trigger={<Button style={{width: "100%"}}>{username}</Button>}
                         lockScroll={true}
                         modal
                         closeOnDocumentClick={false}                       
@@ -267,29 +267,29 @@ export default function Admin({ info, fetchInfo, navHeight }) {
               })}
             </tbody>
           </Table>
-          <button type="submit">Update</button>
-          <button
+          <Button type="submit">Update</Button>
+          <Button
             type="button"
             onClick={() => {
               handleReset(defaultValues);
             }}
           >
             Reset
-          </button>
-          <button type="button" onClick={handleInactivate}>
+          </Button>
+          <Button type="button" onClick={handleInactivate}>
             Inactivate
-          </button>
-          <button type="button" onClick={handleActivate}>
+          </Button>
+          <Button type="button" onClick={handleActivate}>
             Activate
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             onClick={() => {
               setDisplay((state) => !state);
             }}
           >
             ID cards
-          </button>
+          </Button>
         </form>
         <div
           style={{

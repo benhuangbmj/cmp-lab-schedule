@@ -39,6 +39,7 @@ main {
 
 .btn-primary, .btn-primary:disabled {
   background-color: var(--institutional-navy);
+  border-color: var(--institutional-navy);
 }
 
 .btn-primary:hover {
