@@ -148,11 +148,13 @@ export default function Admin({ info, fetchInfo, navHeight }) {
       <main>
         <form onSubmit={formUtils.handleSubmit(handleUpdate)}>
           <Table
+            className='admin-container'
             striped
             borderless
             hover
             size="sm"
             style={{ textAlign: "center" }}
+            responsive
           >
             <thead className="non-select">
               <tr>

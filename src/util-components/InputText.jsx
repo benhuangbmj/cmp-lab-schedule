@@ -7,7 +7,7 @@ export default function InputText({ id, name, utils, options }) {
 
   return (
     <span style={{ border: '1px solid' }}>
-      <input id={id} {...register(name, options)}></input>
+      <input id={id} {...register(name, options)} style={{maxWidth: "100%"}}></input>
       <ErrorMessage
         errors={errors}
         name={name}

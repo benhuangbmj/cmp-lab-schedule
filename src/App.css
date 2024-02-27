@@ -113,7 +113,6 @@ thead {
 th,
 td {
   vertical-align: bottom;
-  width: auto;
 }
 
 .preformatted {
@@ -362,6 +361,10 @@ label {
 
 .chart-container {
   width: 80%;
+}
+.admin-container > tbody > tr > td {
+  vertical-align: top;
+  max-width: 10vw;
 }
 
 @media screen and (max-width: 820px) {
