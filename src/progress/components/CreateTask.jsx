@@ -17,16 +17,9 @@ export default function CreateTask() {
   const activeUser = useSelector(state => state.active.user);
   const userData = useSelector(state => state.userData.items);
   const [userWithName, setUserWithName] = useState();
-  const fields = [
+  const fields = [    
     {
-      label: 'User',
-      register: [
-        'user',
-        { requried: 'This field is required.' }
-      ]
-    },
-    {
-      label: 'Task Name',
+      label: 'Title',
       register: [
         'task_name',
         { requried: 'This field is required.' }
@@ -40,6 +33,13 @@ export default function CreateTask() {
         { required: 'This field is required.' }
       ]
     },
+    {
+      label: 'Assign To',
+      register: [
+        'user',
+        { requried: 'This field is required.' }
+      ]
+    },
   ];
 
   const handleCreateTask = (data) => {
@@ -50,7 +50,7 @@ export default function CreateTask() {
       },
       body: JSON.stringify(data)
     }).then(res => console.log(res));
-    console.log(data);
+    console.log(data);//remove
   }
 
   useLayoutEffect(() => {
@@ -58,10 +58,12 @@ export default function CreateTask() {
       try {
         fetch(utils.apiBaseUrl + `/supervisees?user=${activeUser}`).then(res => {
           res.json().then(data => {
+            console.log(data)//remove
             const users = Array.from(data);
             users.push(activeUser);
             const output = [];
             users.forEach(user => { if (userData[user]) output.push({ name: userData[user].name, user: user }) });
+            utils.sortByLastName(output, ['name']);
             setUserWithName(output);
           });
         }).catch(err => console.log(err));
@@ -77,18 +79,18 @@ export default function CreateTask() {
           fields.map((e) => {
             const output = e.register[0] == 'user' ?
               <span key={e.label}>
-                <label htmlFor={e.label}>{e.label}</label>
+                <label htmlFor={e.label}>{e.label}</label>&nbsp;
                 <select id={e.label} {...register(...e.register)}>
                   {userWithName && userWithName.map(e => <option key={e.user} value={e.user}>{`${e.name} (${e.user})`} </option>)}
                 </select>
               </span> :
               <span key={e.label}>
-                <label htmlFor={e.label}>{e.label}</label>
+                <label htmlFor={e.label}>{e.label}</label>&nbsp;
                 <input id={e.label} type='text' {...register(...e.register)} />
               </span>
             return output;
           })
-        }
+        }&nbsp;
         <input type='submit' value='Create Task' />
       </form>
     </>

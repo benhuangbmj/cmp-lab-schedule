@@ -105,12 +105,14 @@ const makeLogo = (canvas, setLogo) => {
   };
 };
 
-const sortByLastName = (arr, levels) => {
+const sortByLastName = (arr, levels=null) => {
   arr.sort((a, b) => {
-    levels.forEach((lev) => {
-      a = a[lev];
-      b = b[lev];
-    });
+    if(levels!=null) {
+      levels.forEach((lev) => {
+        a = a[lev];
+        b = b[lev];
+      });
+    }
     a = a.split(" ")[1];
     b = b.split(" ")[1];
     if (a <= b) {
@@ -271,4 +273,5 @@ export default {
   getReadyForUpdate: getReadyForUpdate,
   courseOptions: courseOptions,
   subjects: subjects,
+  sortByLastName: sortByLastName,
 };
