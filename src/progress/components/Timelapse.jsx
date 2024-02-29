@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+import ProgressBar from 'react-bootstrap/ProgressBar';
+
 const getTime = (seconds) => {
   let sec = seconds%60;
   const minutes = Math.floor(seconds/60); 
@@ -59,7 +61,7 @@ export default function Timelapse({ task }) {
           }
         })
       }
-      <td>{lapse}</td>
+      <td>{lapse} <ProgressBar now={curr/1000/108}/></td>
     </>
   )
 }

@@ -58,7 +58,6 @@ export default function CreateTask() {
       try {
         fetch(utils.apiBaseUrl + `/supervisees?user=${activeUser}`).then(res => {
           res.json().then(data => {
-            console.log(data)//remove
             const users = Array.from(data);
             users.push(activeUser);
             const output = [];
