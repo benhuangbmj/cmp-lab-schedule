@@ -61,7 +61,7 @@ export default function Stopwatch({task, socket}) {
   
   return(
     <ButtonGroup size='sm'>
-      <Button type='button' disabled={isComplete || isRunning} onClick={handleStart}> <span className='button-text'>Start</span> <FontAwesomeIcon icon={faPlay} /></Button>
+      <Button type='button' variant='success' disabled={isComplete || isRunning} onClick={handleStart}> <span className='button-text'>Start</span> <FontAwesomeIcon icon={faPlay} /></Button>
       <Button type='button' disabled={isComplete || !isRunning} onClick={handlePause}> <span className='button-text'>Pause</span> <FontAwesomeIcon icon={faPause} /> </Button>
       <Button type='button' disabled={isComplete} onClick={handleFinish}> <span className='button-text'>Complete</span> <FontAwesomeIcon icon={faStop} /></Button>
       <Button type='button' disabled={!isComplete} onClick={handleResume}> <span className='button-text'>Resume</span> <FontAwesomeIcon icon={faArrowsRotate} /></Button>

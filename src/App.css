@@ -42,8 +42,17 @@ main {
   border-color: var(--institutional-navy);
 }
 
+.btn-success, .btn-success:disabled {
+  background-color: var(--institutional-green);
+  border-color: var(--institutional-green);
+}
+
 .btn-primary:hover {
   background-color: var(--light-blue);
+}
+
+.btn-success:hover {
+  background-color: var(--light-blue); 
 }
 
 .form-check-input:checked {
