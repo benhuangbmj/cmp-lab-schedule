@@ -105,9 +105,9 @@ const makeLogo = (canvas, setLogo) => {
   };
 };
 
-const sortByLastName = (arr, levels=null) => {
+const sortByLastName = (arr, levels = null) => {
   arr.sort((a, b) => {
-    if(levels!=null) {
+    if (levels != null) {
       levels.forEach((lev) => {
         a = a[lev];
         b = b[lev];
@@ -261,6 +261,18 @@ function generateTime(i) {
   return time;
 }
 
+function getTaskStatus(task) {
+  let value;
+  if (task.complete) {
+    value = "complete";
+  } else if (!task.in_progress) {
+    value = "pause";
+  } else {
+    value = "in progress";
+  }
+  return value;
+}
+
 export default {
   apiBaseUrl: apiBaseUrl,
   generateVerificationCode: generateVerificationCode,
@@ -274,4 +286,5 @@ export default {
   courseOptions: courseOptions,
   subjects: subjects,
   sortByLastName: sortByLastName,
+  getTaskStatus: getTaskStatus,
 };
