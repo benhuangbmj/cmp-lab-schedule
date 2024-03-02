@@ -261,7 +261,7 @@ function generateTime(i) {
   return time;
 }
 
-function getTaskStatus(task) {
+export function getTaskStatus(task) {
   let value;
   if (task.complete) {
     value = "complete";

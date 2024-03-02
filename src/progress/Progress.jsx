@@ -1,4 +1,4 @@
-import utils from "/src/utils";
+import utils, { getTaskStatus } from "/src/utils";
 
 import { io } from "socket.io-client";
 import { useEffect, useState, useRef, useCallback } from "react";
@@ -21,6 +21,7 @@ const displayedFields = [
   "user",
   "type",
   "created_at",
+  "in_progress",
   "progress",
 ];
 const onScreenHeaders = [
@@ -29,9 +30,10 @@ const onScreenHeaders = [
   "Assigned To",
   "Type",
   "Created At",
+  "Status",
   "Progress",
 ];
-const shownOnMobile = ["task_id", "task_name", "progress"];
+const shownOnMobile = ["task_id", "task_name", "in_progress", "progress"];
 
 export default function Progress() {
   const tasks = useSelector(selectTasks);
@@ -48,8 +50,12 @@ export default function Progress() {
         } else {
           setDescending(field);
         }
-        const sortedTasks = tasks.toSorted((a, b) => {
-          const [c, d] = [a[field], b[field]];
+        var sortedTasks = tasks.toSorted((a, b) => {
+          if (field == "in_progress") {
+            var [c, d] = [getTaskStatus(a), getTaskStatus(b)];
+          } else {
+            var [c, d] = [a[field], b[field]];
+          }
           if (c < d) return sign * -1;
           if (c > d) return sign * 1;
           return 0;

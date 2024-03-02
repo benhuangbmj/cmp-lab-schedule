@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { getTaskStatus } from "/src/utils";
 
 import ProgressBar from "react-bootstrap/ProgressBar";
 
@@ -56,6 +57,8 @@ const Timelapse = function ({ task, displayedFields, shownOnMobile }) {
             value = new Date(value).toLocaleString("en-US", {
               timeZone: "America/New_York",
             });
+          } else if (key == "in_progress") {
+            value = getTaskStatus(task);
           }
           return (
             <td
