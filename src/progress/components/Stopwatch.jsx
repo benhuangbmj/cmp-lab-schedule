@@ -1,10 +1,10 @@
 import '/src/App.css';
 import {useState, useEffect} from 'react';
 
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faStop, faPause, faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
+import Button from 'react-bootstrap/Button'; import ButtonGroup
+from 'react-bootstrap/ButtonGroup'; import { FontAwesomeIcon }
+from "@fortawesome/react-fontawesome"; import { faPlay, faStop, faPause,
+faRetweet } from "@fortawesome/free-solid-svg-icons";
 
 export default function Stopwatch({task, socket}) {
   const [isRunning, setIsRunning] = useState(task.in_progress != null);
@@ -62,9 +62,9 @@ export default function Stopwatch({task, socket}) {
   return(
     <ButtonGroup size='sm'>
       <Button type='button' variant='success' disabled={isComplete || isRunning} onClick={handleStart}> <span className='button-text'>Start</span> <FontAwesomeIcon icon={faPlay} /></Button>
-      <Button type='button' disabled={isComplete || !isRunning} onClick={handlePause}> <span className='button-text'>Pause</span> <FontAwesomeIcon icon={faPause} /> </Button>
-      <Button type='button' disabled={isComplete} onClick={handleFinish}> <span className='button-text'>Complete</span> <FontAwesomeIcon icon={faStop} /></Button>
-      <Button type='button' disabled={!isComplete} onClick={handleResume}> <span className='button-text'>Resume</span> <FontAwesomeIcon icon={faArrowsRotate} /></Button>
+      <Button type='button' variant='dark' disabled={isComplete || !isRunning} onClick={handlePause}> <span className='button-text'>Pause</span> <FontAwesomeIcon icon={faPause} /> </Button>
+      <Button type='button' variant='warning' disabled={isComplete} onClick={handleFinish}> <span className='button-text'>Complete</span> <FontAwesomeIcon icon={faStop} /></Button>
+      <Button type='button' disabled={!isComplete} onClick={handleResume}> <span className='button-text'>Resume</span> <FontAwesomeIcon icon={faRetweet} /></Button>
     </ButtonGroup>
   )
 }

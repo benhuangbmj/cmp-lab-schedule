@@ -47,12 +47,29 @@ main {
   border-color: var(--institutional-green);
 }
 
+.btn-warning, .btn-warning:disabled {
+  color: white;
+}
+
+.btn-warning:hover {
+  background-color: var(--light-blue);
+  border-color: var(--light-blue);
+  color: white;
+}
+
 .btn-primary:hover {
   background-color: var(--light-blue);
+  border-color: var(--light-blue);
 }
 
 .btn-success:hover {
-  background-color: var(--light-blue); 
+  background-color: var(--light-blue);
+  border-color: var(--light-blue); 
+}
+
+.btn-dark:hover {
+  background-color: var(--light-blue);
+  border-color: var(--light-blue); 
 }
 
 .form-check-input:checked {
