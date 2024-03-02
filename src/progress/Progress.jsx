@@ -16,7 +16,7 @@ const socket = io(utils.apiBaseUrl, {
 });
 
 const displayedFields = ['task_id', 'task_name', 'user', 'type', 'created_at', 'progress'];
-const onScreenHeaders = ['task_id', 'task_name', 'assigned_to', 'type', 'created_at', 'progress'];
+const onScreenHeaders = ['ID', 'Title', 'Assigned To', 'Type', 'Created At', 'Progress'];
 const shownOnMobile = ['task_id', 'task_name', 'progress'];
 
 export default function Progress() {
