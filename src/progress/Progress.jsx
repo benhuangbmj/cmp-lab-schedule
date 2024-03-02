@@ -20,8 +20,8 @@ const displayedFields = [
   "task_name",
   "user",
   "type",
-  "created_at",
   "in_progress",
+  "created_at",
   "progress",
 ];
 const onScreenHeaders = [
@@ -29,8 +29,8 @@ const onScreenHeaders = [
   "Title",
   "Assigned To",
   "Type",
-  "Created At",
   "Status",
+  "Created At",
   "Progress",
 ];
 const shownOnMobile = ["task_id", "task_name", "in_progress", "progress"];
@@ -41,30 +41,27 @@ export default function Progress() {
   const [descending, setDescending] = useState();
   const dispatch = useDispatch();
 
-  const sortByField = useCallback(
-    (field) => {
-      if (tasks[0].hasOwnProperty(field)) {
-        const sign = descending == field ? -1 : 1;
-        if (sign == -1) {
-          setDescending();
-        } else {
-          setDescending(field);
-        }
-        var sortedTasks = tasks.toSorted((a, b) => {
-          if (field == "in_progress") {
-            var [c, d] = [getTaskStatus(a), getTaskStatus(b)];
-          } else {
-            var [c, d] = [a[field], b[field]];
-          }
-          if (c < d) return sign * -1;
-          if (c > d) return sign * 1;
-          return 0;
-        });
-        dispatch(updateTasks(sortedTasks));
+  const sortByField = (field) => {
+    if (tasks[0].hasOwnProperty(field)) {
+      const sign = descending == field ? -1 : 1;
+      if (sign == -1) {
+        setDescending();
+      } else {
+        setDescending(field);
       }
-    },
-    [tasks],
-  );
+      var sortedTasks = tasks.toSorted((a, b) => {
+        if (field == "in_progress") {
+          var [c, d] = [getTaskStatus(a), getTaskStatus(b)];
+        } else {
+          var [c, d] = [a[field], b[field]];
+        }
+        if (c < d) return sign * -1;
+        if (c > d) return sign * 1;
+        return 0;
+      });
+      dispatch(updateTasks(sortedTasks));
+    }
+  };
 
   useEffect(() => {
     try {

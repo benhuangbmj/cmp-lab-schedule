@@ -3,7 +3,7 @@ import { getTaskStatus } from "/src/utils";
 
 import ProgressBar from "react-bootstrap/ProgressBar";
 
-const getTime = (seconds) => {
+function getTime(seconds) {
   let sec = seconds % 60;
   const minutes = Math.floor(seconds / 60);
   let min = minutes % 60;
@@ -22,7 +22,7 @@ const getTime = (seconds) => {
 
   const output = [hr.toString(), min, sec].join(":");
   return output;
-};
+}
 
 const Timelapse = function ({ task, displayedFields, shownOnMobile }) {
   const [curr, setCurr] = useState(calculateCumulative());
@@ -39,8 +39,8 @@ const Timelapse = function ({ task, displayedFields, shownOnMobile }) {
   }, [curr]);
 
   useEffect(() => {
+    setCurr(calculateCumulative());
     if (task.in_progress) {
-      setCurr(calculateCumulative());
       const interval = setInterval(() => {
         setCurr((curr) => curr + 1000);
       }, 1000);
