@@ -15,8 +15,9 @@ const socket = io(utils.apiBaseUrl, {
   autoConnect: false,
 });
 
-const displayedFields = ['task_id', 'task_name', 'user', 'type', 'created_at', 'progress', 'operations'];
-const onScreenHeaders = ['task_id', 'task_name', 'assigned_to', 'type', 'created_at', 'progress', 'operations']
+const displayedFields = ['task_id', 'task_name', 'user', 'type', 'created_at', 'progress'];
+const onScreenHeaders = ['task_id', 'task_name', 'assigned_to', 'type', 'created_at', 'progress'];
+const shownOnMobile = ['task_id', 'task_name', 'progress'];
 
 export default function Progress() {
   const tasks = useSelector(selectTasks);
@@ -67,7 +68,7 @@ export default function Progress() {
         <Table style={{textAlign: 'center'}} borderless striped responsive size='sm'>
           <thead>
             <tr>
-              {displayedFields.map((e,i) => <th key={i} onClick={() => {sortByField(e)}} >{onScreenHeaders[i]}</th>)}
+              {displayedFields.map((e,i) => <th key={i} className={!shownOnMobile.includes(e)? 'hidden-on-mobile' : ''} onClick={() => {sortByField(e)}} >{onScreenHeaders[i]}</th>)}
             </tr>
           </thead>
           <tbody>
@@ -75,7 +76,7 @@ export default function Progress() {
               tasks.map((task, i) => {
                 return (
                   <tr key={i}>
-                    <Timelapse task={task} />
+                    <Timelapse task={task} displayedFields={displayedFields} shownOnMobile={shownOnMobile} />
                     <td><Stopwatch task={task} socket={socket} /></td>
                   </tr>
                 )

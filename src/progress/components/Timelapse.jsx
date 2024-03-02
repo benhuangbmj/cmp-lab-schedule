@@ -23,15 +23,13 @@ const getTime = (seconds) => {
   return output;  
 }
 
-export default function Timelapse({ task }) {
+export default function Timelapse({ task, displayedFields, shownOnMobile }) {
   const calculateCumulative = () => {
     return task.in_progress? task.cumulative + (Date.now() - task.in_progress) : task.cumulative;
   };
 
   const [curr, setCurr] = useState(calculateCumulative());
   const [lapse, setLapse] = useState(getTime(curr))
-  
-  const displayedFields = ['task_id', 'task_name', 'user', 'type', 'created_at'];
 
   useEffect(() => {
     setLapse(getTime(Math.floor(curr/1000)));
@@ -57,7 +55,7 @@ export default function Timelapse({ task }) {
               value = new Date(value).toLocaleString('en-US', {timeZone: 'America/New_York'});
             }
             return (
-              <td key={key}>{value} </td>)
+              <td key={key} className={!shownOnMobile.includes(key)? 'hidden-on-mobile' : ''}>{value} </td>)
           }
         })
       }
