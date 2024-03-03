@@ -24,7 +24,14 @@ function getTime(seconds) {
   return output;
 }
 
-const Timelapse = function ({ task, displayedFields, shownOnMobile }) {
+const Timelapse = function ({
+  taskMap,
+  tasks,
+  refTask,
+  displayedFields,
+  shownOnMobile,
+}) {
+  const task = tasks[taskMap.get(refTask.task_id)];
   const [curr, setCurr] = useState(calculateCumulative());
   const [lapse, setLapse] = useState(getTime(curr));
 
@@ -46,7 +53,7 @@ const Timelapse = function ({ task, displayedFields, shownOnMobile }) {
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [task]);
+  }, [tasks]);
 
   return (
     <>

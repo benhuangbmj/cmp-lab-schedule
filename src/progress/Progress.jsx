@@ -38,8 +38,11 @@ const shownOnMobile = ["task_id", "task_name", "in_progress", "progress"];
 export default function Progress() {
   const tasks = useSelector(selectTasks);
   const activeUser = useSelector((state) => state.active.user);
-  const [descending, setDescending] = useState();
+  const [descending, setDescending] = useState("task_id");
   const dispatch = useDispatch();
+  const refTasks = useRef();
+  const [initiate, setInitiate] = useState(true);
+  const refTaskMap = useRef(new Map());
 
   const sortByField = (field) => {
     if (tasks[0].hasOwnProperty(field)) {
@@ -59,7 +62,8 @@ export default function Progress() {
         if (c > d) return sign * 1;
         return 0;
       });
-      dispatch(updateTasks(sortedTasks));
+      refTasks.current = sortedTasks;
+      dispatch(updateTasks(Array.from(tasks)));
     }
   };
 
@@ -67,8 +71,9 @@ export default function Progress() {
     try {
       socket.connect();
       socket.on("receiveTasks", (data) => {
-        data.sort((a, b) => a.task_id - b.task_id);
-        dispatch(updateTasks(data));
+        const myData = Array.from(data);
+        myData.sort((a, b) => a.task_id - b.task_id);
+        dispatch(updateTasks(myData));
       });
       socket.on("taskUpdated", () => socket.emit("fetchTasks", activeUser));
     } catch (err) {
@@ -76,6 +81,16 @@ export default function Progress() {
     }
     return () => socket.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (initiate && tasks) {
+      refTasks.current = Array.from(tasks);
+      tasks.forEach((task, i) => {
+        refTaskMap.current.set(task.task_id, i);
+      });
+      setInitiate(false);
+    }
+  }, [tasks]);
 
   return (
     <>
@@ -94,7 +109,7 @@ export default function Progress() {
       >
         disconnect
       </button>
-      {tasks && (
+      {!initiate && (
         <Table
           style={{ textAlign: "center" }}
           borderless
@@ -119,17 +134,24 @@ export default function Progress() {
               ))}
             </tr>
           </thead>
-          <tbody>
-            {tasks.map((task, i) => {
+          <tbody tasks={tasks}>
+            {refTasks.current.map((task, i) => {
               return (
                 <tr key={i}>
                   <Timelapse
-                    task={task}
+                    taskMap={refTaskMap.current}
+                    tasks={tasks}
+                    refTask={task}
                     displayedFields={displayedFields}
                     shownOnMobile={shownOnMobile}
                   />
                   <td>
-                    <Stopwatch task={task} socket={socket} />
+                    <Stopwatch
+                      taskMap={refTaskMap.current}
+                      tasks={tasks}
+                      refTask={task}
+                      socket={socket}
+                    />
                   </td>
                 </tr>
               );

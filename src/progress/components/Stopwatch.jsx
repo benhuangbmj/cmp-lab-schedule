@@ -11,7 +11,8 @@ import {
   faRetweet,
 } from "@fortawesome/free-solid-svg-icons";
 
-export default function Stopwatch({ task, socket }) {
+export default function Stopwatch({ taskMap, tasks, refTask, socket }) {
+  const task = tasks[taskMap.get(refTask.task_id)];
   const [isRunning, setIsRunning] = useState(task.in_progress != null);
   const [isComplete, setIsComplete] = useState(task.complete);
 
@@ -54,7 +55,7 @@ export default function Stopwatch({ task, socket }) {
   useEffect(() => {
     setIsRunning(task.in_progress != null);
     setIsComplete(task.complete);
-  }, [task]);
+  }, [tasks]);
 
   useEffect(() => {
     const handleUnload = () => {
