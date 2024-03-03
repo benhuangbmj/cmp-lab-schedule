@@ -5,8 +5,8 @@
   --stat-color: #a63738;
   --institutional-navy: #002856;
   --institutional-green: #0b7367;
-  --light-blue:  #1C8AC2;
-  --gray:  #5B6770;
+  --light-blue: #1c8ac2;
+  --gray: #5b6770;
 }
 
 @font-face {
@@ -37,17 +37,20 @@ main {
   font-size: 16pt;
 }
 
-.btn-primary, .btn-primary:disabled {
+.btn-primary,
+.btn-primary:disabled {
   background-color: var(--institutional-navy);
   border-color: var(--institutional-navy);
 }
 
-.btn-success, .btn-success:disabled {
+.btn-success,
+.btn-success:disabled {
   background-color: var(--institutional-green);
   border-color: var(--institutional-green);
 }
 
-.btn-warning, .btn-warning:disabled {
+.btn-warning,
+.btn-warning:disabled {
   color: white;
 }
 
@@ -62,14 +65,19 @@ main {
   border-color: var(--light-blue);
 }
 
+.btn-secondary:hover {
+  background-color: var(--light-blue);
+  border-color: var(--light-blue);
+}
+
 .btn-success:hover {
   background-color: var(--light-blue);
-  border-color: var(--light-blue); 
+  border-color: var(--light-blue);
 }
 
 .btn-dark:hover {
   background-color: var(--light-blue);
-  border-color: var(--light-blue); 
+  border-color: var(--light-blue);
 }
 
 .form-check-input:checked {
@@ -312,7 +320,7 @@ label {
 .checkbox-group {
   display: inline-block;
   white-space: nowrap;
-  margin: 0 .5em;
+  margin: 0 0.5em;
 }
 
 .institutional-navy {
@@ -459,6 +467,6 @@ label {
   }
   .course-container > div {
     white-space: nowrap;
-    width: 33%
+    width: 33%;
   }
 }
