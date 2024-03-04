@@ -79,6 +79,7 @@ export default function Progress() {
     } catch (err) {
       console.log(err);
     }
+    socket.emit("fetchTasks", activeUser);
     return () => socket.disconnect();
   }, []);
 
@@ -95,20 +96,6 @@ export default function Progress() {
   return (
     <>
       <CreateTask />
-      <button
-        type="button"
-        onClick={() => socket.emit("fetchTasks", activeUser)}
-      >
-        Load Tasks
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          socket.disconnect();
-        }}
-      >
-        disconnect
-      </button>
       {!initiate && (
         <Table
           style={{ textAlign: "center" }}
