@@ -27,9 +27,33 @@ export default function CreateTask() {
       label: "Type",
       register: ["type", { required: "This field is required." }],
     },
+  ];
+
+  const selectFields = [
     {
       label: "Assign To",
       register: ["user", { requried: "This field is required." }],
+      options: function () {
+        return (
+          userWithName &&
+          userWithName.map((e) => (
+            <option key={this.register[0] + " " + e.user} value={e.user}>
+              {`${e.name} (${e.user})`}{" "}
+            </option>
+          ))
+        );
+      },
+    },
+    {
+      label: "Duration",
+      register: ["duration", { requried: "This field is required." }],
+      options: function () {
+        return Array.from(Array(10), (e, i) => i + 1).map((e) => (
+          <option key={`${this.register[0]} ${e}`} value={e}>
+            {e} hr
+          </option>
+        ));
+      },
     },
   ];
 
@@ -41,7 +65,6 @@ export default function CreateTask() {
       },
       body: JSON.stringify(data),
     }).then((res) => console.log(res));
-    console.log(data); //remove
   };
 
   useLayoutEffect(() => {
@@ -71,37 +94,24 @@ export default function CreateTask() {
     <>
       <form onSubmit={handleSubmit(handleCreateTask)}>
         {fields.map((e) => {
-          const output =
-            e.register[0] == "user" ? (
-              <span key={e.label}>
-                <label htmlFor={e.label}>{e.label}</label>&nbsp;
-                <select id={e.label} {...register(...e.register)}>
-                  {userWithName &&
-                    userWithName.map((e) => (
-                      <option key={e.user} value={e.user}>
-                        {`${e.name} (${e.user})`}{" "}
-                      </option>
-                    ))}
-                </select>
-              </span>
-            ) : (
-              <span key={e.label}>
-                <label htmlFor={e.label}>{e.label}</label>&nbsp;
-                <input id={e.label} type="text" {...register(...e.register)} />
-              </span>
-            );
+          const output = (
+            <span key={e.label}>
+              <label htmlFor={e.label}>{e.label}</label>
+              <input id={e.label} type="text" {...register(...e.register)} />
+            </span>
+          );
           return output;
         })}
-        &nbsp;
-        <label htmlFor="duration">Duration</label>{" "}
-        <select id="duration">
-          {Array.from(Array(10), (e, i) => i + 1).map((e) => (
-            <option key={`duration ${e}`} value={e}>
-              {e} hr
-            </option>
-          ))}
-        </select>{" "}
-        &nbsp;
+        {selectFields.map((e) => {
+          return (
+            <span key={e.label}>
+              <label htmlFor={e.label}>{e.label}</label>{" "}
+              <select id={e.label} {...register(...e.register)}>
+                {e.options()}
+              </select>
+            </span>
+          );
+        })}{" "}
         <input type="submit" value="Create Task" />
       </form>
     </>
