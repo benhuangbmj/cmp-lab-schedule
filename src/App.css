@@ -5,6 +5,7 @@
   --stat-color: #a63738;
   --institutional-navy: #002856;
   --institutional-green: #0b7367;
+  --institutional-yellow: #e5ae3a;
   --light-blue: #1c8ac2;
   --gray: #5b6770;
 }
@@ -52,6 +53,8 @@ main {
 .btn-warning,
 .btn-warning:disabled {
   color: white;
+  background-color: var(--institutional-yellow);
+  border-color: var(--institutional-yellow);
 }
 
 .btn-warning:hover {
