@@ -68,8 +68,9 @@ export default function CreateTask() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    }).then((res) => console.log(res));
-    reset();
+    }).then(() => {
+      reset();
+    });
   };
 
   useLayoutEffect(() => {

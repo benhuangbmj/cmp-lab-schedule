@@ -1,7 +1,13 @@
 import utils, { getTaskStatus } from "/src/utils";
 
 import { io } from "socket.io-client";
-import { useEffect, useState, useRef, useCallback } from "react";
+import {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectTasks, updateTasks } from "/src/reducers/tasksReducer.js";
 
@@ -73,6 +79,7 @@ export default function Progress() {
       socket.on("receiveTasks", (data) => {
         const myData = Array.from(data);
         myData.sort((a, b) => a.task_id - b.task_id);
+        setInitiate(true);
         dispatch(updateTasks(myData));
       });
       socket.on("taskUpdated", () => socket.emit("fetchTasks", activeUser));
@@ -83,7 +90,7 @@ export default function Progress() {
     return () => socket.disconnect();
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (initiate && tasks) {
       refTasks.current = Array.from(tasks);
       tasks.forEach((task, i) => {
@@ -91,7 +98,7 @@ export default function Progress() {
       });
       setInitiate(false);
     }
-  }, [tasks]);
+  }, [tasks, initiate]);
 
   return (
     <>
