@@ -10,8 +10,12 @@ import {
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectTasks, updateTasks } from "/src/reducers/tasksReducer.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilePen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 import Table from "react-bootstrap/Table";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import Button from "react-bootstrap/Button";
 
 import Timelapse from "./components/Timelapse";
 import CreateTask from "./components/CreateTask";
@@ -113,6 +117,7 @@ export default function Progress() {
         >
           <thead>
             <tr>
+              <th></th>
               {displayedFields.map((e, i) => (
                 <th
                   key={i}
@@ -132,6 +137,16 @@ export default function Progress() {
             {refTasks.current.map((task, i) => {
               return (
                 <tr key={i}>
+                  <td>
+                    <ButtonGroup size="sm" vertical>
+                      <Button type="button" variant="info">
+                        <FontAwesomeIcon icon={faFilePen} />
+                      </Button>
+                      <Button type="button" variant="danger" size="sm">
+                        <FontAwesomeIcon icon={faTrashCan} />
+                      </Button>
+                    </ButtonGroup>
+                  </td>
                   <Timelapse
                     taskMap={refTaskMap.current}
                     tasks={tasks}
