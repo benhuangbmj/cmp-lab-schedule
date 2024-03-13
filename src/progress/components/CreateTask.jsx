@@ -13,6 +13,7 @@ export default function CreateTask() {
     watch,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
   const activeUser = useSelector((state) => state.active.user);
   const userData = useSelector((state) => state.userData.items);
@@ -34,11 +35,14 @@ export default function CreateTask() {
       label: "Assign To",
       register: ["user", { requried: "This field is required." }],
       options: function () {
+        if (userWithName) {
+          setValue("user", userWithName[0].user);
+        }
         return (
           userWithName &&
-          userWithName.map((e) => (
+          userWithName.map((e, i) => (
             <option key={this.register[0] + " " + e.user} value={e.user}>
-              {`${e.name} (${e.user})`}{" "}
+              {`${e.name} (${e.user})`}
             </option>
           ))
         );
@@ -65,6 +69,7 @@ export default function CreateTask() {
       },
       body: JSON.stringify(data),
     }).then((res) => console.log(res));
+    reset();
   };
 
   useLayoutEffect(() => {
