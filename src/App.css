@@ -6,6 +6,8 @@
   --institutional-navy: #002856;
   --institutional-green: #0b7367;
   --institutional-yellow: #e5ae3a;
+  --institutional-blue: #11698c;
+  --institutional-red: #a63738;
   --light-blue: #1c8ac2;
   --gray: #5b6770;
 }
@@ -63,6 +65,19 @@ main {
   color: white;
 }
 
+.btn-info,
+.btn-info:disabled {
+  color: white;
+  background-color: var(--institutional-blue);
+  border-color: var(--institutional-blue);
+}
+
+.btn-info:hover {
+  background-color: var(--light-blue);
+  border-color: var(--light-blue);
+  color: white;
+}
+
 .btn-primary:hover {
   background-color: var(--light-blue);
   border-color: var(--light-blue);
@@ -79,6 +94,17 @@ main {
 }
 
 .btn-dark:hover {
+  background-color: var(--light-blue);
+  border-color: var(--light-blue);
+}
+
+.btn-danger,
+.btn-danger:disabled {
+  background-color: var(--institutional-red);
+  border-color: var(--institutional-red);
+}
+
+.btn-danger:hover {
   background-color: var(--light-blue);
   border-color: var(--light-blue);
 }
