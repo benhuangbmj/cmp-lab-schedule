@@ -1,4 +1,5 @@
 import "/src/App.css";
+import * as config from "/src/config.js";
 import { useState, useEffect } from "react";
 
 import Button from "react-bootstrap/Button";
@@ -68,42 +69,46 @@ export default function Stopwatch({ taskMap, tasks, refTask, socket }) {
   }, []);
 
   return (
-    <ButtonGroup size="sm">
-      <Button
-        type="button"
-        variant="success"
-        disabled={isComplete || isRunning}
-        onClick={handleStart}
-      >
-        {" "}
-        <span className="button-text">Start</span>{" "}
-        <FontAwesomeIcon icon={faPlay} />
-      </Button>
-      <Button
-        type="button"
-        variant="secondary"
-        disabled={isComplete || !isRunning}
-        onClick={handlePause}
-      >
-        {" "}
-        <span className="button-text">Pause</span>{" "}
-        <FontAwesomeIcon icon={faPause} />{" "}
-      </Button>
-      <Button
-        type="button"
-        variant="warning"
-        disabled={isComplete}
-        onClick={handleFinish}
-      >
-        {" "}
-        <span className="button-text">Complete</span>{" "}
-        <FontAwesomeIcon icon={faStop} />
-      </Button>
-      <Button type="button" disabled={!isComplete} onClick={handleResume}>
-        {" "}
-        <span className="button-text">Resume</span>{" "}
-        <FontAwesomeIcon icon={faRetweet} />
-      </Button>
-    </ButtonGroup>
+    <>
+      <ButtonGroup vertical={config.mediaQuery.matches} size="sm">
+        <Button
+          type="button"
+          variant="success"
+          disabled={isComplete || isRunning}
+          onClick={handleStart}
+        >
+          {" "}
+          <span className="button-text">Start</span>{" "}
+          <FontAwesomeIcon icon={faPlay} />
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          disabled={isComplete || !isRunning}
+          onClick={handlePause}
+        >
+          {" "}
+          <span className="button-text">Pause</span>{" "}
+          <FontAwesomeIcon icon={faPause} />{" "}
+        </Button>
+      </ButtonGroup>
+      <ButtonGroup vertical={config.mediaQuery.matches} size="sm">
+        <Button
+          type="button"
+          variant="warning"
+          disabled={isComplete}
+          onClick={handleFinish}
+        >
+          {" "}
+          <span className="button-text">Complete</span>{" "}
+          <FontAwesomeIcon icon={faStop} />
+        </Button>
+        <Button type="button" disabled={!isComplete} onClick={handleResume}>
+          {" "}
+          <span className="button-text">Resume</span>{" "}
+          <FontAwesomeIcon icon={faRetweet} />
+        </Button>
+      </ButtonGroup>
+    </>
   );
 }

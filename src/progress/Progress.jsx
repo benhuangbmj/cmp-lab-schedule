@@ -1,4 +1,5 @@
 import utils, { getTaskStatus } from "/src/utils";
+import * as config from "/src/config.js";
 
 import { io } from "socket.io-client";
 import {
@@ -138,7 +139,7 @@ export default function Progress() {
               return (
                 <tr key={i}>
                   <td>
-                    <ButtonGroup size="sm" vertical>
+                    <ButtonGroup size="sm" vertical={config.mediaQuery.matches}>
                       <Button type="button" variant="info">
                         <FontAwesomeIcon icon={faFilePen} />
                       </Button>
