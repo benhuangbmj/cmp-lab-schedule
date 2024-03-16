@@ -78,6 +78,18 @@ export default function Progress() {
     }
   };
 
+  function handleDeleteTask(taskId) {
+    if (confirm("Are you going to permanently delete the task?")) {
+      fetch(utils.apiBaseUrl + "/delete-task", {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain",
+        },
+        body: taskId,
+      });
+    }
+  }
+
   useEffect(() => {
     try {
       socket.connect();
@@ -143,7 +155,12 @@ export default function Progress() {
                       <Button type="button" variant="info">
                         <FontAwesomeIcon icon={faFilePen} />
                       </Button>
-                      <Button type="button" variant="danger" size="sm">
+                      <Button
+                        type="button"
+                        variant="danger"
+                        size="sm"
+                        onClick={() => handleDeleteTask(task.task_id)}
+                      >
                         <FontAwesomeIcon icon={faTrashCan} />
                       </Button>
                     </ButtonGroup>

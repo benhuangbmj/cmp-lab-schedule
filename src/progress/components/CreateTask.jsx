@@ -103,7 +103,7 @@ export default function CreateTask() {
     <>
       <form onSubmit={handleSubmit(handleCreateTask)}>
         <Button type="submit" style={{ margin: "1em auto", display: "block" }}>
-          Create Task
+          Create a Task
         </Button>
         <div
           className="flexbox-column"
