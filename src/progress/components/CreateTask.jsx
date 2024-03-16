@@ -6,6 +6,9 @@ import { useState, useEffect, useLayoutEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 
+import Button from "react-bootstrap/Button";
+import AsteriskLabel from "/src/util-components/AsteriskLabel";
+
 export default function CreateTask() {
   const {
     register,
@@ -99,26 +102,69 @@ export default function CreateTask() {
   return (
     <>
       <form onSubmit={handleSubmit(handleCreateTask)}>
-        {fields.map((e) => {
-          const output = (
-            <span key={e.label}>
-              <label htmlFor={e.label}>{e.label}</label>
-              <input id={e.label} type="text" {...register(...e.register)} />
-            </span>
-          );
-          return output;
-        })}
-        {selectFields.map((e) => {
-          return (
-            <span key={e.label}>
-              <label htmlFor={e.label}>{e.label}</label>{" "}
-              <select id={e.label} {...register(...e.register)}>
-                {e.options()}
-              </select>
-            </span>
-          );
-        })}{" "}
-        <input type="submit" value="Create Task" />
+        <Button type="submit" style={{ margin: "1em auto", display: "block" }}>
+          Create Task
+        </Button>
+        <div
+          className="flexbox-column"
+          style={{
+            alignItems: "flex-start",
+            width: "fit-content",
+          }}
+        >
+          {fields.map((e) => {
+            const output = (
+              <div
+                key={e.label}
+                className="flexbox-row"
+                style={{
+                  justifyContent: "flex-start",
+                  margin: ".5em 0",
+                }}
+              >
+                <AsteriskLabel
+                  htmlFor={e.label}
+                  style={{ marginRight: "1em", width: "80px" }}
+                >
+                  {e.label}
+                </AsteriskLabel>
+                <input
+                  id={e.label}
+                  type="text"
+                  {...register(...e.register)}
+                  style={{ maxWidth: "60vw" }}
+                />
+              </div>
+            );
+            return output;
+          })}
+          {selectFields.map((e) => {
+            return (
+              <div
+                key={e.label}
+                className="flexbox-row"
+                style={{
+                  justifyContent: "flex-start",
+                  margin: ".5em 0px",
+                }}
+              >
+                <AsteriskLabel
+                  htmlFor={e.label}
+                  style={{ marginRight: "1em", width: "80px" }}
+                >
+                  {e.label}
+                </AsteriskLabel>
+                <select
+                  id={e.label}
+                  {...register(...e.register)}
+                  style={{ maxWidth: "60vw" }}
+                >
+                  {e.options()}
+                </select>
+              </div>
+            );
+          })}
+        </div>
       </form>
     </>
   );
