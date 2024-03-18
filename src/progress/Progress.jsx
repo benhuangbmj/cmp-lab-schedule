@@ -100,10 +100,10 @@ export default function Progress() {
         dispatch(updateTasks(myData));
       });
       socket.on("taskUpdated", () => socket.emit("fetchTasks", activeUser));
+      socket.emit("fetchTasks", activeUser);
     } catch (err) {
       console.log(err);
     }
-    socket.emit("fetchTasks", activeUser);
     return () => socket.disconnect();
   }, []);
 
