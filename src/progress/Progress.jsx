@@ -17,6 +17,7 @@ import { faFilePen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import Table from "react-bootstrap/Table";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
+import Popup from "reactjs-popup";
 
 import Timelapse from "./components/Timelapse";
 import CreateTask from "./components/CreateTask";
@@ -152,9 +153,22 @@ export default function Progress() {
                 <tr key={i}>
                   <td>
                     <ButtonGroup size="sm" vertical={config.mediaQuery.matches}>
-                      <Button type="button" variant="info">
-                        <FontAwesomeIcon icon={faFilePen} />
-                      </Button>
+                      <Popup
+                        trigger={
+                          <Button type="button" variant="info">
+                            <FontAwesomeIcon icon={faFilePen} />
+                          </Button>
+                        }
+                        position="right center"
+                        contentStyle={{
+                          width: "55vw",
+                          background: config.themeColor.grey,
+                          color: "white",
+                        }}
+                      >
+                        <CreateTask />
+                      </Popup>
+
                       <Button
                         type="button"
                         variant="danger"

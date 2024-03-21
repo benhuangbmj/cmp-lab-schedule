@@ -132,7 +132,7 @@ export default function CreateTask() {
                   id={e.label}
                   type="text"
                   {...register(...e.register)}
-                  style={{ maxWidth: "60vw" }}
+                  style={{ maxWidth: "50vw" }}
                 />
               </div>
             );
@@ -157,7 +157,7 @@ export default function CreateTask() {
                 <select
                   id={e.label}
                   {...register(...e.register)}
-                  style={{ maxWidth: "60vw" }}
+                  style={{ maxWidth: "50vw" }}
                 >
                   {e.options()}
                 </select>

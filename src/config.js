@@ -9,7 +9,3 @@ export const themeColor = {
   grey: "#5B6770",
 };
 export const mediaQuery = window.matchMedia("(max-width: 820px)");
-
-/*export default {
-  mediaQuery: mediaQuery
-}*/
