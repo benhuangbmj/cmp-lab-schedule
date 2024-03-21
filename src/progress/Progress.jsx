@@ -166,7 +166,7 @@ export default function Progress() {
                           color: "white",
                         }}
                       >
-                        <CreateTask />
+                        <CreateTask task={task} />
                       </Popup>
 
                       <Button

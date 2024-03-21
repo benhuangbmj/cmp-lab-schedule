@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import Button from "react-bootstrap/Button";
 import AsteriskLabel from "/src/util-components/AsteriskLabel";
 
-export default function CreateTask() {
+export default function CreateTask({ task }) {
   const {
     register,
     reset,
@@ -17,7 +17,15 @@ export default function CreateTask() {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm();
+    getValues,
+  } = useForm({
+    defaultValues: task && {
+      task_name: task.task_name,
+      type: task.type,
+      user: task.user,
+      duration: task.duration,
+    },
+  });
   const activeUser = useSelector((state) => state.active.user);
   const userData = useSelector((state) => state.userData.items);
   const [userWithName, setUserWithName] = useState();
@@ -38,13 +46,17 @@ export default function CreateTask() {
       label: "Assign To",
       register: ["user", { requried: "This field is required." }],
       options: function () {
-        if (userWithName) {
+        if (!task && userWithName) {
           setValue("user", userWithName[0].user);
         }
         return (
           userWithName &&
           userWithName.map((e, i) => (
-            <option key={this.register[0] + " " + e.user} value={e.user}>
+            <option
+              key={this.register[0] + " " + e.user}
+              value={e.user}
+              selected={task && task.user == e.user}
+            >
               {`${e.name} (${e.user})`}
             </option>
           ))
@@ -103,7 +115,7 @@ export default function CreateTask() {
     <>
       <form onSubmit={handleSubmit(handleCreateTask)}>
         <Button type="submit" style={{ margin: "1em auto", display: "block" }}>
-          Create a Task
+          {task ? "Edit the Task" : "Create a Task"}
         </Button>
         <div
           className="flexbox-column"
