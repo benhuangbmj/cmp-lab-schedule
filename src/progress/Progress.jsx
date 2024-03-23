@@ -162,6 +162,7 @@ export default function Progress() {
                         position="right center"
                         contentStyle={{
                           width: "55vw",
+                          maxWidth: "400px",
                           background: config.themeColor.grey,
                           color: "white",
                         }}
