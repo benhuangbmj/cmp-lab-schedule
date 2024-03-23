@@ -77,15 +77,20 @@ export default function CreateTask({ task }) {
   ];
 
   const handleCreateTask = (data) => {
-    fetch(utils.apiBaseUrl + "/create-task", {
+    const options = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    }).then(() => {
-      reset();
-    });
+    };
+    if (task) {
+      fetch(utils.apiBaseUrl + "/edit-task", options);
+    } else {
+      fetch(utils.apiBaseUrl + "/create-task", options).then(() => {
+        reset();
+      });
+    }
   };
 
   useLayoutEffect(() => {
