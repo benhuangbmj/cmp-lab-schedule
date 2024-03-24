@@ -24,6 +24,7 @@ export default function CreateTask({ task }) {
       type: task.type,
       user: task.user,
       duration: task.duration,
+      task_id: task.task_id,
     },
   });
   const activeUser = useSelector((state) => state.active.user);
