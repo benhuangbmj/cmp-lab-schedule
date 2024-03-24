@@ -19,13 +19,15 @@ export default function CreateTask({ task }) {
     setValue,
     getValues,
   } = useForm({
-    defaultValues: task && {
-      task_name: task.task_name,
-      type: task.type,
-      user: task.user,
-      duration: task ? task.duration : 3,
-      task_id: task.task_id,
-    },
+    defaultValues: task
+      ? {
+          task_name: task.task_name,
+          type: task.type,
+          user: task.user,
+          duration: task.duration,
+          task_id: task.task_id,
+        }
+      : {},
   });
   const activeUser = useSelector((state) => state.active.user);
   const userData = useSelector((state) => state.userData.items);
@@ -47,20 +49,19 @@ export default function CreateTask({ task }) {
       label: "Assign To",
       register: ["user", { requried: "This field is required." }],
       options: function () {
-        if (!task && userWithName) {
-          setValue("user", userWithName[0].user);
-        }
         return (
           userWithName &&
-          userWithName.map((e, i) => (
-            <option
-              key={this.register[0] + " " + e.user}
-              value={e.user}
-              selected={task && task.user == e.user}
-            >
-              {`${e.name} (${e.user})`}
-            </option>
-          ))
+          userWithName.map((e, i) => {
+            return (
+              <option
+                key={this.register[0] + " " + e.user}
+                value={e.user}
+                selected={e.user == getValues("user")}
+              >
+                {`${e.name} (${e.user})`}
+              </option>
+            );
+          })
         );
       },
     },
@@ -68,7 +69,6 @@ export default function CreateTask({ task }) {
       label: "Duration",
       register: ["duration", { requried: "This field is required." }],
       options: function () {
-        !task && setValue("duration", 3);
         return Array.from(Array(10), (e, i) => i + 1).map((e) => (
           <option key={`${this.register[0]} ${e}`} value={e}>
             {e} hr
@@ -118,6 +118,14 @@ export default function CreateTask({ task }) {
       }
     }
   }, [activeUser]);
+  useEffect(() => {
+    if (!task) setValue("duration", 3);
+  }, []);
+  useEffect(() => {
+    if (!task && userWithName) {
+      setValue("user", userWithName[0].user);
+    }
+  }, [userWithName]);
   return (
     <>
       <form onSubmit={handleSubmit(handleCreateTask)}>
