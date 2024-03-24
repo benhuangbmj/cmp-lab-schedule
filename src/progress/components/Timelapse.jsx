@@ -78,9 +78,13 @@ const Timelapse = function ({
         }
       })}
       <td>
-        {lapse}{" "}
+        {lapse}
         <ProgressBar
-          now={task.complete ? 100 : curr / 1000 / 108}
+          now={
+            task.complete
+              ? 100
+              : curr / 1000 / (task.duration ? task.duration : 3) / 36
+          }
           variant={
             task.complete
               ? "warning"
