@@ -23,7 +23,7 @@ export default function CreateTask({ task }) {
       task_name: task.task_name,
       type: task.type,
       user: task.user,
-      duration: task.duration,
+      duration: task ? task.duration : 3,
       task_id: task.task_id,
     },
   });
@@ -68,6 +68,7 @@ export default function CreateTask({ task }) {
       label: "Duration",
       register: ["duration", { requried: "This field is required." }],
       options: function () {
+        !task && setValue("duration", 3);
         return Array.from(Array(10), (e, i) => i + 1).map((e) => (
           <option key={`${this.register[0]} ${e}`} value={e}>
             {e} hr
