@@ -9,3 +9,11 @@ export const themeColor = {
   grey: "#5B6770",
 };
 export const mediaQuery = window.matchMedia("(max-width: 820px)");
+
+export const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
+export default {
+  themeColor,
+  mediaQuery,
+  apiBaseUrl,
+};
