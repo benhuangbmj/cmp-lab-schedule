@@ -274,10 +274,6 @@ export function getTaskStatus(task) {
   return value;
 }
 
-export const socket = io(apiBaseUrl, {
-  autoConnect: false,
-});
-
 export default {
   apiBaseUrl: apiBaseUrl,
   generateVerificationCode: generateVerificationCode,
@@ -292,5 +288,4 @@ export default {
   subjects: subjects,
   sortByLastName: sortByLastName,
   getTaskStatus: getTaskStatus,
-  socket,
 };
