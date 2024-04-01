@@ -9,7 +9,9 @@ import api from "/src//api-operations";
 
 import Popup from "reactjs-popup";
 import Button from "react-bootstrap/Button";
-import CloseButton from 'react-bootstrap/CloseButton';
+import CloseButton from "react-bootstrap/CloseButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDatabase } from "@fortawesome/free-solid-svg-icons";
 
 import InputText from "/src/util-components/InputText.jsx";
 import InputCheckbox from "/src/util-components/InputCheckbox.jsx";
@@ -18,6 +20,7 @@ import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import CardDisplay from "/src/IDcard/CardDisplay";
 import Profile from "/src/profile/Profile";
+import handleBackup from "/src/utils/handleBackup";
 
 const textFields = ["name", "subject", "password"];
 const checkboxFields = ["roles"];
@@ -39,7 +42,7 @@ const hiddenOnMobile = [
   ...popupTextFields,
   ...popupFields,
   ...popupCheckboxFields,
-]
+];
 const registerOptions = {};
 
 export default function Admin({ info, fetchInfo, navHeight }) {
@@ -108,7 +111,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
     resetCount.current++;
   };
   const handleUpdate = (data) => {
-    delete data.selected;    
+    delete data.selected;
     data = utils.getReadyForUpdate(usernames, data);
     api.update(null, null, data, fetchInfo);
   };
@@ -139,16 +142,16 @@ export default function Admin({ info, fetchInfo, navHeight }) {
     formUtils.setValue("selected", selectAll ? usernames : false);
   }, [selectAll]);
 
-  useEffect(() => { }, []); //remove
+  useEffect(() => {}, []); //remove
 
-  useEffect(() => { }); //remove
+  useEffect(() => {}); //remove
 
   if (loaded && Array.isArray(usernames))
     return (
       <main>
         <form onSubmit={formUtils.handleSubmit(handleUpdate)}>
           <Table
-            className='admin-container'
+            className="admin-container"
             striped
             borderless
             hover
@@ -171,7 +174,11 @@ export default function Admin({ info, fetchInfo, navHeight }) {
                     onClick={() => {
                       handleSortByField(field);
                     }}
-                    className={hiddenOnMobile.includes(field)? "hidden-on-mobile" : undefined}
+                    className={
+                      hiddenOnMobile.includes(field)
+                        ? "hidden-on-mobile"
+                        : undefined
+                    }
                   >
                     {field}
                   </th>
@@ -184,7 +191,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
                 return (
                   <tr key={username + " row"}>
                     <td>
-                      <span className='checkbox-group'>
+                      <span className="checkbox-group">
                         <input
                           type="checkbox"
                           id={username}
@@ -196,30 +203,41 @@ export default function Admin({ info, fetchInfo, navHeight }) {
                     </td>
                     <td>
                       <Popup
-                        trigger={<Button style={{width: "100%"}}>{username}</Button>}
+                        trigger={
+                          <Button style={{ width: "100%" }}>{username}</Button>
+                        }
                         lockScroll={true}
                         modal
-                        closeOnDocumentClick={false}                       
-                        contentStyle={{ overflowY: "scroll", paddingTop: navHeight + 5 + "px", height: '100vh', width: 'auto' }}
+                        closeOnDocumentClick={false}
+                        contentStyle={{
+                          overflowY: "scroll",
+                          paddingTop: navHeight + 5 + "px",
+                          height: "100vh",
+                          width: "auto",
+                        }}
                       >
-                        {close => {
+                        {(close) => {
                           return (
                             <div>
-                              <div style={{ position: 'fixed' }}>
+                              <div style={{ position: "fixed" }}>
                                 <CloseButton onClick={close} />
                               </div>
                               <Profile
                                 info={info}
                                 fetchInfo={fetchInfo}
                                 user={username}
-                                setLoaded={() => { }}
+                                setLoaded={() => {}}
                               />
-                            </div>)
+                            </div>
+                          );
                         }}
                       </Popup>
                     </td>
                     {textFields.map((field) => (
-                      <td key={fieldNameGen(field)} className='hidden-on-mobile'>
+                      <td
+                        key={fieldNameGen(field)}
+                        className="hidden-on-mobile"
+                      >
                         <InputText
                           name={fieldNameGen(field)}
                           utils={formUtils}
@@ -240,7 +258,10 @@ export default function Admin({ info, fetchInfo, navHeight }) {
                     ))}
                     {popupTextFields.map((field) => {
                       return (
-                        <td key={fieldNameGen(field)} className='hidden-on-mobile'>
+                        <td
+                          key={fieldNameGen(field)}
+                          className="hidden-on-mobile"
+                        >
                           <InputTextPopup
                             supField={fieldNameGen(field)}
                             utils={formUtils}
@@ -250,10 +271,20 @@ export default function Admin({ info, fetchInfo, navHeight }) {
                       );
                     })}
                     {popupFields.map((field) => {
-                      return <td key={fieldNameGen(field)} className='hidden-on-mobile'></td>;
+                      return (
+                        <td
+                          key={fieldNameGen(field)}
+                          className="hidden-on-mobile"
+                        ></td>
+                      );
                     })}
                     {popupCheckboxFields.map((field) => {
-                      return <td key={fieldNameGen(field)} className='hidden-on-mobile'></td>;
+                      return (
+                        <td
+                          key={fieldNameGen(field)}
+                          className="hidden-on-mobile"
+                        ></td>
+                      );
                     })}
                     {switchFields.map((field) => {
                       return (
@@ -291,6 +322,11 @@ export default function Admin({ info, fetchInfo, navHeight }) {
             }}
           >
             ID cards
+          </Button>
+
+          <Button type="Button" onClick={handleBackup}>
+            <span className="button-text">Backup&nbsp;</span>{" "}
+            <FontAwesomeIcon icon={faDatabase} />
           </Button>
         </form>
         <div

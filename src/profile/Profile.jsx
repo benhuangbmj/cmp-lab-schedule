@@ -16,7 +16,6 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import { faDatabase } from "@fortawesome/free-solid-svg-icons";
 
 import CardDisplay from "/src/IDcard/CardDisplay";
 import Scheduling from "/src/scheduling/Scheduling";
@@ -32,13 +31,7 @@ const privilege = import.meta.env.VITE_PRIVILEGE;
 const display = ["username", "name", "subject", "links", "password"];
 
 const Profile = forwardRef(function Profile(
-  {
-    info,
-    fetchInfo,
-    user = null,
-    setLoaded,
-    navHeight
-  },
+  { info, fetchInfo, user = null, setLoaded, navHeight },
   ref,
 ) {
   const {
@@ -116,17 +109,6 @@ const Profile = forwardRef(function Profile(
     }
   };
 
-  const handleBackup = () => {
-    const passcode = prompt("Please enter the passocde.");
-    if (passcode === privilege) {
-      update(null, [], info, fetchInfo, true).then(() => {
-        alert("Backup Successful!");
-      });
-    } else {
-      alert("No privilege to back up.");
-    }
-  };
-
   const displayInfo = (user) => {
     setProfile();
     if (info[user] && info[user].profilePic) {
@@ -159,7 +141,7 @@ const Profile = forwardRef(function Profile(
     displayInfo(selected);
   };
 
-  const handleDelete = function() {
+  const handleDelete = function () {
     const confirm = prompt('Type "Confirm" to proceed to delete the user');
     if (confirm === "Confirm") {
       delete info[selected];
@@ -193,7 +175,11 @@ const Profile = forwardRef(function Profile(
 
   return (
     <main>
-      <div ref={ref} className="flexbox-column profile-page" style={{padding: "0px 0px 1em 2em"}}>
+      <div
+        ref={ref}
+        className="flexbox-column profile-page"
+        style={{ padding: "0px 0px 1em 2em" }}
+      >
         <form onSubmit={handleSubmit(handleUpdate)} style={{ width: "100%" }}>
           <div
             className="sticky-top flexbox-column "
@@ -227,10 +213,6 @@ const Profile = forwardRef(function Profile(
               >
                 <span className="button-text">Delete&nbsp;</span>{" "}
                 <FontAwesomeIcon icon={faTrashCan} />
-              </Button>
-              <Button type="Button" onClick={handleBackup}>
-                <span className="button-text">Backup&nbsp;</span>{" "}
-                <FontAwesomeIcon icon={faDatabase} />
               </Button>
             </ButtonGroup>
           </div>
