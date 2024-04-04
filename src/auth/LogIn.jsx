@@ -2,7 +2,7 @@ import "/src/App.css";
 
 import bcrypt from "bcryptjs";
 
-import { generateVerificationCode } from "/src/utils.js";
+import { generateVerificationCode, apiBaseUrl } from "/src/utils.js";
 import { update2_0 } from "/src/api-operations.js";
 import { fetchKey } from "/src/api-operations.js";
 
@@ -12,6 +12,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectUserData } from "/src/reducers/userDataReducer.js";
 import { selectActive, updateActive } from "/src/reducers/activeReducer.js";
 import { useLocation, Navigate } from "react-router-dom";
+
+import Button from "react-bootstrap/Button";
 
 import ResetPassword from "./ResetPassword";
 
@@ -66,7 +68,9 @@ export default function LogIn() {
       alert("The username doesn't exist");
     }
   };
-
+  const handleMicrosoftLogin = function () {
+    window.location.href = apiBaseUrl + "/auth/microsoft";
+  };
   const handleRedirect = () => {
     setRedirect(true);
   };
@@ -98,7 +102,7 @@ export default function LogIn() {
                 />
               </div>
               <div className="flexbox-row">
-                <button type="submit">Submit</button>
+                <Button type="submit">Submit</Button>
                 <ResetPassword />
               </div>
               {Object.keys(errorsLogin).map((key) => (
@@ -115,10 +119,13 @@ export default function LogIn() {
         </div>
       )}
       {location.state && active.user && (
-        <button type="button" onClick={handleRedirect}>
+        <Button type="button" onClick={handleRedirect}>
           Go back to the previous page
-        </button>
+        </Button>
       )}
+      <Button type="button" onClick={handleMicrosoftLogin}>
+        Log in with a Microsoft account
+      </Button>
       {redirect && <Navigate to={location.state.from.pathname} />}
     </main>
   );
