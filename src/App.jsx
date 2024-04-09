@@ -1,6 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-
 import utils from "/src/utils";
 
 import {
@@ -77,6 +76,11 @@ export default function App() {
     observer.current = new MutationObserver((rec) => {
       setNavHeight(refNav.current.offsetHeight);
     });
+    fetch(utils.apiBaseUrl + "/login-user", { credentials: "include" })
+      .then((res) => res.text())
+      .then((res) => {
+        dispatch(updateActive(res));
+      });
   }, []);
 
   useEffect(() => {
