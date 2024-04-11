@@ -79,7 +79,7 @@ export default function App() {
     fetch(utils.apiBaseUrl + "/login-user", { credentials: "include" })
       .then((res) => res.text())
       .then((res) => {
-        dispatch(updateActive(res));
+        if (res != "false") dispatch(updateActive(res));
       });
   }, []);
 
