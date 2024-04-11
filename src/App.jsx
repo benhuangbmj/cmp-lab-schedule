@@ -76,7 +76,7 @@ export default function App() {
     observer.current = new MutationObserver((rec) => {
       setNavHeight(refNav.current.offsetHeight);
     });
-    fetch(utils.apiBaseUrl + "/login-user", { credentials: "include" })
+    fetch(utils.apiBaseUrl + "/login", { credentials: "include" })
       .then((res) => res.text())
       .then((res) => {
         if (res != "false") dispatch(updateActive(res));
