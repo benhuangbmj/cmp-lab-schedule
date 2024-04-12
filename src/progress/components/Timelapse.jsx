@@ -32,70 +32,74 @@ const Timelapse = function ({
   shownOnMobile,
 }) {
   const task = tasks[taskMap.get(refTask.task_id)];
-  const [curr, setCurr] = useState(calculateCumulative());
-  const [lapse, setLapse] = useState(getTime(curr));
+  if (task) {
+    const [curr, setCurr] = useState(calculateCumulative());
+    const [lapse, setLapse] = useState(getTime(curr));
 
-  function calculateCumulative() {
-    return task.in_progress
-      ? task.cumulative + (Date.now() - task.in_progress)
-      : task.cumulative;
-  }
-
-  useEffect(() => {
-    setLapse(getTime(Math.floor(curr / 1000)));
-  }, [curr]);
-
-  useEffect(() => {
-    setCurr(calculateCumulative());
-    if (task.in_progress) {
-      const interval = setInterval(() => {
-        setCurr((curr) => curr + 1000);
-      }, 1000);
-      return () => clearInterval(interval);
+    function calculateCumulative() {
+      return task.in_progress
+        ? task.cumulative + (Date.now() - task.in_progress)
+        : task.cumulative;
     }
-  }, [tasks]);
 
-  return (
-    <>
-      {Object.keys(task).map((key) => {
-        if (displayedFields.includes(key)) {
-          let value = task[key];
-          if (key == "created_at") {
-            value = new Date(value).toLocaleString("en-US", {
-              timeZone: "America/New_York",
-            });
-          } else if (key == "in_progress") {
-            value = getTaskStatus(task);
+    useEffect(() => {
+      setLapse(getTime(Math.floor(curr / 1000)));
+    }, [curr]);
+
+    useEffect(() => {
+      setCurr(calculateCumulative());
+      if (task.in_progress) {
+        const interval = setInterval(() => {
+          setCurr((curr) => curr + 1000);
+        }, 1000);
+        return () => clearInterval(interval);
+      }
+    }, [tasks]);
+
+    return (
+      <>
+        {Object.keys(task).map((key) => {
+          if (displayedFields.includes(key)) {
+            let value = task[key];
+            if (key == "created_at") {
+              value = new Date(value).toLocaleString("en-US", {
+                timeZone: "America/New_York",
+              });
+            } else if (key == "in_progress") {
+              value = getTaskStatus(task);
+            }
+            return (
+              <td
+                key={key}
+                className={
+                  !shownOnMobile.includes(key) ? "hidden-on-mobile" : ""
+                }
+              >
+                {value}{" "}
+              </td>
+            );
           }
-          return (
-            <td
-              key={key}
-              className={!shownOnMobile.includes(key) ? "hidden-on-mobile" : ""}
-            >
-              {value}{" "}
-            </td>
-          );
-        }
-      })}
-      <td>
-        {lapse}
-        <ProgressBar
-          now={
-            task.complete
-              ? 100
-              : curr / 1000 / (task.duration ? task.duration : 3) / 36
-          }
-          variant={
-            task.complete
-              ? "warning"
-              : task.in_progress
-                ? "success"
-                : "secondary"
-          }
-          animated={task.in_progress}
-        />
-      </td>
-    </>
-  );
+        })}
+        <td>
+          {lapse}
+          <ProgressBar
+            now={
+              task.complete
+                ? 100
+                : curr / 1000 / (task.duration ? task.duration : 3) / 36
+            }
+            variant={
+              task.complete
+                ? "warning"
+                : task.in_progress
+                  ? "success"
+                  : "secondary"
+            }
+            animated={task.in_progress}
+          />
+        </td>
+      </>
+    );
+  }
 };
 export default Timelapse;
