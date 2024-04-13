@@ -26,6 +26,9 @@ import Stopwatch from "./components/Stopwatch";
 const socket = io(utils.apiBaseUrl, {
   autoConnect: false,
 });
+socket.on("disconnect", (reason) => {
+  console.log("socket disconnects: ", reason);
+});
 
 const displayedFields = [
   "task_id",
@@ -93,19 +96,25 @@ export default function Progress() {
 
   useEffect(() => {
     try {
-      socket.connect();
+      socket.on("connect", () => {
+        console.log("socket connects"); //remove
+        socket.emit("fetchTasks", activeUser);
+      });
       socket.on("receiveTasks", (data) => {
+        console.log("received tasks"); //remove
         const myData = Array.from(data);
         myData.sort((a, b) => a.task_id - b.task_id);
         setInitiate(true);
         dispatch(updateTasks(myData));
       });
       socket.on("taskUpdated", () => socket.emit("fetchTasks", activeUser));
-      socket.emit("fetchTasks", activeUser);
+      socket.connect();
     } catch (err) {
       console.log(err);
     }
-    return () => socket.disconnect();
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   useLayoutEffect(() => {
