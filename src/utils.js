@@ -32,6 +32,7 @@ const schema = {
     developer: false,
     admin: false,
   },
+  inactive: true,
 };
 
 let blankForm = Object.assign({}, schema, { username: null });
@@ -288,4 +289,5 @@ export default {
   subjects: subjects,
   sortByLastName: sortByLastName,
   getTaskStatus: getTaskStatus,
+  schema,
 };
