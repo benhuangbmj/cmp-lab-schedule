@@ -13,7 +13,7 @@ import { Route, Routes, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { selectActive, updateActive } from "/src/reducers/activeReducer.js";
-import { fetchUserData } from "/src/reducers/userDataReducer";
+import { fetchUserData, selectUserData } from "/src/reducers/userDataReducer";
 
 import { fetchInfo as preFetchInfo, fetchKey } from "./api-operations.js";
 
@@ -43,6 +43,7 @@ export default function App() {
   const observer = useRef();
 
   const active = useSelector(selectActive);
+  const userData = useSelector(selectUserData);
 
   const dispatch = useDispatch();
 
@@ -76,11 +77,6 @@ export default function App() {
     observer.current = new MutationObserver((rec) => {
       setNavHeight(refNav.current.offsetHeight);
     });
-    fetch(utils.apiBaseUrl + "/login", { credentials: "include" })
-      .then((res) => res.text())
-      .then((res) => {
-        if (res != "false") dispatch(updateActive(res));
-      });
   }, []);
 
   useEffect(() => {
@@ -90,6 +86,19 @@ export default function App() {
       setPageHeight("auto");
     }
   }, [loaded]);
+
+  useEffect(() => {
+    if (userData.status == "succeeded") {
+      const users = Object.keys(userData.items);
+      fetch(utils.apiBaseUrl + "/login", { credentials: "include" })
+        .then((res) => {
+          return res.json();
+        })
+        .then((res) => {
+          if (users.includes(res.user)) dispatch(updateActive(res.user));
+        });
+    }
+  }, [userData]);
 
   if (!info) {
     return (
