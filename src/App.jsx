@@ -15,7 +15,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectActive, updateActive } from "/src/reducers/activeReducer.js";
 import { fetchUserData, selectUserData } from "/src/reducers/userDataReducer";
 
-import { fetchInfo as preFetchInfo, fetchKey } from "./api-operations.js";
+import {
+  fetchInfo as preFetchInfo,
+  fetchKey,
+  update,
+} from "./api-operations.js";
 
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -95,7 +99,16 @@ export default function App() {
           return res.json();
         })
         .then((res) => {
-          if (users.includes(res.user)) dispatch(updateActive(res.user));
+          if (res) {
+            if (users.includes(res.user)) dispatch(updateActive(res.user));
+            else {
+              const newUser = { ...utils.schema };
+              Object.assign(newUser, res.profile);
+              update(res.user, [], newUser, fetchInfo).then(() => {
+                dispatch(fetchUserData());
+              });
+            }
+          }
         });
     }
   }, [userData]);
