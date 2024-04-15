@@ -121,11 +121,15 @@ const update = async (targetKey, keys, value, fetchInfo, backup = false) => {
         keys.forEach((e) => {
           currLevel = currLevel[e];
         });
-        currLevel[targetKey] = value;
+        if (value) {
+          currLevel[targetKey] = value;
+        } else {
+          delete currLevel[targetKey];
+        }
       } else {
         Object.keys(value).forEach((user) => {
           Object.assign(res.fields.tutorInfo["en-US"][user], value[user]);
-        })
+        });
       }
       fetch(
         `https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`,
@@ -153,11 +157,14 @@ const update = async (targetKey, keys, value, fetchInfo, backup = false) => {
             },
           ).then((res) => {
             if (res.ok) {
-              fetchInfo().then(() => {
-                alert("Update tutor information successfully!");
-              });
+              fetchInfo &&
+                fetchInfo().then(() => {
+                  alert("Update tutor information successfully!");
+                });
+              return res.status;
             } else {
               alert("Update failed.");
+              throw Error(res.status);
             }
           });
         });
