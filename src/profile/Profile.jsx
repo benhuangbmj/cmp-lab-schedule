@@ -144,8 +144,7 @@ const Profile = forwardRef(function Profile(
   const handleDelete = function () {
     const confirm = prompt('Type "Confirm" to proceed to delete the user');
     if (confirm === "Confirm") {
-      delete info[selected];
-      update(null, [], info, fetchInfo);
+      update(selected, [], null, fetchInfo);
       setSelected();
     } else {
       alert("Action terminated.");
