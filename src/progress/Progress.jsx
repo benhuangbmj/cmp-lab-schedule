@@ -94,7 +94,7 @@ export default function Progress() {
     }
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     try {
       socket.on("connect", () => {
         console.log("socket connects"); //remove
