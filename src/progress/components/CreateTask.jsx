@@ -79,6 +79,7 @@ export default function CreateTask({ task }) {
   ];
 
   const handleCreateTask = (data) => {
+    data.created_by = activeUser;
     const options = {
       method: "POST",
       headers: {
