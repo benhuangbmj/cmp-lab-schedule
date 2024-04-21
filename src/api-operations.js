@@ -229,6 +229,7 @@ export const update2_0 = async (targetKey, keys, value) => {
   }
 };
 
+//update3_0 uses object arguments and integrates the callback "next" compared to update. The async-await syntax is insignificant comparatively.
 export const update3_0 = async ({
   targetKey,
   keys,
