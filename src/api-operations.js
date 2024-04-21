@@ -20,7 +20,7 @@ const getSingleAsset = async function (assetId) {
   return asset;
 };
 
-const fetchInfo = (setCourseTutor, setInfo, setShifts) => {
+const fetchInfo = (setCourseTutor, setInfo, setShifts, next) => {
   const query = `{
     tutorsCollection {
       items {
@@ -75,6 +75,11 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts) => {
       setCourseTutor(courses);
       setShifts(shift);
       setInfo(tutorInfo);
+    })
+    .then(() => {
+      if (next) {
+        next();
+      }
     });
 };
 
@@ -159,7 +164,7 @@ const update = async (targetKey, keys, value, fetchInfo, backup = false) => {
             if (res.ok) {
               fetchInfo &&
                 fetchInfo().then(() => {
-                  alert("Update tutor information successfully!");
+                  alert("Update user database successfully!");
                 });
               return res.status;
             } else {
@@ -224,6 +229,76 @@ export const update2_0 = async (targetKey, keys, value) => {
   }
 };
 
+export const update3_0 = async ({
+  targetKey,
+  keys,
+  value,
+  fetchInfo,
+  next,
+}) => {
+  const entryId = databaseId;
+  let userData = await fetch(
+    `https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${cmaToken}`,
+      },
+    },
+  );
+  userData = await userData.json();
+
+  const currVersion = userData.sys.version;
+  if (targetKey != null) {
+    let currLevel = userData.fields.tutorInfo["en-US"];
+    keys.forEach((e) => {
+      currLevel = currLevel[e];
+    });
+    if (value) {
+      currLevel[targetKey] = value;
+    } else {
+      delete currLevel[targetKey];
+    }
+  } else {
+    Object.keys(value).forEach((user) => {
+      Object.assign(userData.fields.tutorInfo["en-US"][user], value[user]);
+    });
+  }
+  let updatedData = await fetch(
+    `https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${cmaToken}`,
+        "Content-Type": "application/vnd.contentful.management.v1+json",
+        "X-Contentful-Version": currVersion,
+      },
+      body: JSON.stringify(userData),
+    },
+  );
+  updatedData = await updatedData.json();
+  const newVersion = updatedData.sys.version;
+  let publishedData = await fetch(
+    `https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}/published`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${cmaToken}`,
+        "X-Contentful-Version": newVersion,
+      },
+    },
+  );
+  if (publishedData.ok) {
+    if (fetchInfo) {
+      fetchInfo(next).then(() => {
+        alert("Update user database successfully!");
+      });
+    }
+  } else {
+    alert("Update failed.");
+    throw Error(res.status);
+  }
+};
 export const deleteAsset = async function (assetId) {
   let currAsset = await fetch(
     `https://api.contentful.com/spaces/${spaceId}/environments/master/assets/${assetId}`,
@@ -354,4 +429,5 @@ export default {
   fetchKey: fetchKey,
   deleteAsset: deleteAsset,
   createAsset: createAsset,
+  update3_0,
 };
