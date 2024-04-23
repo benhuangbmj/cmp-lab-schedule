@@ -8,6 +8,8 @@ export default function InputCheckbox({
   options,
   values,
   isReset,
+  developerOnly = false,
+  adminOnly = false,
 }) {
   const {
     register,
@@ -30,7 +32,10 @@ export default function InputCheckbox({
       {values.map((val) => (
         <span key={val} className="checkbox-group">
           <input
-            disabled={!userData[activeUser].roles.developer}
+            disabled={
+              (adminOnly && !userData[activeUser].roles.admin) ||
+              (developerOnly && !userData[activeUser].roles.developer)
+            }
             type="checkbox"
             id={`${name} ${val}`}
             value={val}
