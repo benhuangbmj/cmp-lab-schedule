@@ -3,10 +3,12 @@ import bcrypt from "bcryptjs";
 import { useState, useEffect, useCallback, useRef, forwardRef } from "react";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateActive } from "/src/reducers/activeReducer.js";
 
 import { getSingleAsset, update, fetchKey } from "/src/api-operations";
 import { schema as dataSchema, courseOptions, blankForm } from "/src/utils";
+import { handleSignOut } from "/src/auth/SignOut";
 
 import SelectUser from "/src/util-components/SelectUser";
 import Button from "react-bootstrap/Button";
@@ -56,6 +58,7 @@ const Profile = forwardRef(function Profile(
   const [loggedIn, setLoggedIn] = useState(true);
   const currUser = useRef();
   const newUsername = watch("username");
+  const dispatch = useDispatch();
 
   function generateUsernameError() {
     setError("username", {
@@ -145,6 +148,9 @@ const Profile = forwardRef(function Profile(
     const confirm = prompt('Type "Confirm" to proceed to delete the user');
     if (confirm === "Confirm") {
       update(selected, [], null, fetchInfo);
+      if (selected == activeUser) {
+        handleSignOut(dispatch);
+      }
       setSelected();
     } else {
       alert("Action terminated.");
