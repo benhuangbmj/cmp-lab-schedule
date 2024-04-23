@@ -253,6 +253,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
                           values={fieldOptions[field]}
                           isReset={resetCount.current}
                           options={registerOptions}
+                          developerOnly={true}
                         />
                       </td>
                     ))}
