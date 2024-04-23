@@ -19,6 +19,7 @@ import {
   fetchInfo as preFetchInfo,
   fetchKey,
   update,
+  update3_0,
 } from "./api-operations.js";
 
 import Navbar from "react-bootstrap/Navbar";
@@ -51,8 +52,8 @@ export default function App() {
 
   const dispatch = useDispatch();
 
-  const fetchInfo = useCallback(async () => {
-    return preFetchInfo(setCourseTutor, setInfo, setShifts);
+  const fetchInfo = useCallback(async (next) => {
+    return preFetchInfo(setCourseTutor, setInfo, setShifts, next);
   }, []);
 
   const checkActive = async () => {
@@ -100,14 +101,20 @@ export default function App() {
         })
         .then((res) => {
           if (res) {
-            if (users.includes(res.user)) dispatch(updateActive(res.user));
-            else {
+            if (!users.includes(res.user)) {
               const newUser = { ...utils.schema };
               Object.assign(newUser, res.profile);
-              update(res.user, [], newUser, fetchInfo).then(() => {
-                dispatch(fetchUserData());
+              update3_0({
+                targetKey: res.user,
+                keys: [],
+                value: newUser,
+                fetchInfo: fetchInfo,
+                next: () => {
+                  dispatch(fetchUserData());
+                },
               });
             }
+            dispatch(updateActive(res.user));
           }
         });
     }
