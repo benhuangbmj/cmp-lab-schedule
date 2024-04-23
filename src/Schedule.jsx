@@ -47,7 +47,7 @@ export default function Schedule({ shift, courses, setNavbar }) {
   }
 
   useEffect(() => {
-    if (userData && activeUser && userData[activeUser].roles.admin) {
+    if (userData && activeUser && userData[activeUser]?.roles.admin) {
       setOnScreen("initial");
     }
   }, [activeUser, userData]);
