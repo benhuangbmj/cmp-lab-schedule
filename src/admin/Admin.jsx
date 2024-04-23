@@ -24,9 +24,9 @@ import handleBackup from "/src/utils/handleBackup";
 
 const textFields = ["name", "subject", "password"];
 const checkboxFields = ["roles"];
-const popupFields = ["schedule"];
-const popupTextFields = ["links"];
-const popupCheckboxFields = ["courses"];
+const popupFields = []; //"schedule"];
+const popupTextFields = []; //"links"];
+const popupCheckboxFields = []; //"courses"];
 const switchFields = ["inactive"];
 const allFields = [
   "username",
