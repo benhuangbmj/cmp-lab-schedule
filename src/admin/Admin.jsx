@@ -51,6 +51,7 @@ const registerOptions = {};
 
 export default function Admin({ info, fetchInfo, navHeight }) {
   const userData = useSelector((state) => state.userData.items);
+  const activeUser = useSelector((state) => state.active.user);
   const resetCount = useRef(0);
   const [loaded, setLoaded] = useState(false);
   const [usernames, setUsernames] = useState();
@@ -356,7 +357,16 @@ export default function Admin({ info, fetchInfo, navHeight }) {
             ID cards
           </Button>
 
-          <Button type="Button" onClick={handleBackup}>
+          <Button
+            type="Button"
+            onClick={handleBackup}
+            disabled={
+              !(
+                userData[activeUser]?.roles.admin &&
+                userData[activeUser]?.roles.developer
+              )
+            }
+          >
             <span className="button-text">Backup&nbsp;</span>{" "}
             <FontAwesomeIcon icon={faDatabase} />
           </Button>
