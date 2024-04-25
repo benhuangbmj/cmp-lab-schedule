@@ -7,6 +7,7 @@ import { apiBaseUrl } from "/src/utils";
 export default function selectSupervisors({ user, currSupOptions }) {
 	const userData = useSelector(selectUserData);
 	const [supOptions, setSupOptions] = useState([]);
+	const [defaultOptions, setDefaultOptions] = useState([]);
 	function handleChange(values) {
 		const data = { user: user, supervisors: values };
 		fetch(apiBaseUrl + "/set-supervisors", {
@@ -18,19 +19,25 @@ export default function selectSupervisors({ user, currSupOptions }) {
 	useEffect(() => {
 		if (userData && userData.status == "succeeded") {
 			const items = userData.items;
-			const data = [];
+			const options = [];
+			const defaultValue = [];
 			Object.keys(items).forEach((user) => {
-				data.push({ value: user, label: items[user].name });
+				const curr = { value: user, label: items[user].name };
+				options.push(curr);
+				if (currSupOptions.includes(user)) defaultValue.push(curr);
 			});
-			setSupOptions(data);
+			setSupOptions(options);
+			setDefaultOptions(defaultValue);
 		}
 	}, [userData]);
 	return (
-		<Select
-			defaultValue={currSupOptions}
-			options={supOptions}
-			isMulti
-			onChange={handleChange}
-		/>
+		supOptions.length > 0 && (
+			<Select
+				defaultValue={defaultOptions}
+				options={supOptions}
+				isMulti
+				onChange={handleChange}
+			/>
+		)
 	);
 }
