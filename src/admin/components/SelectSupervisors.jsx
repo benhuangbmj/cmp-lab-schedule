@@ -4,7 +4,7 @@ import { selectUserData } from "/src/reducers/userDataReducer";
 import { useState, useEffect } from "react";
 import { apiBaseUrl } from "/src/utils";
 
-export default function selectSupervisors({ user, currSupOptions }) {
+export default function selectSupervisors({ user, currSupOptions = [] }) {
 	const userData = useSelector(selectUserData);
 	const [supOptions, setSupOptions] = useState([]);
 	const [defaultOptions, setDefaultOptions] = useState([]);
