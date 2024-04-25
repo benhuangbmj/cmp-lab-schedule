@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState, useMemo, useRef } from "react";
 
 import utils, { fieldOptions } from "/src/utils";
-import api from "/src//api-operations";
+import contentful from "/src//api-operations";
 
 import Popup from "reactjs-popup";
 import Button from "react-bootstrap/Button";
@@ -21,8 +21,10 @@ import Form from "react-bootstrap/Form";
 import CardDisplay from "/src/IDcard/CardDisplay";
 import Profile from "/src/profile/Profile";
 import handleBackup from "/src/utils/handleBackup";
+import SelectSupervisors from "/src/admin/components/SelectSupervisors";
 
 const textFields = ["name", "subject", "password"];
+const selectFields = ["supervisors"];
 const checkboxFields = ["roles"];
 const popupFields = []; //"schedule"];
 const popupTextFields = []; //"links"];
@@ -31,6 +33,7 @@ const switchFields = ["inactive"];
 const allFields = [
   "username",
   ...textFields,
+  ...selectFields,
   ...checkboxFields,
   ...popupTextFields,
   ...popupFields,
@@ -39,6 +42,7 @@ const allFields = [
 ];
 const hiddenOnMobile = [
   ...textFields,
+  ...selectFields,
   ...popupTextFields,
   ...popupFields,
   ...popupCheckboxFields,
@@ -54,6 +58,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
   const [currValues, setCurrValues] = useState();
   const [selectAll, setSelectAll] = useState(false);
   const [display, setDisplay] = useState(false);
+  const [supervisors, setSupervisors] = useState();
   const formUtils = useForm({
     criteriaMode: "all",
   });
@@ -113,7 +118,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
   const handleUpdate = (data) => {
     delete data.selected;
     data = utils.getReadyForUpdate(usernames, data);
-    api.update(null, null, data, fetchInfo);
+    contentful.update(null, null, data, fetchInfo);
   };
   const handleInactivate = () => {
     setInative(true);
@@ -124,7 +129,22 @@ export default function Admin({ info, fetchInfo, navHeight }) {
   };
 
   useEffect(() => {
-    setUsernames(Object.keys(userData).sort());
+    if (userData) {
+      const userObj = {};
+      Object.keys(userData).forEach((user) => {
+        userObj[user] = [];
+      });
+      fetch(utils.apiBaseUrl + "/select-supervisors", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userObj),
+      })
+        .then((res) => res.json())
+        .then((res) => setSupervisors(res));
+      setUsernames(Object.keys(userData).sort());
+    }
   }, [userData]);
 
   useEffect(() => {
@@ -146,7 +166,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
 
   useEffect(() => {}); //remove
 
-  if (loaded && Array.isArray(usernames))
+  if (loaded && Array.isArray(usernames) && supervisors)
     return (
       <main>
         <form onSubmit={formUtils.handleSubmit(handleUpdate)}>
@@ -242,6 +262,17 @@ export default function Admin({ info, fetchInfo, navHeight }) {
                           name={fieldNameGen(field)}
                           utils={formUtils}
                           options={registerOptions}
+                        />
+                      </td>
+                    ))}
+                    {selectFields.map((field) => (
+                      <td
+                        key={fieldNameGen(field)}
+                        className="hidden-on-mobile"
+                      >
+                        <SelectSupervisors
+                          user={username}
+                          currSupOptions={supervisors[username]}
                         />
                       </td>
                     ))}
