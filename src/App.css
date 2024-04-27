@@ -40,6 +40,10 @@ main {
   font-size: 16pt;
 }
 
+h3 {
+  font-family: Aptifer-Slab;
+}
+
 .btn-primary,
 .btn-primary:disabled {
   background-color: var(--institutional-navy);

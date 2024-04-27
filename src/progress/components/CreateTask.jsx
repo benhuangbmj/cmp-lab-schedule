@@ -128,72 +128,73 @@ export default function CreateTask({ task }) {
     }
   }, [userWithName]);
   return (
-    <>
-      <form onSubmit={handleSubmit(handleCreateTask)}>
-        <div
-          className="flexbox-column"
-          style={{
-            alignItems: "flex-start",
-            width: "fit-content",
-          }}
-        >
-          {fields.map((e) => {
-            const output = (
-              <div
-                key={e.label}
-                className="flexbox-row"
-                style={{
-                  justifyContent: "flex-start",
-                  margin: ".5em 0",
-                }}
+    <form onSubmit={handleSubmit(handleCreateTask)}>
+      <h3 className="center-fit">
+        {task ? "Edit the Existing Task" : "Create a New Task"}
+      </h3>
+      <div
+        className="flexbox-column"
+        style={{
+          alignItems: "flex-start",
+          width: "fit-content",
+        }}
+      >
+        {fields.map((e) => {
+          const output = (
+            <div
+              key={e.label}
+              className="flexbox-row"
+              style={{
+                justifyContent: "flex-start",
+                margin: ".5em 0",
+              }}
+            >
+              <AsteriskLabel
+                htmlFor={e.label}
+                style={{ marginRight: "1em", width: "80px" }}
               >
-                <AsteriskLabel
-                  htmlFor={e.label}
-                  style={{ marginRight: "1em", width: "80px" }}
-                >
-                  {e.label}
-                </AsteriskLabel>
-                <input
-                  id={e.label}
-                  type="text"
-                  {...register(...e.register)}
-                  style={{ maxWidth: "50vw" }}
-                />
-              </div>
-            );
-            return output;
-          })}
-          {selectFields.map((e) => {
-            return (
-              <div
-                key={e.label}
-                className="flexbox-row"
-                style={{
-                  justifyContent: "flex-start",
-                  margin: ".5em 0px",
-                }}
+                {e.label}
+              </AsteriskLabel>
+              <input
+                id={e.label}
+                type="text"
+                {...register(...e.register)}
+                style={{ maxWidth: "50vw" }}
+              />
+            </div>
+          );
+          return output;
+        })}
+        {selectFields.map((e) => {
+          return (
+            <div
+              key={e.label}
+              className="flexbox-row"
+              style={{
+                justifyContent: "flex-start",
+                margin: ".5em 0px",
+              }}
+            >
+              <AsteriskLabel
+                htmlFor={e.label}
+                style={{ marginRight: "1em", width: "80px" }}
               >
-                <AsteriskLabel
-                  htmlFor={e.label}
-                  style={{ marginRight: "1em", width: "80px" }}
-                >
-                  {e.label}
-                </AsteriskLabel>
-                <select
-                  id={e.label}
-                  {...register(...e.register)}
-                  style={{ maxWidth: "50vw" }}
-                >
-                  {e.options()}
-                </select>
-              </div>
-            );
-          })}
-        </div>
-        <Button type="submit" style={{ margin: "1em auto", display: "block" }}>
-          {task ? "Edit the Task" : "Create a Task"}
-        </Button>
-      </form>
-    </>
+                {e.label}
+              </AsteriskLabel>
+              <select
+                id={e.label}
+                {...register(...e.register)}
+                style={{ maxWidth: "50vw" }}
+              >
+                {e.options()}
+              </select>
+            </div>
+          );
+        })}
+      </div>
+      <Button type="submit" style={{ margin: "1em auto", display: "block" }}>
+        {task ? "Edit" : "Create"}
+      </Button>
+    </form>
   );
 }
