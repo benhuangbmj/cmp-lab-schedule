@@ -95,8 +95,8 @@ export default function IDCard({ user, setRerender, canvas }) {
       boxSizing: "border-box",
       border: borderSetting,
       width: "2.6in" /*
-      fontFamily: "Priori",
-      fontWeight: "light",*/,
+      fontFamily: "Priori",*/,
+      fontWeight: "bold",
       fontSize: "9pt",
       paddingLeft: "2px",
     },
@@ -152,6 +152,7 @@ export default function IDCard({ user, setRerender, canvas }) {
       textAlign: "left",
       maxHeight: ".415in",
       overflow: "hidden",
+      marginTop: "5pt",
     },
     icon: {
       width: "0.6in",
@@ -235,15 +236,12 @@ export default function IDCard({ user, setRerender, canvas }) {
           <View style={styles.information}>
             <Text
               style={{
-                fontSize: "12pt",
-                /*fontFamily: "Priori-Black" /*
-                fontWeight: "normal",*/
+                fontSize: "13pt",
+                /*fontFamily: "Priori-Black" */
+                fontWeight: "bold",
               }}
             >
               {user.name + " (" + user.subject + ")"}
-            </Text>
-            <Text style={{ maxHeight: ".4in", overflow: "hidden" }}>
-              {user.day.map((e, i) => `${e} ${user.time[i]}`)}
             </Text>
             <View style={styles.subjects}>
               {user.courses &&
