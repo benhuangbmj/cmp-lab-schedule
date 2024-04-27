@@ -26,7 +26,7 @@ Font.register({
 Font.register({
   family: "Priori-Black",
   fontWeight: "normal",
-  src: "/public/BillionStars_PersonalUse.ttf",
+  src: "/PrioriSansOT-Black.otf",
 });
 Font.register({ family: "Aptifer-Slab", src: "/Aptifer Slab LT Pro.otf" });
 Font.register({
@@ -94,8 +94,8 @@ export default function IDCard({ user, setRerender, canvas }) {
     information: {
       boxSizing: "border-box",
       border: borderSetting,
-      width: "2.6in" /*
-      fontFamily: "Priori",*/,
+      width: "2.6in",
+      fontFamily: "Priori",
       fontWeight: "bold",
       fontSize: "9pt",
       paddingLeft: "2px",
@@ -116,8 +116,8 @@ export default function IDCard({ user, setRerender, canvas }) {
       textAlign: "center",
       marginLeft: "20%",
       transform: "rotate(90deg)",
-      color: "white" /*
-      fontFamily: "Aptifer-Slab-Black",*/,
+      color: "white",
+      fontFamily: "Aptifer-Slab-Black",
       border: borderSetting,
     },
     logo: {
@@ -139,9 +139,9 @@ export default function IDCard({ user, setRerender, canvas }) {
       flexWrap: "wrap",
       justifyContent: "flex-end",
       alignContent: "flex-end",
-      fontSize: "8pt" /*
+      fontSize: "10pt",
       fontFamily: "Priori",
-      fontWeight: "light",*/,
+      fontWeight: "light",
     },
     subjects: {
       border: borderSetting,
@@ -236,9 +236,8 @@ export default function IDCard({ user, setRerender, canvas }) {
           <View style={styles.information}>
             <Text
               style={{
-                fontSize: "13pt",
-                /*fontFamily: "Priori-Black" */
-                fontWeight: "bold",
+                fontSize: "15pt",
+                fontFamily: "Priori-Black",
               }}
             >
               {user.name + " (" + user.subject + ")"}
