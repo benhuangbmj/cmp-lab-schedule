@@ -77,7 +77,7 @@ export default function LogIn() {
 
   return (
     <main className="center-fit">
-      {!active.user ? (
+      {/*!active.user ? (
         <>
           <form onSubmit={handleSubmitLogin(handleLogin)}>
             <div>
@@ -122,7 +122,7 @@ export default function LogIn() {
         <Button type="button" onClick={handleRedirect}>
           Go back to the previous page
         </Button>
-      )}
+      )*/}
       <Button type="button" onClick={handleMicrosoftLogin}>
         Log in with a Microsoft account
       </Button>
