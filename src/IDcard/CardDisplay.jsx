@@ -18,6 +18,7 @@ export default function CardDisplay({
   info,
   pageOrientation,
   toolbar = false,
+  profile = false,
 }) {
   const [rerender, setRerender] = useState(0);
   const canvas = useRef(null);
@@ -42,7 +43,7 @@ export default function CardDisplay({
             >
               {Object.keys(info).map(
                 (e) =>
-                  !info[e].inactive && (
+                  (!info[e].inactive || profile) && (
                     <IDCard
                       key={e}
                       user={info[e]}

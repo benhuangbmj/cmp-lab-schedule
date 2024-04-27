@@ -248,6 +248,7 @@ const Profile = forwardRef(function Profile(
                     pageSize={[220, 290]}
                     pageOrientation="landscape"
                     info={{ user: info[selected] }}
+                    profile={true}
                   />
                 </div>
               ) : (
