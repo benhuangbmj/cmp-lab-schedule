@@ -84,7 +84,7 @@ export default function Charts() {
       {plot && (
         <div className="centered chart-container" style={{ height: "300px" }}>
           <span className="chart-label">Total visits: {fullData.total}</span>
-          <span className="chart-label">Rating: {fullData.rating}</span>
+          {/*<span className="chart-label">Rating: {fullData.rating}</span>*/}
           <span className="chart-label">
             Distinct visitors: {fullData.distinct}
           </span>
