@@ -1,13 +1,9 @@
 import { useRef, useEffect, useState } from "react";
-import SelectSupervisors from "/src/admin/components/SelectSupervisors";
-
+import PostDisplay from "/src/devBlog/PostDisplay";
 export default function FrontendLab({ info, fetchInfo }) {
   return (
     <>
-      <SelectSupervisors
-        user={"bhuang"}
-        currSupOptions={["xingzhiyou", "bhuang"]}
-      />
+      <PostDisplay />
     </>
   );
 }
