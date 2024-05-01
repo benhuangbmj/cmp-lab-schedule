@@ -60,6 +60,8 @@ export default function Admin({ info, fetchInfo, navHeight }) {
   const [selectAll, setSelectAll] = useState(false);
   const [display, setDisplay] = useState(false);
   const [supervisors, setSupervisors] = useState();
+  const [activeRows, setActiveRows] = useState();
+  const [highlighted, setHighlighted] = useState();
   const formUtils = useForm({
     criteriaMode: "all",
   });
@@ -145,6 +147,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
         .then((res) => res.json())
         .then((res) => setSupervisors(res));
       setUsernames(Object.keys(userData).sort());
+      setActiveRows(Array(Object.keys(userData).length).fill(false));
     }
   }, [userData]);
 
@@ -167,7 +170,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
 
   useEffect(() => {}); //remove
 
-  if (loaded && Array.isArray(usernames) && supervisors)
+  if (loaded && Array.isArray(usernames) && supervisors && activeRows)
     return (
       <main>
         <form onSubmit={formUtils.handleSubmit(handleUpdate)}>
@@ -210,7 +213,20 @@ export default function Admin({ info, fetchInfo, navHeight }) {
               {usernames.map((username, i) => {
                 const fieldNameGen = (field) => `${username} ${field}`;
                 return (
-                  <tr key={username + " row"}>
+                  <tr
+                    key={username + " row"}
+                    style={{
+                      border:
+                        activeRows[i] || i == highlighted
+                          ? "1px solid blue"
+                          : "initial",
+                    }}
+                    onClick={() => {
+                      i == highlighted
+                        ? setHighlighted(null)
+                        : setHighlighted(i);
+                    }}
+                  >
                     <td>
                       <span className="checkbox-group">
                         <input
