@@ -62,6 +62,8 @@ export default function Admin({ info, fetchInfo, navHeight }) {
   const [supervisors, setSupervisors] = useState();
   const [activeRows, setActiveRows] = useState();
   const [highlighted, setHighlighted] = useState();
+  const refRows = useRef();
+
   const formUtils = useForm({
     criteriaMode: "all",
   });
@@ -148,6 +150,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
         .then((res) => setSupervisors(res));
       setUsernames(Object.keys(userData).sort());
       setActiveRows(Array(Object.keys(userData).length).fill(false));
+      refRows.current = Array(Object.keys(userData).length).fill();
     }
   }, [userData]);
 
@@ -166,9 +169,20 @@ export default function Admin({ info, fetchInfo, navHeight }) {
     formUtils.setValue("selected", selectAll ? usernames : false);
   }, [selectAll]);
 
-  useEffect(() => {}, []); //remove
-
-  useEffect(() => {}); //remove
+  useEffect(() => {
+    if (refRows.current && refRows.current[0]) {
+      console.log(refRows.current[0].children);
+      refRows.current.forEach((row) => {
+        Object.keys(row.children).forEach((i) => {
+          const child = row.children[i];
+          child.onclick = (e) => {
+            console.log("clicked");
+            e.stopPropagation();
+          };
+        });
+      });
+    }
+  });
 
   if (loaded && Array.isArray(usernames) && supervisors && activeRows)
     return (
@@ -214,6 +228,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
                 const fieldNameGen = (field) => `${username} ${field}`;
                 return (
                   <tr
+                    ref={(elem) => (refRows.current[i] = elem)}
                     key={username + " row"}
                     style={{
                       border:
