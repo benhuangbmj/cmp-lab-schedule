@@ -49,6 +49,17 @@ const hiddenOnMobile = [
 ];
 const registerOptions = {};
 
+function stopPropagation(elem) {
+  if (elem.localName !== "td") {
+    elem.onclick = (event) => {
+      event.stopPropagation();
+    };
+  }
+  Object.keys(elem.children).forEach((i) => {
+    stopPropagation(elem.children[i]);
+  });
+}
+
 export default function Admin({ info, fetchInfo, navHeight }) {
   const userData = useSelector((state) => state.userData.items);
   const activeUser = useSelector((state) => state.active.user);
@@ -63,6 +74,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
   const [activeRows, setActiveRows] = useState();
   const [highlighted, setHighlighted] = useState();
   const refRows = useRef();
+  const refPropagationStopped = useRef(false);
 
   const formUtils = useForm({
     criteriaMode: "all",
@@ -170,17 +182,18 @@ export default function Admin({ info, fetchInfo, navHeight }) {
   }, [selectAll]);
 
   useEffect(() => {
-    if (refRows.current && refRows.current[0]) {
-      console.log(refRows.current[0].children);
+    if (
+      !refPropagationStopped.current &&
+      refRows.current &&
+      refRows.current[0]
+    ) {
       refRows.current.forEach((row) => {
         Object.keys(row.children).forEach((i) => {
           const child = row.children[i];
-          child.onclick = (e) => {
-            console.log("clicked");
-            e.stopPropagation();
-          };
+          stopPropagation(child);
         });
       });
+      refPropagationStopped.current = true;
     }
   });
 
