@@ -51,13 +51,18 @@ const registerOptions = {};
 
 function stopPropagation(elem) {
   if (elem.localName !== "td") {
-    elem.onclick = (event) => {
-      event.stopPropagation();
-    };
+    Object.keys(elem.children).forEach((i) => {
+      stopPropagation(elem.children[i]);
+    });
+  } else {
+    Object.keys(elem.children).forEach((i) => {
+      if (!elem.children[i].onclick) {
+        elem.children[i].onclick = (event) => {
+          event.stopPropagation();
+        };
+      }
+    });
   }
-  Object.keys(elem.children).forEach((i) => {
-    stopPropagation(elem.children[i]);
-  });
 }
 
 export default function Admin({ info, fetchInfo, navHeight }) {
@@ -73,8 +78,8 @@ export default function Admin({ info, fetchInfo, navHeight }) {
   const [supervisors, setSupervisors] = useState();
   const [activeRows, setActiveRows] = useState();
   const [highlighted, setHighlighted] = useState();
-  const refRows = useRef();
   const refPropagationStopped = useRef(false);
+  const refTbody = useRef();
 
   const formUtils = useForm({
     criteriaMode: "all",
@@ -162,7 +167,6 @@ export default function Admin({ info, fetchInfo, navHeight }) {
         .then((res) => setSupervisors(res));
       setUsernames(Object.keys(userData).sort());
       setActiveRows(Array(Object.keys(userData).length).fill(false));
-      refRows.current = Array(Object.keys(userData).length).fill();
     }
   }, [userData]);
 
@@ -182,17 +186,9 @@ export default function Admin({ info, fetchInfo, navHeight }) {
   }, [selectAll]);
 
   useEffect(() => {
-    if (
-      !refPropagationStopped.current &&
-      refRows.current &&
-      refRows.current[0]
-    ) {
-      refRows.current.forEach((row) => {
-        Object.keys(row.children).forEach((i) => {
-          const child = row.children[i];
-          stopPropagation(child);
-        });
-      });
+    if (!refPropagationStopped.current && refTbody.current) {
+      console.log(refTbody);
+      stopPropagation(refTbody.current);
       refPropagationStopped.current = true;
     }
   });
@@ -236,12 +232,11 @@ export default function Admin({ info, fetchInfo, navHeight }) {
                 ))}
               </tr>
             </thead>
-            <tbody>
+            <tbody ref={refTbody}>
               {usernames.map((username, i) => {
                 const fieldNameGen = (field) => `${username} ${field}`;
                 return (
                   <tr
-                    ref={(elem) => (refRows.current[i] = elem)}
                     key={username + " row"}
                     style={{
                       border:
