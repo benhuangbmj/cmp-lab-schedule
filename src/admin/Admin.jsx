@@ -187,7 +187,6 @@ export default function Admin({ info, fetchInfo, navHeight }) {
 
   useEffect(() => {
     if (!refPropagationStopped.current && refTbody.current) {
-      console.log(refTbody);
       stopPropagation(refTbody.current);
       refPropagationStopped.current = true;
     }
@@ -310,10 +309,12 @@ export default function Admin({ info, fetchInfo, navHeight }) {
                         key={fieldNameGen(field)}
                         className="hidden-on-mobile"
                       >
-                        <SelectSupervisors
-                          user={username}
-                          currSupOptions={supervisors[username]}
-                        />
+                        <div>
+                          <SelectSupervisors
+                            user={username}
+                            currSupOptions={supervisors[username]}
+                          />
+                        </div>
                       </td>
                     ))}
                     {checkboxFields.map((field) => (
