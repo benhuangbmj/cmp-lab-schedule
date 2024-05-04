@@ -28,7 +28,7 @@ export default function InputCheckbox({
   }, [isReset]);
 
   return (
-    <div style={{ textAlign: "left", width: "auto" }}>
+    <div className="center-fit" style={{ textAlign: "left" }}>
       {values.map((val) => (
         <span key={val} className="checkbox-group">
           <input
