@@ -78,7 +78,6 @@ export default function Admin({ info, fetchInfo, navHeight }) {
   const [supervisors, setSupervisors] = useState();
   const [activeRows, setActiveRows] = useState();
   const [highlighted, setHighlighted] = useState();
-  const refPropagationStopped = useRef(false);
   const refTbody = useRef();
 
   const formUtils = useForm({
@@ -186,11 +185,10 @@ export default function Admin({ info, fetchInfo, navHeight }) {
   }, [selectAll]);
 
   useEffect(() => {
-    if (!refPropagationStopped.current && refTbody.current) {
+    if (refTbody.current) {
       stopPropagation(refTbody.current);
-      refPropagationStopped.current = true;
     }
-  });
+  }, [loaded, usernames, supervisors, activeRows]);
 
   if (loaded && Array.isArray(usernames) && supervisors && activeRows)
     return (
