@@ -65,6 +65,10 @@ function stopPropagation(elem) {
   }
 }
 
+function setBackground(active) {
+  return active ? { background: "#11698c30" } : {};
+}
+
 export default function Admin({ info, fetchInfo, navHeight }) {
   const userData = useSelector((state) => state.userData.items);
   const activeUser = useSelector((state) => state.active.user);
@@ -188,7 +192,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
     if (refTbody.current) {
       stopPropagation(refTbody.current);
     }
-  }, [loaded, usernames, supervisors, activeRows]);
+  }, [loaded, usernames, supervisors]);
 
   if (loaded && Array.isArray(usernames) && supervisors && activeRows)
     return (
@@ -229,25 +233,41 @@ export default function Admin({ info, fetchInfo, navHeight }) {
                 ))}
               </tr>
             </thead>
-            <tbody ref={refTbody}>
+            <tbody className="non-select" ref={refTbody}>
               {usernames.map((username, i) => {
                 const fieldNameGen = (field) => `${username} ${field}`;
+                function handleClickRow(event) {
+                  const currActive = activeRows[i];
+                  if (event.ctrlKey && event.shiftKey) {
+                    return;
+                  } else if (event.ctrlKey) {
+                    var newActive = Array.from(activeRows);
+                  } else if (event.shiftKey) {
+                    const currHighlighted =
+                      highlighted != null ? highlighted : i;
+                    const start = Math.min(currHighlighted, i);
+                    const end = Math.max(currHighlighted, i);
+                    var newActive = Array.from(activeRows, (e, j) => {
+                      if (j >= start && j <= end) {
+                        return true;
+                      } else {
+                        return false;
+                      }
+                    });
+                  } else {
+                    var newActive = Array(activeRows.length).fill(false);
+                  }
+                  if (!event.shiftKey) {
+                    newActive[i] = !currActive;
+                    i == highlighted ? setHighlighted(null) : setHighlighted(i);
+                  } else {
+                    highlighted != null ? null : setHighlighted(i);
+                  }
+                  setActiveRows(newActive);
+                }
                 return (
-                  <tr
-                    key={username + " row"}
-                    style={{
-                      border:
-                        activeRows[i] || i == highlighted
-                          ? "1px solid blue"
-                          : "initial",
-                    }}
-                    onClick={() => {
-                      i == highlighted
-                        ? setHighlighted(null)
-                        : setHighlighted(i);
-                    }}
-                  >
-                    <td>
+                  <tr key={username + " row"} onClick={handleClickRow}>
+                    <td style={setBackground(activeRows[i])}>
                       <span className="checkbox-group">
                         <input
                           type="checkbox"
