@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Image, Font } from "@react-pdf/renderer";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import QRCode from "qrcode";
 import { icons, makeLogo } from "../utils";
 
@@ -34,9 +34,14 @@ Font.register({
   src: "/Aptifer Slab LT Pro Black.otf",
 });
 
-export default function IDCard({ user, setRerender, canvas }) {
-  const [qr, setQr] = useState({});
+export default function IDCard({ user, canvas, reversed }) {
+  const [qr, setQr] = useState([]);
   const [logo, setLogo] = useState();
+
+  user = useMemo(() => Object.assign({}, user), []);
+  if (reversed) {
+    user.courses = useMemo(() => user.courses.toReversed(), []);
+  }
 
   const toAdjustMargin =
     user.profilePic &&
@@ -97,7 +102,7 @@ export default function IDCard({ user, setRerender, canvas }) {
       width: "2.6in",
       fontFamily: "Priori",
       fontWeight: "bold",
-      fontSize: "9pt",
+      fontSize: "10pt",
       paddingLeft: "2px",
     },
     category: {
@@ -186,53 +191,49 @@ export default function IDCard({ user, setRerender, canvas }) {
     if (user.links) {
       Object.keys(user.links).forEach((link) => {
         if (user.links[link] != null && user.links[link] != "") {
-          QRCode.toDataURL(user.links[link])
-            .then((res) => {
-              const output = {};
-              output[link] = res;
-              setQr((prev) => {
-                return Object.assign(prev, output);
-              });
-            })
-            .then(() => {
-              setRerender((prev) => prev + 1);
-            });
+          QRCode.toDataURL(user.links[link]).then((res) => {
+            const output = {};
+            output[link] = res;
+            setQr((state) =>
+              reversed
+                ? Object.entries(output).concat(state)
+                : state.concat(Object.entries(output)),
+            );
+          });
         }
       });
     }
-  }, []);
 
-  useEffect(() => {
     makeLogo(canvas, setLogo);
   }, []);
 
   return (
-    <View style={styles.card} wrap={false}>
-      <View style={styles.company}>
-        <Image
-          style={[styles.brand, { backgroundColor: companyBackground }]}
-          src="src/img/MULogo-DeptCMP-White-Horiz.png"
-        />
-      </View>
-      <View style={styles.content}>
-        <View style={styles.logoContainer}>
-          {logo && <Image style={styles.logo} src={logo} />}
+    qr && (
+      <View style={styles.card} wrap={false}>
+        <View style={styles.company}>
+          <Image
+            style={[styles.brand, { backgroundColor: companyBackground }]}
+            src="src/img/MULogo-DeptCMP-White-Horiz.png"
+          />
         </View>
-        <View style={styles.social}>
-          {Object.keys(qr).length > 0 &&
-            Object.entries(qr).map(([link, code]) => {
-              return (
-                <View
-                  key={link}
-                  style={{ border: borderSetting, width: "33.3%" }}
-                >
-                  <Image style={styles.socialIcon} src={icons[link]} />
-                  <Image style={styles.QR} src={code} />
-                </View>
-              );
-            })}
-        </View>
-        {
+        <View style={styles.content}>
+          <View style={styles.logoContainer}>
+            {logo && <Image style={styles.logo} src={logo} />}
+          </View>
+          <View style={styles.social}>
+            {qr.length > 0 &&
+              qr.map(([link, code]) => {
+                return (
+                  <View
+                    key={link}
+                    style={{ border: borderSetting, width: "33.3%" }}
+                  >
+                    <Image style={styles.socialIcon} src={icons[link]} />
+                    <Image style={styles.QR} src={code} />
+                  </View>
+                );
+              })}
+          </View>
           <View style={styles.information}>
             <Text
               style={{
@@ -244,15 +245,13 @@ export default function IDCard({ user, setRerender, canvas }) {
             </Text>
             <View style={styles.subjects}>
               {user.courses &&
-                user.courses.toReversed().map((e) => (
+                user.courses.map((e) => (
                   <Text key={e} style={{ width: "33%" }}>
                     {e}
                   </Text>
                 ))}
             </View>
           </View>
-        }
-        {
           <View style={styles.profile}>
             <Image
               style={styles.image}
@@ -263,17 +262,13 @@ export default function IDCard({ user, setRerender, canvas }) {
               }
             />
           </View>
-        }
-        {
           <View style={styles.decoration}>
             <Text style={{ width: "100%", paddingRight: "2px" }}>
               Please scan the QR code below to sign in for tutoring
             </Text>
             <Image style={styles.icon} src="src/img/tutorForm.png" />
           </View>
-        }
-      </View>
-      {
+        </View>
         <View style={styles.category}>
           {cardTitle.split("").map((e) => (
             <Text key={e} style={styles.rotate}>
@@ -281,8 +276,7 @@ export default function IDCard({ user, setRerender, canvas }) {
             </Text>
           ))}
         </View>
-      }
-    </View>
+      </View>
+    )
   );
-  //
 }

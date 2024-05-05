@@ -1,6 +1,7 @@
 import { PDFViewer, Page, Document, StyleSheet } from "@react-pdf/renderer";
 import { useState, useRef, useEffect } from "react";
 import IDCard from "./IDCard";
+import { schema } from "/src/utils";
 
 const styles = StyleSheet.create({
   page: {
@@ -20,8 +21,32 @@ export default function CardDisplay({
   toolbar = false,
   profile = false,
 }) {
-  const [rerender, setRerender] = useState(0);
   const canvas = useRef(null);
+  const [infoTwoSided, setInfoTwoSided] = useState();
+
+  useEffect(() => {
+    if (!profile) {
+      const users = Object.keys(info).filter((user) => !info[user].inactive);
+      const infoLen = users.length;
+      const infoTwoSided = [];
+      for (let j = 0; j < Math.ceil(infoLen / 6); j++) {
+        for (let i = 6 * j; i < 6 * (j + 1); i++) {
+          if (i < infoLen) infoTwoSided.push(info[users[i]]);
+          else infoTwoSided.push(schema);
+        }
+        for (let k = 0; k < 3; k++) {
+          for (let i = 6 * j + 2 * k + 1; i >= 6 * j + 2 * k; i--) {
+            if (i < infoLen) {
+              infoTwoSided.push(info[users[i]]);
+            } else infoTwoSided.push(schema);
+          }
+        }
+      }
+      setInfoTwoSided(infoTwoSided);
+    } else {
+      setInfoTwoSided(Object.values(info).concat(Object.values(info)));
+    }
+  }, []);
   return (
     <>
       <canvas
@@ -41,17 +66,15 @@ export default function CardDisplay({
               orientation={pageOrientation}
               style={styles.page}
             >
-              {Object.keys(info).map(
-                (e) =>
-                  (!info[e].inactive || profile) && (
-                    <IDCard
-                      key={e}
-                      user={info[e]}
-                      setRerender={setRerender}
-                      canvas={canvas}
-                    />
-                  ),
-              )}
+              {infoTwoSided &&
+                infoTwoSided.map((user, i) => (
+                  <IDCard
+                    key={i}
+                    user={user}
+                    canvas={canvas}
+                    reversed={profile ? i % 2 == 1 : Math.floor(i / 6) % 2 == 1}
+                  />
+                ))}
             </Page>
           </Document>
         }
