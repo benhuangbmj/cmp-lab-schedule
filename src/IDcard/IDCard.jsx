@@ -208,75 +208,73 @@ export default function IDCard({ user, canvas, reversed }) {
   }, []);
 
   return (
-    qr && (
-      <View style={styles.card} wrap={false}>
-        <View style={styles.company}>
+    <View style={styles.card} wrap={false}>
+      <View style={styles.company}>
+        <Image
+          style={[styles.brand, { backgroundColor: companyBackground }]}
+          src="src/img/MULogo-DeptCMP-White-Horiz.png"
+        />
+      </View>
+      <View style={styles.content}>
+        <View style={styles.logoContainer}>
+          {logo && <Image style={styles.logo} src={logo} />}
+        </View>
+        <View style={styles.social}>
+          {qr.length > 0 &&
+            qr.map(([link, code]) => {
+              return (
+                <View
+                  key={link}
+                  style={{ border: borderSetting, width: "33.3%" }}
+                >
+                  <Image style={styles.socialIcon} src={icons[link]} />
+                  <Image style={styles.QR} src={code} />
+                </View>
+              );
+            })}
+        </View>
+        <View style={styles.information}>
+          <Text
+            style={{
+              fontSize: "15pt",
+              fontFamily: "Priori-Black",
+            }}
+          >
+            {user.name + " (" + user.subject + ")"}
+          </Text>
+          <View style={styles.subjects}>
+            {user.courses &&
+              user.courses.map((e) => (
+                <Text key={e} style={{ width: "33%" }}>
+                  {e}
+                </Text>
+              ))}
+          </View>
+        </View>
+        <View style={styles.profile}>
           <Image
-            style={[styles.brand, { backgroundColor: companyBackground }]}
-            src="src/img/MULogo-DeptCMP-White-Horiz.png"
+            style={styles.image}
+            src={
+              user.profilePic && user.profilePic.url
+                ? "https:" + user.profilePic.url
+                : "https://www.messiah.edu/images/stained_glass_circle1_multicolor.jpg"
+            }
           />
         </View>
-        <View style={styles.content}>
-          <View style={styles.logoContainer}>
-            {logo && <Image style={styles.logo} src={logo} />}
-          </View>
-          <View style={styles.social}>
-            {qr.length > 0 &&
-              qr.map(([link, code]) => {
-                return (
-                  <View
-                    key={link}
-                    style={{ border: borderSetting, width: "33.3%" }}
-                  >
-                    <Image style={styles.socialIcon} src={icons[link]} />
-                    <Image style={styles.QR} src={code} />
-                  </View>
-                );
-              })}
-          </View>
-          <View style={styles.information}>
-            <Text
-              style={{
-                fontSize: "15pt",
-                fontFamily: "Priori-Black",
-              }}
-            >
-              {user.name + " (" + user.subject + ")"}
-            </Text>
-            <View style={styles.subjects}>
-              {user.courses &&
-                user.courses.map((e) => (
-                  <Text key={e} style={{ width: "33%" }}>
-                    {e}
-                  </Text>
-                ))}
-            </View>
-          </View>
-          <View style={styles.profile}>
-            <Image
-              style={styles.image}
-              src={
-                user.profilePic && user.profilePic.url
-                  ? "https:" + user.profilePic.url
-                  : "https://www.messiah.edu/images/stained_glass_circle1_multicolor.jpg"
-              }
-            />
-          </View>
-          <View style={styles.decoration}>
-            <Text style={{ width: "100%", paddingRight: "2px" }}>
-              Please scan the QR code below to sign in for tutoring
-            </Text>
-            <Image style={styles.icon} src="src/img/tutorForm.png" />
-          </View>
-        </View>
-        <View style={styles.category}>
-          {cardTitle.split("").map((e) => (
-            <Text key={e} style={styles.rotate}>
-              {e}
-            </Text>
-          ))}
+        <View style={styles.decoration}>
+          <Text style={{ width: "100%", paddingRight: "2px" }}>
+            Please scan the QR code below to sign in for tutoring
+          </Text>
+          <Image style={styles.icon} src="src/img/tutorForm.png" />
         </View>
       </View>
-    )
+      <View style={styles.category}>
+        {cardTitle.split("").map((e) => (
+          <Text key={e} style={styles.rotate}>
+            {e}
+          </Text>
+        ))}
+      </View>
+    </View>
   );
 }

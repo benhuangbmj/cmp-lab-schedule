@@ -191,7 +191,12 @@ export default function App() {
                   </Button>
                 </NavLink>
               ) : (
-                <SignOut />
+                <>
+                  <span className="nav-link">
+                    Hello, {info[active.user].name}
+                  </span>
+                  <SignOut />
+                </>
               )}
             </Nav>
           </div>
