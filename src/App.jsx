@@ -8,6 +8,7 @@ import {
   useCallback,
   useRef,
   useLayoutEffect,
+  useMemo,
 } from "react";
 import { Route, Routes, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -41,6 +42,14 @@ export default function App() {
   const [shifts, setShifts] = useState(null);
   const [navbar, setNavbar] = useState(true);
   const [navHeight, setNavHeight] = useState();
+  const observer = useMemo(
+    () =>
+      new MutationObserver((rec) => {
+        setNavHeight(refNav.current.offsetHeight);
+      }),
+    [],
+  );
+  const refNav = useRef();
 
   const active = useSelector(selectActive);
   const userData = useSelector(selectUserData);
@@ -104,6 +113,16 @@ export default function App() {
     }
   }, [userData]);
 
+  useEffect(() => {
+    if (refNav.current) {
+      observer.observe(refNav.current, {
+        subtree: true,
+        attributeFilter: ["class"],
+      });
+      setNavHeight(refNav.current.offsetHeight);
+    }
+  }, [info]);
+
   if (!info) {
     return (
       <main>
@@ -112,8 +131,9 @@ export default function App() {
     );
   } else {
     return (
-      <div className="designing">
+      <div>
         <Navbar
+          ref={refNav}
           style={{ display: navbar ? "initial" : "none" }}
           data-bs-theme="dark"
           expand="md"
