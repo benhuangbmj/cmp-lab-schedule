@@ -40,12 +40,7 @@ export default function App() {
   const [courseTutor, setCourseTutor] = useState(null);
   const [shifts, setShifts] = useState(null);
   const [navbar, setNavbar] = useState(true);
-  const [loaded, setLoaded] = useState(false);
-  const [pageHeight, setPageHeight] = useState("auto");
   const [navHeight, setNavHeight] = useState();
-  const refProfile = useRef();
-  const refNav = useRef();
-  const observer = useRef();
 
   const active = useSelector(selectActive);
   const userData = useSelector(selectUserData);
@@ -79,18 +74,7 @@ export default function App() {
       dispatch(fetchUserData());
     }
     checkActive();
-    observer.current = new MutationObserver((rec) => {
-      setNavHeight(refNav.current.offsetHeight);
-    });
   }, []);
-
-  useEffect(() => {
-    if (loaded) {
-      setPageHeight(refProfile.current?.clientHeight + "px");
-    } else {
-      setPageHeight("auto");
-    }
-  }, [loaded]);
 
   useEffect(() => {
     if (userData.status == "succeeded") {
@@ -128,18 +112,8 @@ export default function App() {
     );
   } else {
     return (
-      <div
-        onLoad={() => {
-          observer.current.observe(refNav.current, {
-            subtree: true,
-            attributeFilter: ["class"],
-          });
-          setNavHeight(refNav.current.offsetHeight);
-        }}
-        style={{ height: pageHeight }}
-      >
+      <div className="designing">
         <Navbar
-          ref={refNav}
           style={{ display: navbar ? "initial" : "none" }}
           data-bs-theme="dark"
           expand="md"
@@ -213,15 +187,12 @@ export default function App() {
             }
           />
           <Route
-            ref={refProfile}
             path="/profile"
             element={
               <ProtectedRoute>
                 <Profile
-                  ref={refProfile}
                   info={info}
                   fetchInfo={fetchInfo}
-                  setLoaded={setLoaded}
                   navHeight={navHeight}
                 />
               </ProtectedRoute>

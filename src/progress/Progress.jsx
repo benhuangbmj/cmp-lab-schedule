@@ -128,7 +128,7 @@ export default function Progress() {
   }, [tasks, initiate]);
 
   return (
-    <>
+    <main>
       <CreateTask />
       {!initiate && (
         <Table
@@ -210,6 +210,6 @@ export default function Progress() {
           </tbody>
         </Table>
       )}
-    </>
+    </main>
   );
 }
