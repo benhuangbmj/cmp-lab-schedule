@@ -10,23 +10,7 @@ export default function ProtectedRoute({ children, role }) {
   const loaded = useSelector((state) => state.active.loaded);
   const userData = useSelector((state) => state.userData.items);
   const [activeRole, setActiveRole] = useState();
-  const [fetchLogin, setFetchLogin] = useState(false);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!activeUser) {
-      fetch(utils.apiBaseUrl + "/login", { credentials: "include" })
-        .then((res) => res.json())
-        .then((res) => {
-          if (res) {
-            dispatch(updateActive(res.user));
-          }
-          setFetchLogin(true);
-        });
-    } else {
-      setFetchLogin(true);
-    }
-  }, []);
 
   useLayoutEffect(() => {
     if (activeUser && role && userData)
@@ -35,9 +19,9 @@ export default function ProtectedRoute({ children, role }) {
 
   if (!(loaded && userData)) {
     return <p>Loading</p>;
-  } else if (fetchLogin) {
+  } else {
     if (!activeUser) {
-      return <Navigate to="/login" state={{ from: location }} replace />;
+      return <Navigate to="/" state={{ from: location }} replace />;
     } else if (role != undefined) {
       if (activeRole === undefined) {
         return <p>Loading</p>;

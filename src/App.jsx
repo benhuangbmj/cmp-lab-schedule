@@ -16,6 +16,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectActive, updateActive } from "/src/reducers/activeReducer.js";
 import { fetchUserData, selectUserData } from "/src/reducers/userDataReducer";
 
+import { useLocation, Navigate } from "react-router-dom";
+
 import {
   fetchInfo as preFetchInfo,
   fetchKey,
@@ -42,6 +44,7 @@ export default function App() {
   const [shifts, setShifts] = useState(null);
   const [navbar, setNavbar] = useState(true);
   const [navHeight, setNavHeight] = useState();
+  const [fetchLogin, setFetchLogin] = useState(false);
   const observer = useMemo(
     () =>
       new MutationObserver((rec) => {
@@ -50,12 +53,10 @@ export default function App() {
     [],
   );
   const refNav = useRef();
-
   const active = useSelector(selectActive);
   const userData = useSelector(selectUserData);
-
   const dispatch = useDispatch();
-
+  const location = useLocation();
   const fetchInfo = useCallback(async (next) => {
     return preFetchInfo(setCourseTutor, setInfo, setShifts, next);
   }, []);
@@ -104,10 +105,15 @@ export default function App() {
                 fetchInfo: fetchInfo,
                 next: () => {
                   dispatch(fetchUserData());
+                  setFetchLogin(true);
                 },
               });
+            } else {
+              setFetchLogin(true);
             }
             dispatch(updateActive(res.user));
+          } else {
+            setFetchLogin(true);
           }
         });
     }
@@ -123,12 +129,18 @@ export default function App() {
     }
   }, [info]);
 
-  if (!info) {
+  if (!info || !fetchLogin) {
     return (
       <main>
         <h1>Loading ...</h1>
       </main>
     );
+  } else if (location.state?.from) {
+    if (active.user) {
+      return <Navigate to={location.state.from.pathname} />;
+    } else {
+      return <Navigate to="/login" />;
+    }
   } else {
     return (
       <div>

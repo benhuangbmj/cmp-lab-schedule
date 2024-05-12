@@ -25,9 +25,7 @@ export default function LogIn() {
     formState: { errors: errorsLogin },
   } = useForm();
   const dispatch = useDispatch();
-
   const [redirect, setRedirect] = useState(false);
-
   const userData = useSelector(selectUserData).items;
   const active = useSelector(selectActive);
   const location = useLocation();
