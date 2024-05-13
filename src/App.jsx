@@ -119,7 +119,7 @@ export default function App() {
     }
   }, [userData]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (refNav.current) {
       observer.observe(refNav.current, {
         subtree: true,
@@ -127,7 +127,7 @@ export default function App() {
       });
       setNavHeight(refNav.current.offsetHeight);
     }
-  }, [info]);
+  }, [info, fetchLogin]);
 
   if (!info || !fetchLogin) {
     return (
@@ -135,13 +135,12 @@ export default function App() {
         <h1>Loading ...</h1>
       </main>
     );
-  } else if (location.state?.from) {
-    if (active.user) {
-      return <Navigate to={location.state.from.pathname} />;
-    } else {
-      return <Navigate to="/login" />;
-    }
   } else {
+    if (location.state?.from) {
+      return (
+        <Navigate to="/login" state={{ to: location.state.from.pathname }} />
+      );
+    }
     return (
       <div>
         <Navbar
