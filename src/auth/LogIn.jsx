@@ -67,7 +67,18 @@ export default function LogIn() {
     }
   };
   const handleMicrosoftLogin = function () {
-    window.location.href = apiBaseUrl + "/auth/microsoft";
+    if (location.state?.to) {
+      fetch(apiBaseUrl + "/auth/microsoft", {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain",
+        },
+        credentials: "include",
+        body: location.state?.to,
+      }).then(() => (window.location.href = apiBaseUrl + "/auth/microsoft"));
+    } else {
+      window.location.href = apiBaseUrl + "/auth/microsoft";
+    }
   };
   const handleRedirect = () => {
     setRedirect(true);
