@@ -17,6 +17,7 @@ function restrict(i) {
 export default function Timetable({ tutor, slots, setSlots }) {
   const mouseDown = useRef(false);
   const [extended, setExtended] = useState(false);
+  const refTbody = useRef();
 
   useEffect(() => {
     document.addEventListener("mouseup", HandleMouseUp);
@@ -57,13 +58,26 @@ export default function Timetable({ tutor, slots, setSlots }) {
       >
         {extended ? "Collapse" : "Expand"}
       </Button>
-      <Table size="sm" bordered className="non-select">
-        <tbody>
+      <Table
+        size="sm"
+        bordered
+        className="non-select"
+        style={{ touchAction: "none" }}
+      >
+        <thead>
           <tr>
             {days.map((e) => (
               <th key={e}>{e}</th>
             ))}
           </tr>
+        </thead>
+        <tbody
+          ref={refTbody}
+          onTouchStart={(e) => {}}
+          onTouchMove={(e) => {
+            console.log(e);
+          }}
+        >
           {times.map((time, i) => {
             if (extended || restrict(i)) {
               return (
