@@ -15,29 +15,28 @@ function restrict(i) {
 }
 
 export default function Timetable({ tutor, slots, setSlots }) {
-  const mouseDown = useRef(false);
+  const pointerDown = useRef(false);
   const [touchAction, setTouchAction] = useState("none");
   const [extended, setExtended] = useState(false);
-  const refTbody = useRef();
 
   useEffect(() => {
-    document.addEventListener("mouseup", HandleMouseUp);
+    document.addEventListener("pointerup", HandlePointerUp);
   }, []);
 
-  const handleMouseDown = (e) => {
-    mouseDown.current = true;
+  const handlePointerDown = (e) => {
+    pointerDown.current = true;
     const [i, j] = e.target.dataset.pos.split(",");
     const newSlots = JSON.parse(JSON.stringify(slots));
     newSlots[i][j] = !newSlots[i][j];
     setSlots(newSlots);
   };
 
-  const HandleMouseUp = () => {
-    mouseDown.current = false;
+  const HandlePointerUp = () => {
+    pointerDown.current = false;
   };
 
-  const handleMouseEnter = (e) => {
-    if (mouseDown.current) {
+  const handlePointerEnter = (e) => {
+    if (pointerDown.current) {
       const [i, j] = e.target.dataset.pos.split(",");
       const newSlots = JSON.parse(JSON.stringify(slots));
       newSlots[i][j] = !newSlots[i][j];
@@ -64,7 +63,7 @@ export default function Timetable({ tutor, slots, setSlots }) {
     }
   }
 
-  function handleTouchEnd() {}
+  function handleTouchEnd(ev) {}
 
   return (
     <div className={styles.container}>
@@ -90,9 +89,10 @@ export default function Timetable({ tutor, slots, setSlots }) {
           </tr>
         </thead>
         <tbody
-          ref={refTbody}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
+          onPointerMove={(ev) => {
+            if (ev.pointerType == "touch")
+              ev.target.releasePointerCapture(ev.pointerId);
+          }}
         >
           {times.map((time, i) => {
             if (extended || restrict(i)) {
@@ -109,8 +109,8 @@ export default function Timetable({ tutor, slots, setSlots }) {
                             }
                           : {}
                       }
-                      onMouseDown={tutor && handleMouseDown}
-                      onMouseEnter={tutor && handleMouseEnter}
+                      onPointerDown={tutor && handlePointerDown}
+                      onPointerEnter={tutor && handlePointerEnter}
                       data-pos={[i, j]}
                     >
                       {time}
