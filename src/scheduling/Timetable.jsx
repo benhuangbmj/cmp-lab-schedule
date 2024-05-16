@@ -16,6 +16,7 @@ function restrict(i) {
 
 export default function Timetable({ tutor, slots, setSlots }) {
   const mouseDown = useRef(false);
+  const [touchAction, setTouchAction] = useState("none");
   const [extended, setExtended] = useState(false);
   const refTbody = useRef();
 
@@ -48,6 +49,23 @@ export default function Timetable({ tutor, slots, setSlots }) {
     setExtended((state) => !state);
   };
 
+  function handleTouchStart(ev) {
+    if (ev.touches.length > 1) {
+      setTouchAction((state) => {
+        switch (state) {
+          case "none":
+            return "auto";
+            break;
+          case "auto":
+            return "none";
+            break;
+        }
+      });
+    }
+  }
+
+  function handleTouchEnd() {}
+
   return (
     <div className={styles.container}>
       <h5>{tutor ? `${tutor}'s Schedule` : ""}</h5>
@@ -62,10 +80,7 @@ export default function Timetable({ tutor, slots, setSlots }) {
         size="sm"
         bordered
         className="non-select"
-        style={{ touchAction: "none" }}
-        onPointerMove={(e) => {
-          console.log(e.clientX);
-        }}
+        style={{ touchAction: touchAction }}
       >
         <thead>
           <tr>
@@ -74,7 +89,11 @@ export default function Timetable({ tutor, slots, setSlots }) {
             ))}
           </tr>
         </thead>
-        <tbody ref={refTbody}>
+        <tbody
+          ref={refTbody}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           {times.map((time, i) => {
             if (extended || restrict(i)) {
               return (
