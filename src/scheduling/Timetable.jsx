@@ -63,6 +63,9 @@ export default function Timetable({ tutor, slots, setSlots }) {
         bordered
         className="non-select"
         style={{ touchAction: "none" }}
+        onPointerMove={(e) => {
+          console.log(e.clientX);
+        }}
       >
         <thead>
           <tr>
@@ -71,13 +74,7 @@ export default function Timetable({ tutor, slots, setSlots }) {
             ))}
           </tr>
         </thead>
-        <tbody
-          ref={refTbody}
-          onTouchStart={(e) => {}}
-          onTouchMove={(e) => {
-            console.log(e);
-          }}
-        >
+        <tbody ref={refTbody}>
           {times.map((time, i) => {
             if (extended || restrict(i)) {
               return (
