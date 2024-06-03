@@ -3,7 +3,6 @@ import { useState, useEffect, useMemo } from "react";
 import QRCode from "qrcode";
 import { icons, makeLogo } from "../utils";
 
-const cardTitle = " STUDENT TUTOR ";
 const [cw, ch] = [4, 3];
 const [iw, ih] = ["0.96in", "1.28in"];
 const [companyBackground, display, borderSetting] = [
@@ -35,6 +34,9 @@ Font.register({
 });
 
 export default function IDCard({ user, canvas, reversed }) {
+  const cardTitle = /student/i.test(user.title)
+    ? " STUDENT TUTOR "
+    : " EMPLOYEE ";
   const [qr, setQr] = useState([]);
   const [logo, setLogo] = useState();
 
