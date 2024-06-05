@@ -5,6 +5,7 @@ const cmaToken = import.meta.env.VITE_CMA_TOKEN;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 const databaseId = import.meta.env.VITE_DATABASE_ID;
 const backupId = import.meta.env.VITE_BACKUP_ID;
+const userInfoId = import.meta.env.VITE_USER_INFO_ID;
 
 const getSingleAsset = async function (assetId) {
   let asset = await fetch(
@@ -25,6 +26,9 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts, next) => {
     tutorsCollection {
       items {
         tutorInfo
+        sys {
+          id
+        }
       }
     }
   }`;
@@ -38,7 +42,9 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts, next) => {
   })
     .then((res) => res.json())
     .then((res) => {
-      const tutorInfo = res.data.tutorsCollection.items[0].tutorInfo;
+      const tutorInfo = res.data.tutorsCollection.items.find(
+        (e, i) => e.sys.id == userInfoId,
+      ).tutorInfo;
       const shift = Array.from(Array(4), () => Array.from(Array(2), () => []));
       const courseMap = new Map();
       for (let student in tutorInfo) {
@@ -88,6 +94,9 @@ export const fetchKey = async (user, key) => {
     tutorsCollection {
       items {
         tutorInfo
+        sys {
+          id
+        }
       }
     }
   }`;
@@ -103,7 +112,9 @@ export const fetchKey = async (user, key) => {
     },
   );
   userData = await userData.json();
-  userData = userData.data.tutorsCollection.items[0].tutorInfo[user];
+  userData = userData.data.tutorsCollection.items.find(
+    (e, i) => e.sys.id == userInfoId,
+  ).tutorInfo[user];
   return userData[key];
 };
 
