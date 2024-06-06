@@ -443,7 +443,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
           style={{
             width: "100%",
             height: "90vh",
-            maxHeight: `${window.innerHeight - navHeight - refButton.current.offsetHeight - 15}px`,
+            maxHeight: `${window.innerHeight - navHeight - refButton.current?.offsetHeight}px`,
             display: display ? "block" : "none",
           }}
         >
