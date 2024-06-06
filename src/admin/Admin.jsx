@@ -83,6 +83,8 @@ export default function Admin({ info, fetchInfo, navHeight }) {
   const [activeRows, setActiveRows] = useState();
   const [highlighted, setHighlighted] = useState();
   const refTbody = useRef();
+  const refCardDisp = useRef();
+  const refButton = useRef();
 
   const formUtils = useForm({
     criteriaMode: "all",
@@ -193,6 +195,12 @@ export default function Admin({ info, fetchInfo, navHeight }) {
       stopPropagation(refTbody.current);
     }
   }, [loaded, usernames, supervisors]);
+
+  useEffect(() => {
+    if (display) {
+      refCardDisp.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [display]);
 
   if (loaded && Array.isArray(usernames) && supervisors && activeRows)
     return (
@@ -407,6 +415,7 @@ export default function Admin({ info, fetchInfo, navHeight }) {
             Activate
           </Button>
           <Button
+            ref={refButton}
             type="button"
             onClick={() => {
               setDisplay((state) => !state);
@@ -430,9 +439,11 @@ export default function Admin({ info, fetchInfo, navHeight }) {
           </Button>
         </form>
         <div
+          ref={refCardDisp}
           style={{
             width: "100%",
             height: "90vh",
+            maxHeight: `${window.innerHeight - navHeight - refButton.current.offsetHeight - 15}px`,
             display: display ? "block" : "none",
           }}
         >
