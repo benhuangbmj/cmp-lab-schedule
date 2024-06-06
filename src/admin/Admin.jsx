@@ -432,7 +432,8 @@ export default function Admin({ info, fetchInfo, navHeight }) {
         <div
           style={{
             width: "100%",
-            display: display ? "initial" : "none",
+            height: "90vh",
+            display: display ? "block" : "none",
           }}
         >
           <CardDisplay
