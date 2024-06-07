@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { BLOCKS } from "@contentful/rich-text-types";
+import dayjs from "dayjs";
 
 function renderEntry(node, children) {
 	if (node.data.target.sys.contentType.sys.id === "videoEmbed") {
@@ -38,10 +39,23 @@ const renderOptions = {
 };
 
 export default function BlogPost({ content }) {
+	const createdAt = dayjs(content.sys.createdAt).format("MMM D, YYYY");
+	const updatedAt = dayjs(content.sys.updatedAt).format("MMM D, YYYY");
 	return (
-		<div style={{ border: "1px solid black", margin: "1em auto" }}>
-			<h2>{content.fields.postTitle}</h2>
+		<div
+			style={{
+				border: "1px solid black",
+				margin: "1em",
+				width: "1000px",
+				maxWidth: "65vw",
+				textAlign: "left",
+				padding: "1em 1em",
+			}}
+		>
+			<h1>{content.fields.postTitle}</h1>
+			<h6>Posted on {createdAt}</h6>
 			{documentToReactComponents(content.fields.blogPost, renderOptions)}
+			<footer> Updated on {updatedAt}</footer>
 		</div>
 	);
 }
