@@ -36,7 +36,7 @@ Font.register({
 export default function IDCard({ user, canvas, reversed }) {
   const cardTitle = /student/i.test(user.title)
     ? " STUDENT TUTOR "
-    : " EMPLOYEE ";
+    : "  EMPLOYEE  ";
   const [qr, setQr] = useState([]);
   const [logo, setLogo] = useState();
 
