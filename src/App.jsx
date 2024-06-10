@@ -12,6 +12,7 @@ import {
 } from "react";
 import { Route, Routes, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { ErrorBoundary, useErrorBoundary } from "react-error-boundary";
 
 import { selectActive, updateActive } from "/src/reducers/activeReducer.js";
 import { fetchUserData, selectUserData } from "/src/reducers/userDataReducer";
@@ -57,6 +58,7 @@ export default function App() {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const location = useLocation();
+  const { showBoundary } = useErrorBoundary();
   const fetchInfo = useCallback(async (next) => {
     return preFetchInfo(setCourseTutor, setInfo, setShifts, next);
   }, []);
@@ -115,6 +117,9 @@ export default function App() {
           } else {
             setFetchLogin(true);
           }
+        })
+        .catch((err) => {
+          showBoundary(err);
         });
     }
   }, [userData]);
