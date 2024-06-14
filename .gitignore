@@ -7,3 +7,5 @@ tests
 *.sh
 vite.config.js.timestamp*.*
 package-lock.json
+opencv.js
+*.xml
