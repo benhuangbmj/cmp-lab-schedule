@@ -7,67 +7,82 @@ export default function FrontendLab({ info, fetchInfo }) {
   const refVideo = useRef();
   const refCanvas = useRef();
   const [faceCount, setFaceCount] = useState(0);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+  const loadCount = useRef(0);
   useEffect(() => {
-    const video = refVideo.current;
-    const canvas = refCanvas.current;
-
-    navigator.mediaDevices
-      .getUserMedia({
-        audio: false,
-        video: true,
-      })
-      .then((stream) => {
-        video.srcObject = stream;
-        const url = "src/haarcascade_frontalface_default.xml";
-        fetch(url)
-          .then((response) => response.arrayBuffer())
-          .then((buffer) => {
-            const data = new Uint8Array(buffer);
-            cv.FS_createDataFile(
-              "/",
-              "haarcascade_frontalface_default.xml",
-              data,
-              true,
-              false,
-              false,
-            );
-          })
-          .then(() => {
-            let src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
-            let dst = new cv.Mat(video.height, video.width, cv.CV_8UC4);
-            let gray = new cv.Mat();
-            let cap = new cv.VideoCapture(video);
-            let faces = new cv.RectVector();
-            let classifier = new cv.CascadeClassifier();
-            classifier.load("haarcascade_frontalface_default.xml");
-            const FPS = 30;
-            function processVideo() {
-              let begin = Date.now();
-              // start processing.
-              cap.read(src);
-              src.copyTo(dst);
-              cv.cvtColor(dst, gray, cv.COLOR_RGBA2GRAY, 0);
-              // detect faces.
-              classifier.detectMultiScale(gray, faces, 1.1, 3, 0);
-              // draw faces.
-              setFaceCount(faces.size());
-              for (let i = 0; i < faces.size(); ++i) {
-                let face = faces.get(i);
-                let point1 = new cv.Point(face.x, face.y);
-                let point2 = new cv.Point(
-                  face.x + face.width,
-                  face.y + face.height,
-                );
-                cv.rectangle(dst, point1, point2, [255, 0, 0, 255]);
-              }
-              cv.imshow(canvas, dst);
-              let delay = 1000 / FPS - (Date.now() - begin);
-              setTimeout(processVideo, 1);
-            }
-            setTimeout(processVideo, 0);
-          });
-      });
+    const script = document.createElement("script");
+    script.src = "src/opencv.js";
+    document.head.appendChild(script);
+    script.onload = () => {
+      setScriptLoaded(true);
+    };
+    return () => {
+      document.head.removeChild(script);
+    };
   }, []);
+  useEffect(() => {
+    if (scriptLoaded) {
+      const video = refVideo.current;
+      const canvas = refCanvas.current;
+
+      navigator.mediaDevices
+        .getUserMedia({
+          audio: false,
+          video: true,
+        })
+        .then((stream) => {
+          video.srcObject = stream;
+          const url = "src/haarcascade_frontalface_default.xml";
+          fetch(url)
+            .then((response) => response.arrayBuffer())
+            .then((buffer) => {
+              const data = new Uint8Array(buffer);
+              cv.FS_createDataFile(
+                "/",
+                "haarcascade_frontalface_default.xml",
+                data,
+                true,
+                false,
+                false,
+              );
+            })
+            .then(() => {
+              let src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
+              let dst = new cv.Mat(video.height, video.width, cv.CV_8UC4);
+              let gray = new cv.Mat();
+              let cap = new cv.VideoCapture(video);
+              let faces = new cv.RectVector();
+              let classifier = new cv.CascadeClassifier();
+              classifier.load("haarcascade_frontalface_default.xml");
+              const FPS = 30;
+              function processVideo() {
+                let begin = Date.now();
+                // start processing.
+                cap.read(src);
+                src.copyTo(dst);
+                cv.cvtColor(dst, gray, cv.COLOR_RGBA2GRAY, 0);
+                // detect faces.
+                classifier.detectMultiScale(gray, faces, 1.1, 3, 0);
+                // draw faces.
+                setFaceCount(faces.size());
+                for (let i = 0; i < faces.size(); i++) {
+                  let face = faces.get(i);
+                  let point1 = new cv.Point(face.x, face.y);
+                  let point2 = new cv.Point(
+                    face.x + face.width,
+                    face.y + face.height,
+                  );
+                  cv.rectangle(dst, point1, point2, [255, 0, 0, 255]);
+                }
+                cv.imshow(canvas, dst);
+                let delay = 1000 / FPS - (Date.now() - begin);
+                setTimeout(processVideo, delay);
+              }
+              setTimeout(processVideo, 0);
+            });
+        });
+    }
+  }, [scriptLoaded]);
   return (
     <main
       ref={block2}
