@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import cv from "@techstark/opencv-js";
 
 export default function FaceDetection({
   scriptLoaded,
@@ -10,7 +11,7 @@ export default function FaceDetection({
   const refCanvas = useRef();
   const [faceCount, setFaceCount] = useState(0);
   const loadCount = useRef(0);
-  const refTracks = useRef();
+  const refTracks = useRef(); /*
   useEffect(() => {
     if (!scriptLoaded) {
       const script = document.createElement("script");
@@ -20,9 +21,9 @@ export default function FaceDetection({
         setScriptLoaded(true);
       };
     }
-  }, []);
+  }, []);*/
   useEffect(() => {
-    if (scriptLoaded) {
+    if (true) {
       const video = refVideo.current;
       const canvas = refCanvas.current;
       navigator.mediaDevices
@@ -34,7 +35,7 @@ export default function FaceDetection({
           video.srcObject = stream;
           refTracks.current = stream.getTracks();
           if (!modelLoaded) {
-            const url = "src/haarcascade_frontalface_default.xml";
+            const url = "src/opencv/haarcascade_frontalface_default.xml";
             fetch(url)
               .then((response) => response.arrayBuffer())
               .then((buffer) => {
