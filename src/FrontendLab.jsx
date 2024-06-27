@@ -1,14 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import PostDisplay from "/src/devBlog/PostDisplay";
 import FaceDection from "/src/computer-vision/FaceDetection";
-export default function FrontendLab({
-  info,
-  fetchInfo,
-  scriptLoaded,
-  setScriptLoaded,
-  modelLoaded,
-  setModelLoaded,
-}) {
+export default function FrontendLab({ info, fetchInfo }) {
   const [color, setColor] = useState("blue");
   const block = useRef();
   const block2 = useRef();
@@ -38,12 +31,6 @@ export default function FrontendLab({
           //console.log("leave", e.pointerId);
         }}
       ></div>
-      <FaceDection
-        scriptLoaded={scriptLoaded}
-        setScriptLoaded={setScriptLoaded}
-        modelLoaded={modelLoaded}
-        setModelLoaded={setModelLoaded}
-      />
     </main>
   );
 }

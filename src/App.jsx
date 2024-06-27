@@ -40,7 +40,6 @@ import Admin from "/src/admin/Admin";
 import Progress from "/src/progress/Progress";
 
 export default function App() {
-  const [scriptLoaded, setScriptLoaded] = useState(false);
   const [modelLoaded, setModelLoaded] = useState(false);
   const [info, setInfo] = useState(null);
   const [courseTutor, setCourseTutor] = useState(null);
@@ -263,8 +262,6 @@ export default function App() {
                 <FrontendLab
                   info={info}
                   fetchInfo={fetchInfo}
-                  scriptLoaded={scriptLoaded}
-                  setScriptLoaded={setScriptLoaded}
                   modelLoaded={modelLoaded}
                   setModelLoaded={setModelLoaded}
                 />
