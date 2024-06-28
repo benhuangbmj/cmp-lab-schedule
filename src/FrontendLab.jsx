@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import PostDisplay from "/src/devBlog/PostDisplay";
-import FaceDection from "/src/computer-vision/FaceDetection";
+import TextDetection from "/src/computer-vision/TextDetection";
 export default function FrontendLab({ info, fetchInfo }) {
   const [color, setColor] = useState("blue");
   const block = useRef();
@@ -31,6 +31,7 @@ export default function FrontendLab({ info, fetchInfo }) {
           //console.log("leave", e.pointerId);
         }}
       ></div>
+      <TextDetection />
     </main>
   );
 }

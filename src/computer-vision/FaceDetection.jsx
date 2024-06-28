@@ -5,7 +5,6 @@ export default function FaceDetection({ modelLoaded, setModelLoaded }) {
   const refVideo = useRef();
   const refCanvas = useRef();
   const [faceCount, setFaceCount] = useState(0);
-  const loadCount = useRef(0);
   const refTracks = useRef();
   useEffect(() => {
     const video = refVideo.current;
