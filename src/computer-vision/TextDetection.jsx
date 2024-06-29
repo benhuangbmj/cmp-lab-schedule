@@ -5,6 +5,7 @@ export default function TextDetection() {
 	const refVideo = useRef();
 	const refCanvas = useRef();
 	const refTracks = useRef();
+	const [num, setNum] = useState();
 	const capture = useCallback(async () => {
 		const canvas = refCanvas.current;
 		const video = refVideo.current;
@@ -14,9 +15,13 @@ export default function TextDetection() {
 		const worker = await createWorker("eng");
 		await worker.setParameters({
 			tessedit_pageseg_mode: PSM.SPARSE_TEXT,
+			tessedit_char_whitelist: "0123456789",
 		});
-		const res = await worker.recognize(img);
-		console.log(res);
+		const {
+			data: { words },
+		} = await worker.recognize(img);
+		console.log(words[0]);
+		setNum(words[0].text);
 		await worker.terminate();
 	}, []);
 	useEffect(() => {
@@ -24,14 +29,13 @@ export default function TextDetection() {
 			const video = refVideo.current;
 			const canvas = refCanvas.current;
 			const stream = await navigator.mediaDevices.getUserMedia({
-				video: true,
+				audio: false,
+				video: {
+					facingMode: "environment",
+				},
 			});
 			video.srcObject = stream;
 			video.play();
-			video.onresize = () => {
-				canvas.width = video.videoWidth;
-				canvas.height = video.videoHeight;
-			};
 			refTracks.current = stream.getVideoTracks();
 		})();
 		return () => {
@@ -43,11 +47,17 @@ export default function TextDetection() {
 
 	return (
 		<>
-			<video ref={refVideo} muted controls />
-			<canvas ref={refCanvas} style={{ border: "1px solid black" }} />
 			<button type="button" onClick={capture}>
 				Capture
 			</button>
+			<p>ID number: {num} </p>
+			<video ref={refVideo} muted controls width="200px" height="200px" />
+			<canvas
+				ref={refCanvas}
+				style={{ border: "1px solid black" }}
+				width="200px"
+				height="200px"
+			/>
 		</>
 	);
 }
