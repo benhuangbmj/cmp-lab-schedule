@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import utils from "/src/utils";
+import { capitalize } from "lodash";
 
 import {
   useState,
@@ -38,6 +39,8 @@ import ProtectedRoute from "/src/utils/ProtectedRoute";
 import SignOut from "/src/auth/SignOut";
 import Admin from "/src/admin/Admin";
 import Progress from "/src/progress/Progress";
+
+const routes = ["profile", "admin", "progress", "experimental"];
 
 export default function App() {
   const [modelLoaded, setModelLoaded] = useState(false);
@@ -184,18 +187,11 @@ export default function App() {
                     <NavLink className="nav-link" to="/">
                       Schedule
                     </NavLink>
-                    <NavLink className="nav-link" to="/profile">
-                      Profile
-                    </NavLink>
-                    <NavLink className="nav-link" to="/progress">
-                      Progress
-                    </NavLink>
-                    <NavLink className="nav-link" to="/admin">
-                      Administration
-                    </NavLink>
-                    <NavLink className="nav-link" to="/experimental">
-                      Experimental
-                    </NavLink>
+                    {routes.map((route) => (
+                      <NavLink className="nav-link" to={`/${route}`}>
+                        {capitalize(route)}
+                      </NavLink>
+                    ))}
                   </Nav>
                 )}
               </Navbar.Collapse>
