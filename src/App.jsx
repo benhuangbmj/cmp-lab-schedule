@@ -55,6 +55,7 @@ export default function App() {
     [],
   );
   const refNav = useRef();
+  const refNavCollapse = useRef();
   const active = useSelector(selectActive);
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
@@ -133,6 +134,15 @@ export default function App() {
       });
       setNavHeight(refNav.current.offsetHeight);
     }
+    const navbarToggler = document.querySelector("button.navbar-toggler");
+    if (refNavCollapse.current) {
+      const children = Array.from(refNavCollapse.current.children);
+      children.forEach((child) => {
+        child.onclick = () => {
+          navbarToggler.click();
+        };
+      });
+    }
   }, [info, fetchLogin]);
 
   if (!info || !fetchLogin) {
@@ -170,7 +180,7 @@ export default function App() {
               />
               <Navbar.Collapse>
                 {active.user && (
-                  <Nav>
+                  <Nav ref={refNavCollapse}>
                     <NavLink className="nav-link" to="/">
                       Schedule
                     </NavLink>

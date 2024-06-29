@@ -20,7 +20,6 @@ export default function TextDetection() {
 		const {
 			data: { words },
 		} = await worker.recognize(img);
-		console.log(words[0]);
 		setNum(words[0].text);
 		await worker.terminate();
 	}, []);
