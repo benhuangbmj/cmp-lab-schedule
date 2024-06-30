@@ -7,7 +7,6 @@ export default class Video {
 		this._video = video;
 		this._tracks = stream.getVideoTracks();
 		this._video.srcObject = this._stream;
-		this._video.style.width = "50vw";
 		console.table([
 			{ name: "stream", subject: this._stream },
 			{ name: "video", subject: this._video },
@@ -22,29 +21,58 @@ export default class Video {
 	stop() {
 		this._tracks.forEach((track) => track.stop());
 	}
-	projectTo(canvas) {
+
+	projectTo(canvas, highlightAspectRatio = 5.4 / 8) {
 		const video = this._video;
-		let w;
-		let h;
+		let minDimension;
 		video.onresize = () => {
-			canvas.width = video.videoWidth;
-			canvas.height = video.videoHeight;
-			w = video.videoWidth;
-			h = video.videoHeight;
+			minDimension = Math.min(video.videoWidth, video.videoHeight);
+			canvas.width = Math.min(document.documentElement.clientWidth, 600);
+			const r = canvas.width / minDimension;
+			canvas.height = minDimension * r;
 		};
+		const context = canvas.getContext("2d", {
+			willReadFrequently: true,
+		});
 		function draw() {
-			const context = canvas.getContext("2d");
+			const offset = 15;
+			const span = 1 - 2 / offset;
+			const highlightedWidth = canvas.width * span;
+			const highlightedHeight = highlightedWidth * highlightAspectRatio;
+			const leftCornerX = canvas.width / offset;
+			const leftCornerY = (canvas.height - highlightedHeight) / 2;
 			context.drawImage(
 				video,
-				w / 6,
-				h / 5,
-				(4 * w) / 6,
-				(3 * h) / 5,
-				w / 6,
-				h / 5,
-				(4 * w) / 6,
-				(3 * h) / 5,
+				0,
+				0,
+				minDimension,
+				minDimension,
+				0,
+				0,
+				canvas.width,
+				canvas.height,
 			);
+			const background = context.getImageData(
+				0,
+				0,
+				canvas.width,
+				canvas.height,
+			);
+
+			const highlighted = context.getImageData(
+				leftCornerX,
+				leftCornerY,
+				highlightedWidth,
+				highlightedHeight,
+			);
+			for (let i = 0; i < background.data.length; i += 4) {
+				for (let j = 0; j < 3; j++) {
+					background.data[i + j] *= 0.5;
+				}
+			}
+			context.putImageData(background, 0, 0);
+			context.putImageData(highlighted, leftCornerX, leftCornerY);
+
 			requestAnimationFrame(draw);
 		}
 		draw();
