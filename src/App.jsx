@@ -188,7 +188,11 @@ export default function App() {
                       Schedule
                     </NavLink>
                     {routes.map((route) => (
-                      <NavLink className="nav-link" to={`/${route}`}>
+                      <NavLink
+                        key={route}
+                        className="nav-link"
+                        to={`/${route}`}
+                      >
                         {capitalize(route)}
                       </NavLink>
                     ))}
