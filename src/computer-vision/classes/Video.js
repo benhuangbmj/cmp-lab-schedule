@@ -2,6 +2,8 @@ export default class Video {
 	_stream;
 	_video;
 	_tracks;
+	_animationFrame;
+	_minDimension = 0;
 	constructor(stream, video) {
 		this._stream = stream;
 		this._video = video;
@@ -24,17 +26,13 @@ export default class Video {
 
 	projectTo(canvas, highlightAspectRatio = 5.4 / 8) {
 		const video = this._video;
-		let minDimension;
 		video.onresize = () => {
-			minDimension = Math.min(video.videoWidth, video.videoHeight);
 			canvas.width = Math.min(document.documentElement.clientWidth, 600);
-			const r = canvas.width / minDimension;
-			canvas.height = minDimension * r;
+			canvas.height = canvas.width;
+			this._minDimension = Math.min(video.videoWidth, video.videoHeight);
 		};
-		const context = canvas.getContext("2d", {
-			willReadFrequently: true,
-		});
-		function draw() {
+		const context = canvas.getContext("2d", { willReadFrequently: true });
+		const draw = () => {
 			const offset = 15;
 			const span = 1 - 2 / offset;
 			const highlightedWidth = canvas.width * span;
@@ -45,8 +43,8 @@ export default class Video {
 				video,
 				0,
 				0,
-				minDimension,
-				minDimension,
+				this._minDimension,
+				this._minDimension,
 				0,
 				0,
 				canvas.width,
@@ -72,9 +70,12 @@ export default class Video {
 			}
 			context.putImageData(background, 0, 0);
 			context.putImageData(highlighted, leftCornerX, leftCornerY);
-
-			requestAnimationFrame(draw);
-		}
-		draw();
+			this._animationFrame = requestAnimationFrame(draw);
+		};
+		this._animationFrame = requestAnimationFrame(draw);
+	}
+	stopProjecting() {
+		cancelAnimationFrame(this._animationFrame);
+		this._animationFrame = null;
 	}
 }
