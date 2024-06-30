@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
-import PostDisplay from "/src/devBlog/PostDisplay";
+//import PostDisplay from "/src/devBlog/PostDisplay";
 import TextDetection from "/src/computer-vision/TextDetection";
+import CheckInWithID from "/src/computer-vision/CheckInWithID";
 export default function FrontendLab({ info, fetchInfo }) {
   const [color, setColor] = useState("blue");
   const block = useRef();
@@ -31,7 +32,7 @@ export default function FrontendLab({ info, fetchInfo }) {
           //console.log("leave", e.pointerId);
         }}
       ></div>
-      <TextDetection />
+      <CheckInWithID />
     </main>
   );
 }
