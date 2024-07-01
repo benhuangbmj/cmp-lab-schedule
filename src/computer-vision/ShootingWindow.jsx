@@ -17,7 +17,6 @@ export default function ShootingWindow({ videoStream }) {
 	}, [videoStream]);
 	return (
 		<div>
-			<canvas ref={refCanvas} />
 			<video
 				ref={refVideo}
 				muted
@@ -27,6 +26,7 @@ export default function ShootingWindow({ videoStream }) {
 					visibility: "hidden",
 				}}
 			/>
+			<canvas ref={refCanvas} />
 		</div>
 	);
 }
