@@ -5,12 +5,14 @@ import CaptureImage from "./CaptureImage";
 
 export default function CheckInWithID() {
 	const [stream, setStream] = useState();
+	const [streamCount, setStreamCount] = useState(0);
 	const videoStream = useMemo(() => {
 		if (stream) {
 			return new VideoStream(stream);
 		}
 	}, [stream]);
 
+	//start the camera stream
 	useEffect(() => {
 		(async () => {
 			try {
@@ -25,7 +27,7 @@ export default function CheckInWithID() {
 				console.error(err);
 			}
 		})();
-	}, []);
+	}, [streamCount]);
 	return (
 		<div>
 			<ShootingWindow videoStream={videoStream} />
