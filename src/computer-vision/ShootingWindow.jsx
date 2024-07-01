@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 
 export default function ShootingWindow({ videoStream }) {
-	console.log(videoStream);
 	const refVideo = useRef();
 	const refCanvas = useRef();
 	const video = videoStream;
@@ -17,29 +16,17 @@ export default function ShootingWindow({ videoStream }) {
 		}
 	}, [videoStream]);
 	return (
-		<>
+		<div>
 			<canvas ref={refCanvas} />
-			<button type="button" onClick={() => video.stopProjecting()}>
-				Stop
-			</button>
-			<button
-				type="button"
-				onClick={() => {
-					video.projectTo(refCanvas.current);
-				}}
-			>
-				{" "}
-				Start{" "}
-			</button>
 			<video
 				ref={refVideo}
 				muted
 				autoPlay
 				style={{
-					position: "absoluate",
+					position: "absolute",
 					visibility: "hidden",
 				}}
 			/>
-		</>
+		</div>
 	);
 }
