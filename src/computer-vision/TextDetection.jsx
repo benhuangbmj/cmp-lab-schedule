@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { createWorker, PSM } from "tesseract.js";
 
-export default function TextDetection({ imgDataURL }) {
-	const [num, setNum] = useState();
+export default function TextDetection({ imgDataURL, num, setNum }) {
 	useEffect(() => {
 		if (imgDataURL) {
 			(async () => {
@@ -14,14 +13,12 @@ export default function TextDetection({ imgDataURL }) {
 				const {
 					data: { words },
 				} = await worker.recognize(imgDataURL);
+				console.log(words); //remove
 				if (words.length === 0) {
 					setNum("Capture failed. Please try again.");
 				}
 				for (let i = 0; i < words.length; i++) {
-					if (
-						words[i].confidence > 90 &&
-						words[i].text.length === 8
-					) {
+					if (words[i].text.length === 8) {
 						setNum(words[i].text);
 						break;
 					}
