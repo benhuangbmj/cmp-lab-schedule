@@ -2,6 +2,8 @@ export default class VideoStream {
 	_stream;
 	_video;
 	_tracks;
+	_canvas;
+	_context;
 	_animationFrame;
 	_minDimension = 0;
 	constructor(stream, video) {
@@ -28,17 +30,23 @@ export default class VideoStream {
 		this._tracks.forEach((track) => track.stop());
 	}
 
-	projectTo(canvas, highlightAspectRatio = 5.4 / 8) {
+	projectTo(canvas, highlightAspectRatio = 5.3 / 8) {
 		if (!this._video) {
 			return;
 		}
+		this._canvas = canvas;
 		const video = this._video;
 		video.onresize = () => {
 			canvas.width = Math.min(document.documentElement.clientWidth, 600);
 			canvas.height = canvas.width;
 			this._minDimension = Math.min(video.videoWidth, video.videoHeight);
 		};
-		const context = canvas.getContext("2d", { willReadFrequently: true });
+		if (!this._context) {
+			this._context = canvas.getContext("2d", {
+				willReadFrequently: true,
+			});
+		}
+		const context = this._context;
 		const draw = () => {
 			const offset = 15;
 			const span = 1 - 2 / offset;
@@ -46,6 +54,10 @@ export default class VideoStream {
 			const highlightedHeight = highlightedWidth * highlightAspectRatio;
 			const leftCornerX = canvas.width / offset;
 			const leftCornerY = (canvas.height - highlightedHeight) / 2;
+			this._highlightedWidth = highlightedWidth;
+			this._highlightedHeight = highlightedHeight;
+			this._leftCornerX = leftCornerX;
+			this._leftCornerY = leftCornerY;
 			context.drawImage(
 				video,
 				0,
@@ -87,6 +99,30 @@ export default class VideoStream {
 		}
 		cancelAnimationFrame(this._animationFrame);
 		this._animationFrame = null;
+	}
+	restartProjecting() {
+		this._video.play();
+		this.projectTo(this._canvas);
+	}
+	captureImage() {
+		if (!this._context) {
+			return;
+		}
+		const context = this._context;
+		const canvas = document.createElement("canvas");
+		const capturedData = context.getImageData(
+			this._leftCornerX,
+			this._leftCornerY,
+			this._highlightedWidth,
+			this._highlightedHeight,
+		);
+		canvas.width = capturedData.width;
+		canvas.height = capturedData.height;
+		const ctx = canvas.getContext("2d");
+		ctx.putImageData(capturedData, 0, 0);
+		this.stopProjecting();
+		this._video.pause();
+		return canvas.toDataURL("image/png");
 	}
 	logProperties() {
 		console.table([
