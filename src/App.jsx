@@ -35,7 +35,7 @@ import Schedule from "./Schedule";
 import Profile from "./profile/Profile";
 import FrontendLab from "./FrontendLab";
 import LogIn from "/src/auth/LogIn";
-import ProtectedRoute from "/src/utils/ProtectedRoute";
+import ProtectedRoute from "/src/util-components/ProtectedRoute";
 import SignOut from "/src/auth/SignOut";
 import Admin from "/src/admin/Admin";
 import Progress from "/src/progress/Progress";
