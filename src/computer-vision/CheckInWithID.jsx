@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import VideoStream from "./classes/VideoStream";
 import ShootingWindow from "./ShootingWindow";
+import CaptureImage from "./CaptureImage";
 
 export default function CheckInWithID() {
 	const [stream, setStream] = useState();
@@ -26,8 +27,9 @@ export default function CheckInWithID() {
 		})();
 	}, []);
 	return (
-		<>
+		<div>
 			<ShootingWindow videoStream={videoStream} />
-		</>
+			<CaptureImage videoStream={videoStream} />
+		</div>
 	);
 }
