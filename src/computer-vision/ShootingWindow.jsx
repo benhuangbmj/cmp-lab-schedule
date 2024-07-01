@@ -1,50 +1,45 @@
 import { useEffect, useState, useRef, useMemo } from "react";
-import Video from "./classes/Video";
 
-export default function ShootingWindow() {
-	const [stream, setStream] = useState();
+export default function ShootingWindow({ videoStream }) {
+	console.log(videoStream);
 	const refVideo = useRef();
 	const refCanvas = useRef();
-	const video = useMemo(() => {
-		if (stream) {
-			return new Video(stream, refVideo.current);
-		}
-	}, [stream]);
+	const video = videoStream;
+
 	useEffect(() => {
-		(async () => {
-			try {
-				const stream = await navigator.mediaDevices.getUserMedia({
-					audio: false,
-					video: {
-						facingMode: "environment",
-					},
-				});
-				setStream(stream);
-			} catch (err) {
-				console.error(err);
-			}
-		})();
-	}, []);
-	useEffect(() => {
-		if (video) {
+		if (videoStream) {
+			video.setVideo = refVideo.current;
 			video.projectTo(refCanvas.current);
 			return () => {
 				video.stop();
+				video.stopProjecting();
 			};
 		}
-	}, [video]);
+	}, [videoStream]);
 	return (
 		<>
+			<canvas ref={refCanvas} />
+			<button type="button" onClick={() => video.stopProjecting()}>
+				Stop
+			</button>
+			<button
+				type="button"
+				onClick={() => {
+					video.projectTo(refCanvas.current);
+				}}
+			>
+				{" "}
+				Start{" "}
+			</button>
 			<video
 				ref={refVideo}
 				muted
 				autoPlay
 				style={{
-					position: "absolute",
+					position: "absoluate",
 					visibility: "hidden",
 				}}
 			/>
-			<canvas ref={refCanvas} />
 		</>
 	);
 }
