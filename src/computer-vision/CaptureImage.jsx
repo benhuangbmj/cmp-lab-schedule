@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState, cloneElement, Children } from "react";
 import Button from "react-bootstrap/Button";
-import TextDetection from "./TextDetection";
 
-export default function CaptureImage({ videoStream }) {
+export default function CaptureImage({ videoStream, children }) {
 	const [captured, setCaptured] = useState(false);
 	const [imgDataURL, setImgDataURL] = useState();
 	function handleCapture() {
@@ -17,12 +16,18 @@ export default function CaptureImage({ videoStream }) {
 			setCaptured(false);
 		}
 	}
+
 	return (
 		<div>
 			<Button type="button" onClick={handleCapture}>
 				{captured ? "Retake" : "Capture ID"}
 			</Button>
-			<TextDetection imgDataURL={imgDataURL} />
+			{Children.map(children, (child, i) => {
+				return cloneElement(child, {
+					imgDataURL: imgDataURL,
+					key: i,
+				});
+			})}
 		</div>
 	);
 }
