@@ -1,62 +1,42 @@
-import { useEffect, useState, useRef, useMemo, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { createWorker, PSM } from "tesseract.js";
 
-export default function TextDetection() {
-	const refVideo = useRef();
-	const refCanvas = useRef();
-	const refTracks = useRef();
+export default function TextDetection({ imgDataURL }) {
 	const [num, setNum] = useState();
-	const capture = useCallback(async () => {
-		const canvas = refCanvas.current;
-		const video = refVideo.current;
-		const ctx = canvas.getContext("2d");
-		ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-		const img = canvas.toDataURL("image/png");
-		const worker = await createWorker("eng");
-		await worker.setParameters({
-			tessedit_pageseg_mode: PSM.SPARSE_TEXT,
-			tessedit_char_whitelist: "0123456789",
-		});
-		const {
-			data: { words },
-		} = await worker.recognize(img);
-		setNum(words[0].text);
-		await worker.terminate();
-	}, []);
 	useEffect(() => {
-		(async () => {
-			const video = refVideo.current;
-			const canvas = refCanvas.current;
-			const stream = await navigator.mediaDevices.getUserMedia({
-				audio: false,
-				video: {
-					facingMode: "environment",
-				},
-			});
-			video.srcObject = stream;
-			video.play();
-			refTracks.current = stream.getVideoTracks();
-		})();
-		return () => {
-			refTracks.current.forEach((track) => {
-				track.stop();
-			});
-		};
-	}, []);
+		if (imgDataURL) {
+			(async () => {
+				const worker = await createWorker("eng");
+				await worker.setParameters({
+					tessedit_pageseg_mode: PSM.SPARSE_TEXT,
+					tessedit_char_whitelist: "0123456789",
+				});
+				const {
+					data: { words },
+				} = await worker.recognize(imgDataURL);
+				if (words.length === 0) {
+					setNum("Capture failed. Please try again.");
+				}
+				for (let i = 0; i < words.length; i++) {
+					if (
+						words[i].confidence > 90 &&
+						words[i].text.length === 8
+					) {
+						setNum(words[i].text);
+						break;
+					}
+					if (i === words.length - 1) {
+						setNum("Capture failed. Please try again.");
+					}
+				}
+				await worker.terminate();
+			})();
+		}
+	}, [imgDataURL]);
 
 	return (
-		<>
-			<button type="button" onClick={capture}>
-				Capture
-			</button>
+		<div>
 			<p>ID number: {num} </p>
-			<video ref={refVideo} muted controls width="200px" height="200px" />
-			<canvas
-				ref={refCanvas}
-				style={{ border: "1px solid black" }}
-				width="200px"
-				height="200px"
-			/>
-		</>
+		</div>
 	);
 }
