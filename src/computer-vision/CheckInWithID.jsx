@@ -15,27 +15,15 @@ export default function CheckInWithID() {
 		}
 	}, [stream]);
 
-	//start the camera stream
+	//start the camera
 	useEffect(() => {
-		(async () => {
-			try {
-				const stream = await navigator.mediaDevices.getUserMedia({
-					audio: false,
-					video: {
-						facingMode: "environment",
-					},
-				});
-				setStream(stream);
-			} catch (err) {
-				console.error(err);
-			}
-		})();
+		VideoStream.createVideoStream(setStream);
 	}, [streamCount]);
 	return (
 		<div>
 			<ShootingWindow videoStream={videoStream} />
 			<CaptureImage videoStream={videoStream}>
-				<TextDetection setIdNumber={setIdNumber} />
+				<TextDetection num={idNumber} setNum={setIdNumber} />
 			</CaptureImage>
 		</div>
 	);

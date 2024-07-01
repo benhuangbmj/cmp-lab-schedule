@@ -14,6 +14,19 @@ export default class VideoStream {
 			this._video.srcObject = this._stream;
 		}
 	}
+	static async createVideoStream(callback) {
+		try {
+			const stream = await navigator.mediaDevices.getUserMedia({
+				audio: false,
+				video: {
+					facingMode: "environment",
+				},
+			});
+			callback(stream);
+		} catch (err) {
+			console.error(err);
+		}
+	}
 	set setVideo(video) {
 		this._video = video;
 		this._video.srcObject = this._stream;
