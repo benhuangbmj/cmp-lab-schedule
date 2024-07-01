@@ -1,4 +1,4 @@
-export default class Video {
+export default class VideoStream {
 	_stream;
 	_video;
 	_tracks;
@@ -6,16 +6,20 @@ export default class Video {
 	_minDimension = 0;
 	constructor(stream, video) {
 		this._stream = stream;
-		this._video = video;
 		this._tracks = stream.getVideoTracks();
+		if (video) {
+			this._video = video;
+			this._video.srcObject = this._stream;
+		}
+	}
+	set setVideo(video) {
+		this._video = video;
 		this._video.srcObject = this._stream;
-		console.table([
-			{ name: "stream", subject: this._stream },
-			{ name: "video", subject: this._video },
-			{ name: "tracks", subject: this._tracks },
-		]);
 	}
 	start() {
+		if (!this._video) {
+			return;
+		}
 		this._video.srcObject = this._stream;
 		this._video.play();
 	}
@@ -25,6 +29,9 @@ export default class Video {
 	}
 
 	projectTo(canvas, highlightAspectRatio = 5.4 / 8) {
+		if (!this._video) {
+			return;
+		}
 		const video = this._video;
 		video.onresize = () => {
 			canvas.width = Math.min(document.documentElement.clientWidth, 600);
@@ -75,7 +82,19 @@ export default class Video {
 		this._animationFrame = requestAnimationFrame(draw);
 	}
 	stopProjecting() {
+		if (!this._animationFrame) {
+			return;
+		}
 		cancelAnimationFrame(this._animationFrame);
 		this._animationFrame = null;
+	}
+	logProperties() {
+		console.table([
+			{ name: "stream", subject: this._stream },
+			{ name: "video", subject: this._video },
+			{ name: "tracks", subject: this._tracks },
+			{ name: "animationFrame", subject: this._animationFrame },
+			{ name: "minDimension", subject: this._minDimension },
+		]);
 	}
 }
