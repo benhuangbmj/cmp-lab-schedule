@@ -24,6 +24,8 @@ export default function ShootingWindow({ videoStream }) {
 				style={{
 					position: "absolute",
 					visibility: "hidden",
+					wdith: 0,
+					height: 0,
 				}}
 			/>
 			<canvas ref={refCanvas} />
