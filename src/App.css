@@ -434,6 +434,11 @@ label {
   max-width: 10vw;
 }
 
+.modal-container {
+  width: 500px;
+  max-width: 95vw;
+}
+
 @media screen and (max-width: 820px) {
   main {
     font-size: 100%;
