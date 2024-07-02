@@ -26,6 +26,7 @@ function fetchData(id) {
 		}, 0);
 	});
 }
+
 export default function FetchStudent({ id, setStudent }) {
 	const [confirmed, setConfirmed] = useState(false);
 	function handleConfirm() {

@@ -54,7 +54,7 @@ export default function CheckInWithID() {
 	}, [student]);
 
 	return (
-		<div>
+		<main>
 			<div className="centered">Please scan your student ID</div>
 
 			<ShootingWindow videoStream={videoStream} />
@@ -71,6 +71,6 @@ export default function CheckInWithID() {
 				readOnly={readOnly}
 			/>
 			<FetchStudent id={id} setStudent={setStudent} />
-		</div>
+		</main>
 	);
 }

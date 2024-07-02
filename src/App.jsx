@@ -39,6 +39,7 @@ import ProtectedRoute from "/src/util-components/ProtectedRoute";
 import SignOut from "/src/auth/SignOut";
 import Admin from "/src/admin/Admin";
 import Progress from "/src/progress/Progress";
+import CheckInWithID from "/src/computer-vision/CheckInWithID";
 
 const routes = ["profile", "admin", "progress", "experimental"];
 
@@ -279,6 +280,7 @@ export default function App() {
             }
           />
           <Route path="/login" element={<LogIn />} />
+          <Route path="/checkinwithid" element={<CheckInWithID />} />
         </Routes>
       </div>
     );
