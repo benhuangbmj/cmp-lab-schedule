@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createWorker, PSM } from "tesseract.js";
 
-export default function TextDetection({ imgDataURL, num, setNum }) {
+export default function TextDetection({ imgDataURL, id, setId }) {
 	useEffect(() => {
 		if (imgDataURL) {
 			(async () => {
@@ -13,17 +13,16 @@ export default function TextDetection({ imgDataURL, num, setNum }) {
 				const {
 					data: { words },
 				} = await worker.recognize(imgDataURL);
-				console.log(words); //remove
 				if (words.length === 0) {
-					setNum("Capture failed. Please try again.");
+					setId("Capture failed. Please try again.");
 				}
 				for (let i = 0; i < words.length; i++) {
 					if (words[i].text.length === 8) {
-						setNum(words[i].text);
+						setId(words[i].text);
 						break;
 					}
 					if (i === words.length - 1) {
-						setNum("Capture failed. Please try again.");
+						setId("Capture failed. Please try again.");
 					}
 				}
 				await worker.terminate();
@@ -33,7 +32,7 @@ export default function TextDetection({ imgDataURL, num, setNum }) {
 
 	return (
 		<div>
-			<p>ID number: {num} </p>
+			<p>ID number: {id} </p>
 		</div>
 	);
 }
