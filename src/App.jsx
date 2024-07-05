@@ -210,12 +210,8 @@ export default function App() {
                 title="Student check in"
                 id="student-check-in"
               >
-                <Dropdown.Item
-                  href="/checkinwithid"
-                  style={{ background: "red", padding: "0" }}
-                >
-                  with ID
-                </Dropdown.Item>
+                <Dropdown.Item href="/checkinwithid">with ID</Dropdown.Item>
+                <Dropdown.Item disabled>with form</Dropdown.Item>
               </DropdownButton>
 
               {!active.user ? (
