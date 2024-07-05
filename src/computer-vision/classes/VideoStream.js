@@ -50,7 +50,7 @@ export default class VideoStream {
 		this._canvas = canvas;
 		const video = this._video;
 		video.onresize = () => {
-			canvas.width = Math.min(document.documentElement.clientWidth, 600);
+			canvas.width = Math.min(document.documentElement.clientWidth, 400);
 			canvas.height = canvas.width;
 			this._minDimension = Math.min(video.videoWidth, video.videoHeight);
 		};

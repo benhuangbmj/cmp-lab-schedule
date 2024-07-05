@@ -12,8 +12,42 @@ export const mediaQuery = window.matchMedia("(max-width: 820px)");
 
 export const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
+export const studentFieldReadOnly = {
+  id: true,
+};
+export const studentFieldTypes = {
+  id: "text",
+  name: "text",
+  major: "text",
+  email: "email",
+  subject: "select",
+  year: "select",
+};
+export const studentFieldOptions = {
+  subject: ["Calculus III", "Mathematics", "Physics"],
+  year: ["Freshman", "Sophomore", "Junior", "Senior"],
+};
+
+export function variants() {
+  return [
+    "primary",
+    "secondary",
+    "success",
+    "danger",
+    "warning",
+    "info",
+    "dark",
+    "light",
+    "link",
+  ];
+}
+
 export default {
   themeColor,
   mediaQuery,
   apiBaseUrl,
+  studentFieldReadOnly,
+  studentFieldTypes,
+  studentFieldOptions,
+  variants,
 };

@@ -1,7 +1,17 @@
-import { useState, cloneElement, Children } from "react";
+import {
+	useState,
+	cloneElement,
+	Children,
+	forwardRef,
+	useImperativeHandle,
+	useEffect,
+} from "react";
 import Button from "react-bootstrap/Button";
 
-export default function CaptureImage({ videoStream, children }) {
+const CaptureImage = forwardRef(function CaptureImage(
+	{ videoStream, children, reset, streamStopped },
+	ref,
+) {
 	const [captured, setCaptured] = useState(false);
 	const [imgDataURL, setImgDataURL] = useState();
 	function handleCapture() {
@@ -12,14 +22,31 @@ export default function CaptureImage({ videoStream, children }) {
 				setCaptured(true);
 			}
 		} else {
-			videoStream.restartProjecting();
-			setCaptured(false);
+			if (reset) {
+				reset();
+			} else setCaptured(false);
 		}
 	}
+	useImperativeHandle(
+		ref,
+		() => ({
+			setCaptured,
+		}),
+		[],
+	);
+	useEffect(() => {
+		if (!captured && videoStream) {
+			videoStream.restartProjecting();
+		}
+	}, [captured]);
 
 	return (
 		<div>
-			<Button type="button" onClick={handleCapture}>
+			<Button
+				disabled={streamStopped}
+				type="button"
+				onClick={handleCapture}
+			>
 				{captured ? "Retake" : "Capture ID"}
 			</Button>
 			{Children.map(children, (child, i) => {
@@ -30,4 +57,6 @@ export default function CaptureImage({ videoStream, children }) {
 			})}
 		</div>
 	);
-}
+});
+
+export default CaptureImage;

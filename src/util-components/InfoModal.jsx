@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import FormField from "./FormField";
+
 export default function InfoModal({
 	formUtil,
 	show,
@@ -11,13 +12,17 @@ export default function InfoModal({
 	formOptions = {},
 	fieldOptions = {},
 	readOnly = {},
+	setInfoSubmitted,
 }) {
+	const {
+		formState: { isDirty },
+	} = formUtil;
 	function handleClose() {
 		setShow(false);
 	}
 	function onSubmit(data) {
 		setShow(false);
-		console.log(data);
+		setInfoSubmitted(data);
 	}
 	return (
 		<Modal
@@ -48,7 +53,7 @@ export default function InfoModal({
 			</Modal.Body>
 			<Modal.Footer>
 				<Button type="button" onClick={formUtil.handleSubmit(onSubmit)}>
-					Confirm
+					{isDirty ? "Update" : "Confirm"}
 				</Button>
 				<Button variant="secondary" onClick={handleClose}>
 					Close

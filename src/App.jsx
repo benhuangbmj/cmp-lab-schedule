@@ -30,6 +30,8 @@ import {
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
 
 import Schedule from "./Schedule";
 import Profile from "./profile/Profile";
@@ -39,6 +41,7 @@ import ProtectedRoute from "/src/util-components/ProtectedRoute";
 import SignOut from "/src/auth/SignOut";
 import Admin from "/src/admin/Admin";
 import Progress from "/src/progress/Progress";
+import CheckInWithID from "/src/checkInWithID/CheckInWithID";
 
 const routes = ["profile", "admin", "progress", "experimental"];
 
@@ -201,13 +204,31 @@ export default function App() {
               </Navbar.Collapse>
             </div>
             <Nav>
+              <DropdownButton
+                variant="outline-light"
+                size="sm"
+                title="Student check in"
+                id="student-check-in"
+              >
+                <Dropdown.Item
+                  href="/checkinwithid"
+                  style={{ background: "red", padding: "0" }}
+                >
+                  with ID
+                </Dropdown.Item>
+              </DropdownButton>
+
               {!active.user ? (
                 <NavLink
                   className="nav-link"
                   to="/login"
                   style={{ padding: "0" }}
                 >
-                  <Button variant="outline-light" size="sm">
+                  <Button
+                    style={{ float: "right" }}
+                    variant="outline-light"
+                    size="sm"
+                  >
                     Log in
                   </Button>
                 </NavLink>
@@ -279,6 +300,7 @@ export default function App() {
             }
           />
           <Route path="/login" element={<LogIn />} />
+          <Route path="/checkinwithid" element={<CheckInWithID />} />
         </Routes>
       </div>
     );
