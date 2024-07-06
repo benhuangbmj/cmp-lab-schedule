@@ -4,6 +4,8 @@ import { updateActive } from "/src/reducers/activeReducer";
 import { apiBaseUrl } from "/src/utils";
 
 import Button from "react-bootstrap/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 
 export function handleSignOut(dispatch) {
   fetch(apiBaseUrl + "/logout", {
@@ -25,7 +27,8 @@ export default function SignOut() {
       }}
       size="sm"
     >
-      Sign out
+      <span className="button-text">Sign out</span>{" "}
+      <FontAwesomeIcon icon={faArrowRightFromBracket} />
     </Button>
   );
 }
