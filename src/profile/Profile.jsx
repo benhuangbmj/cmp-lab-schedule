@@ -14,10 +14,12 @@ import SelectUser from "/src/util-components/SelectUser";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import { faRotateLeft } from "@fortawesome/free-solid-svg-icons";
-import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrashCan,
+  faUserPlus,
+  faPenToSquare,
+  faRotateLeft,
+} from "@fortawesome/free-solid-svg-icons";
 
 import CardDisplay from "/src/IDcard/CardDisplay";
 import Scheduling from "/src/scheduling/Scheduling";
