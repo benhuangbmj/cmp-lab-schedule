@@ -16,6 +16,7 @@ import StatusDisplay from "/src/checkInWithID/components/StatusDisplay";
 import Button from "react-bootstrap/Button";
 
 export default function CheckInWithID() {
+	const [loaded, setLoaded] = useState(false);
 	const [stream, setStream] = useState();
 	const [streamCount, setStreamCount] = useState(0);
 	const [id, setId] = useState();
@@ -31,6 +32,7 @@ export default function CheckInWithID() {
 	//create the video stream from the webcam
 	const videoStream = useMemo(() => {
 		if (stream) {
+			setLoaded(true);
 			return new VideoStream(stream);
 		}
 	}, [stream]);
@@ -56,6 +58,7 @@ export default function CheckInWithID() {
 	}
 	//Re-initialize the video stream
 	useEffect(() => {
+		setLoaded(false);
 		VideoStream.createVideoStream(setStream);
 	}, [streamCount]);
 	//controller: student info display
@@ -101,7 +104,7 @@ export default function CheckInWithID() {
 			<div className="centered" style={{ margin: "0.25em auto" }}>
 				Please scan your student ID
 			</div>
-			<ShootingWindow videoStream={videoStream} />
+			<ShootingWindow videoStream={videoStream} loaded={loaded} />
 			<CaptureImage
 				ref={refCaptureImage}
 				videoStream={videoStream}

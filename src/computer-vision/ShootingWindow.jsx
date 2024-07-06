@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useMemo } from "react";
+import Spinner from "react-bootstrap/Spinner";
 
-export default function ShootingWindow({ videoStream }) {
+export default function ShootingWindow({ loaded, videoStream }) {
 	const refVideo = useRef();
 	const refCanvas = useRef();
 	const video = videoStream;
@@ -16,7 +17,13 @@ export default function ShootingWindow({ videoStream }) {
 		}
 	}, [videoStream]);
 	return (
-		<div>
+		<div
+			style={{
+				height: "100vw",
+				maxHeight: "400px",
+				marginBottom: ".4em",
+			}}
+		>
 			<video
 				ref={refVideo}
 				muted
@@ -28,7 +35,21 @@ export default function ShootingWindow({ videoStream }) {
 					height: 0,
 				}}
 			/>
-			<canvas ref={refCanvas} />
+			<div>
+				{!loaded && (
+					<div
+						style={{
+							position: "absolute",
+							display: "block",
+							width: "100%",
+							paddingTop: "min(190px, 45vw)",
+						}}
+					>
+						<Spinner variant={videoStream ? "light" : "dark"} />
+					</div>
+				)}
+				<canvas ref={refCanvas} />
+			</div>
 		</div>
 	);
 }
