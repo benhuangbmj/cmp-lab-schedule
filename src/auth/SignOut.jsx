@@ -20,7 +20,6 @@ export default function SignOut() {
   const dispatch = useDispatch();
   return (
     <Button
-      variant="outline-light"
       onClick={() => {
         handleSignOut(dispatch);
       }}

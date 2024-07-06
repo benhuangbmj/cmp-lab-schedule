@@ -32,6 +32,8 @@ import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faIdCard } from "@fortawesome/free-solid-svg-icons";
 
 import Schedule from "./Schedule";
 import Profile from "./profile/Profile";
@@ -203,39 +205,54 @@ export default function App() {
                 )}
               </Navbar.Collapse>
             </div>
-            <Nav>
-              <DropdownButton
-                variant="outline-light"
-                size="sm"
-                title="Student check in"
-                id="student-check-in"
-              >
-                <Dropdown.Item href="/checkinwithid">with ID</Dropdown.Item>
-                <Dropdown.Item disabled>with form</Dropdown.Item>
-              </DropdownButton>
-
+            <Nav className=" flexbox-row" style={{ margin: "0" }}>
               {!active.user ? (
                 <NavLink
                   className="nav-link"
                   to="/login"
                   style={{ padding: "0" }}
                 >
-                  <Button
-                    style={{ float: "right" }}
-                    variant="outline-light"
-                    size="sm"
-                  >
-                    Log in
+                  <Button size="sm" style={{ float: "right" }}>
+                    <span className="button-text">Log in</span>{" "}
+                    <span>
+                      <FontAwesomeIcon icon={faUser} />
+                    </span>
                   </Button>
                 </NavLink>
               ) : (
                 <>
-                  <span className="nav-link">
+                  <div
+                    className="nav-link"
+                    style={{
+                      padding: "0",
+                      marginRight: ".25em",
+                    }}
+                  >
                     Hello, {info[active.user].name}
-                  </span>
+                  </div>
                   <SignOut />
                 </>
               )}
+              <DropdownButton
+                className="button-text"
+                size="sm"
+                title="Student check in"
+                id="student-check-in"
+              >
+                <Dropdown.Item href="/checkinwithid">
+                  with ID <FontAwesomeIcon icon={faIdCard} />
+                </Dropdown.Item>
+                <Dropdown.Item disabled>with form</Dropdown.Item>
+              </DropdownButton>
+              <NavLink
+                className="nav-link"
+                to="/checkinwithid"
+                style={{ padding: "0" }}
+              >
+                <Button className="mobile-only" size="sm">
+                  <FontAwesomeIcon icon={faIdCard} />
+                </Button>
+              </NavLink>
             </Nav>
           </div>
         </Navbar>
