@@ -21,7 +21,7 @@ export default function ShootingWindow({ loaded, videoStream }) {
 			style={{
 				height: "100vw",
 				maxHeight: "400px",
-				marginBottom: ".4em",
+				marginBottom: ".25em",
 			}}
 		>
 			<video
