@@ -177,10 +177,15 @@ export default function App() {
           <div className="flexbox-row bk-institutional-navy">
             <div
               className="flexbox-row"
-              style={{ justifyContent: "flex-start", margin: 0 }}
+              style={{
+                justifyContent: "flex-start",
+                margin: 0,
+              }}
             >
               <NavLink className="nav-link" to="/">
-                <Navbar.Brand>CMP-Lab@Messiah</Navbar.Brand>
+                <Navbar.Brand>
+                  <span className="shrink-on-mobile">CMP-Lab@Messiah</span>
+                </Navbar.Brand>
               </NavLink>
               <Navbar.Toggle
                 aria-controls="basic-navbar-nav"
@@ -205,7 +210,7 @@ export default function App() {
                 )}
               </Navbar.Collapse>
             </div>
-            <Nav className=" flexbox-row" style={{ margin: "0" }}>
+            <Nav className="flexbox-row" style={{ margin: "0" }}>
               {!active.user ? (
                 <NavLink
                   className="nav-link"
@@ -228,7 +233,9 @@ export default function App() {
                       marginRight: ".25em",
                     }}
                   >
-                    Hello, {info[active.user].name}
+                    <span className="button-text">
+                      Hello, {info[active.user].name}
+                    </span>
                   </div>
                   <SignOut />
                 </>
