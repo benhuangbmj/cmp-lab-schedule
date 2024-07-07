@@ -447,6 +447,10 @@ label {
   display: none;
 }
 
+.navbar-icons {
+  height: 52px;
+}
+
 @media screen and (max-width: 820px) {
   main {
     font-size: 100%;
@@ -514,5 +518,8 @@ label {
   }
   .mobile-only {
     display: initial;
+  }
+  .navbar-icons {
+    height: 49.5px;
   }
 }

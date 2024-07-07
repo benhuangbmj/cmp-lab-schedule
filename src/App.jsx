@@ -169,12 +169,17 @@ export default function App() {
       <div>
         <Navbar
           ref={refNav}
-          style={{ display: navbar ? "initial" : "none" }}
+          style={{
+            display: navbar ? "initial" : "none",
+          }}
           data-bs-theme="dark"
           expand="xl"
           sticky="top"
         >
-          <div className="flexbox-row bk-institutional-navy">
+          <div
+            className="flexbox-row bk-institutional-navy"
+            style={{ alignItems: "start" }}
+          >
             <div
               className="flexbox-row"
               style={{
@@ -191,7 +196,7 @@ export default function App() {
                 aria-controls="basic-navbar-nav"
                 style={!active.user ? { display: "none" } : {}}
               />
-              <Navbar.Collapse>
+              <Navbar.Collapse style={{ width: "0px" }}>
                 {active.user && (
                   <Nav ref={refNavCollapse}>
                     <NavLink className="nav-link" to="/">
@@ -210,7 +215,12 @@ export default function App() {
                 )}
               </Navbar.Collapse>
             </div>
-            <Nav className="flexbox-row" style={{ margin: "0" }}>
+            <Nav
+              className="flexbox-row navbar-icons"
+              style={{
+                margin: "0",
+              }}
+            >
               {!active.user ? (
                 <NavLink
                   className="nav-link"
