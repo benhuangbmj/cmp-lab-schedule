@@ -171,7 +171,7 @@ export default function App() {
           ref={refNav}
           style={{ display: navbar ? "initial" : "none" }}
           data-bs-theme="dark"
-          expand="md"
+          expand="xl"
           sticky="top"
         >
           <div className="flexbox-row bk-institutional-navy">
