@@ -1,10 +1,8 @@
 import {
 	useLayoutEffect,
-	useEffect,
 	useState,
 	forwardRef,
 	useImperativeHandle,
-	cloneElement,
 } from "react";
 import { createWorker, PSM } from "tesseract.js";
 import ProgressBar from "react-bootstrap/ProgressBar";
@@ -103,7 +101,7 @@ const TextDetection = forwardRef(function TextDetection(
 			}
 		};
 	}, []);
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (progress == 1) {
 			setTimeout(() => {
 				setIncomplete(false);
@@ -132,13 +130,14 @@ const TextDetection = forwardRef(function TextDetection(
 						maxWidth: "90vw",
 					}}
 				>
-					{myProgress.map((e) => {
-						return cloneElement(<ProgressBar />, {
-							variant: variant,
-							animated: incomplete,
-							now: progress * 100,
-						});
-					})}
+					{myProgress.map((e, i) => (
+						<ProgressBar
+							variant={variant}
+							animated={incomplete}
+							now={progress * 100}
+							key={i}
+						/>
+					))}
 				</div>
 			</div>
 			<div style={{ width: "fit-content" }} className="flexbox-row">
