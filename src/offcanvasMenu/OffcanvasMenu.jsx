@@ -11,10 +11,6 @@ import { selectActive } from "/src/reducers/activeReducer.js";
 function OffcanvasMenu({ root, routes }) {
   const [show, setShow] = useState(false);
   const active = useSelector(selectActive);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
   return (
     <>
       <Navbar.Toggle style={!active.user ? { display: "none" } : {}} />
