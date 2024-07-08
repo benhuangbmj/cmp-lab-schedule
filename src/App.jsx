@@ -44,6 +44,7 @@ import SignOut from "/src/auth/SignOut";
 import Admin from "/src/admin/Admin";
 import Progress from "/src/progress/Progress";
 import CheckInWithID from "/src/checkInWithID/CheckInWithID";
+import OffcanvasWrapper from "/src/util-components/OffcanvasWrapper";
 
 const routes = ["profile", "admin", "progress", "experimental"];
 
@@ -221,6 +222,26 @@ export default function App() {
                 margin: "0",
               }}
             >
+              <DropdownButton
+                className="button-text"
+                size="sm"
+                title="Student check in"
+                id="student-check-in"
+              >
+                <Dropdown.Item href="/checkinwithid">
+                  with ID (Demo) <FontAwesomeIcon icon={faIdCard} />
+                </Dropdown.Item>
+                <Dropdown.Item disabled>with form</Dropdown.Item>
+              </DropdownButton>
+              <NavLink
+                className="nav-link"
+                to="/checkinwithid"
+                style={{ padding: "0" }}
+              >
+                <Button className="mobile-only" size="sm">
+                  <FontAwesomeIcon icon={faIdCard} />
+                </Button>
+              </NavLink>
               {!active.user ? (
                 <NavLink
                   className="nav-link"
@@ -243,33 +264,31 @@ export default function App() {
                       marginRight: ".25em",
                     }}
                   >
-                    <span className="button-text">
-                      Hello, {info[active.user].name}
-                    </span>
+                    <OffcanvasWrapper
+                      placement="end"
+                      trigger={
+                        <>
+                          <div className="navbar-icons flexbox-row">
+                            <img
+                              src={
+                                userData?.items[active?.user]?.profilePic?.url
+                                  ? `https:${userData?.items[active?.user]?.profilePic?.url}`
+                                  : "https://www.messiah.edu/images/4_see_your_possibilities_anew.jpg"
+                              }
+                              className="user-icon"
+                            />
+                            <div className="button-text">
+                              &nbsp; Hello, {info[active.user].name}
+                            </div>
+                          </div>
+                        </>
+                      }
+                    >
+                      <SignOut />
+                    </OffcanvasWrapper>
                   </div>
-                  <SignOut />
                 </>
               )}
-              <DropdownButton
-                className="button-text"
-                size="sm"
-                title="Student check in"
-                id="student-check-in"
-              >
-                <Dropdown.Item href="/checkinwithid">
-                  with ID <FontAwesomeIcon icon={faIdCard} />
-                </Dropdown.Item>
-                <Dropdown.Item disabled>with form</Dropdown.Item>
-              </DropdownButton>
-              <NavLink
-                className="nav-link"
-                to="/checkinwithid"
-                style={{ padding: "0" }}
-              >
-                <Button className="mobile-only" size="sm">
-                  <FontAwesomeIcon icon={faIdCard} />
-                </Button>
-              </NavLink>
             </Nav>
           </div>
         </Navbar>
