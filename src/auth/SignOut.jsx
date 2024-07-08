@@ -21,14 +21,16 @@ export function handleSignOut(dispatch) {
 export default function SignOut() {
   const dispatch = useDispatch();
   return (
-    <Button
+    <div
+      className="flexbox-row panel-button"
+      style={{ justifyContent: "flex-start" }}
+      type="button"
       onClick={() => {
         handleSignOut(dispatch);
       }}
-      size="sm"
     >
-      <span className="button-text">Sign out</span>{" "}
       <FontAwesomeIcon icon={faArrowRightFromBracket} />
-    </Button>
+      <div style={{ marginLeft: "1em" }}>Sign out</div>
+    </div>
   );
 }
