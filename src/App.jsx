@@ -229,7 +229,8 @@ export default function App() {
                 id="student-check-in"
               >
                 <Dropdown.Item href="/checkinwithid">
-                  with ID (Demo) <FontAwesomeIcon icon={faIdCard} />
+                  with ID (Demo) &nbsp;
+                  <FontAwesomeIcon icon={faIdCard} />
                 </Dropdown.Item>
                 <Dropdown.Item disabled>with form</Dropdown.Item>
               </DropdownButton>
@@ -268,7 +269,11 @@ export default function App() {
                       placement="end"
                       trigger={
                         <>
-                          <div className="navbar-icons flexbox-row">
+                          <div
+                            type="button"
+                            style={{ border: "none" }}
+                            className="navbar-icons flexbox-row"
+                          >
                             <img
                               src={
                                 userData?.items[active?.user]?.profilePic?.url
