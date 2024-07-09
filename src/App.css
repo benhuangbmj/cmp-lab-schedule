@@ -447,15 +447,9 @@ label {
   display: none;
 }
 
-.navbar-icons {
-  height: 59.5px;
-}
-
 .user-icon {
   border-radius: 100%;
   object-fit: contain;
-  height: 55px;
-  width: 55px;
   border: 5px double var(--light-blue);
 }
 

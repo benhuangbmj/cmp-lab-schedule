@@ -66,6 +66,7 @@ export default function App() {
   );
   const refNav = useRef();
   const refNavCollapse = useRef();
+  const refBrand = useRef();
   const active = useSelector(selectActive);
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
@@ -190,7 +191,7 @@ export default function App() {
                 margin: 0,
               }}
             >
-              <Nav.Item>
+              <Nav.Item ref={refBrand}>
                 <NavLink className="nav-link" to="/">
                   <Navbar.Brand>
                     <span className="shrink-on-mobile">CMP-Lab@Messiah</span>
@@ -224,7 +225,7 @@ export default function App() {
         </Navbar>
         <Navbar data-bs-theme="dark">
           <Nav
-            className="flexbox-row navbar-icons"
+            className="flexbox-row"
             style={{
               position: "fixed",
               top: "0",
@@ -260,7 +261,7 @@ export default function App() {
                 </Nav.Item>
               </NavLink>
             ) : (
-              <UserPanel />
+              <UserPanel height={refBrand.current?.clientHeight} />
             )}
           </Nav>
         </Navbar>
