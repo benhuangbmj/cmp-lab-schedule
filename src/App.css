@@ -448,19 +448,19 @@ label {
 }
 
 .navbar-icons {
-  height: 52px;
+  height: 59.5px;
 }
 
 .user-icon {
   border-radius: 100%;
   object-fit: contain;
-  height: 48px;
-  width: 48px;
-  border: 4px double var(--light-blue);
+  height: 55px;
+  width: 55px;
+  border: 5px double var(--light-blue);
 }
 
 .user-icon:hover {
-  border: 4px solid var(--light-blue);
+  border: 5px solid var(--light-blue);
 }
 
 .panel-button:hover {
@@ -534,8 +534,5 @@ label {
   }
   .mobile-only {
     display: initial;
-  }
-  .navbar-icons {
-    height: 49.5px;
   }
 }

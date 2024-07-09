@@ -44,8 +44,8 @@ import SignOut from "/src/auth/SignOut";
 import Admin from "/src/admin/Admin";
 import Progress from "/src/progress/Progress";
 import CheckInWithID from "/src/checkInWithID/CheckInWithID";
-import OffcanvasWrapper from "/src/util-components/OffcanvasWrapper";
 import UserPanel from "/src/userPanel/UserPanel";
+import NavDropdown from "react-bootstrap/NavDropdown";
 
 const routes = ["profile", "admin", "progress", "experimental"];
 
@@ -173,6 +173,7 @@ export default function App() {
           ref={refNav}
           style={{
             display: navbar ? "initial" : "none",
+            zIndex: 1,
           }}
           data-bs-theme="dark"
           expand="xl"
@@ -182,18 +183,20 @@ export default function App() {
             className="flexbox-row bk-institutional-navy"
             style={{ alignItems: "start" }}
           >
-            <div
+            <Nav
               className="flexbox-row"
               style={{
                 justifyContent: "flex-start",
                 margin: 0,
               }}
             >
-              <NavLink className="nav-link" to="/">
-                <Navbar.Brand>
-                  <span className="shrink-on-mobile">CMP-Lab@Messiah</span>
-                </Navbar.Brand>
-              </NavLink>
+              <Nav.Item>
+                <NavLink className="nav-link" to="/">
+                  <Navbar.Brand>
+                    <span className="shrink-on-mobile">CMP-Lab@Messiah</span>
+                  </Navbar.Brand>
+                </NavLink>
+              </Nav.Item>
               <Navbar.Toggle
                 aria-controls="basic-navbar-nav"
                 style={!active.user ? { display: "none" } : {}}
@@ -216,52 +219,50 @@ export default function App() {
                   </Nav>
                 )}
               </Navbar.Collapse>
-            </div>
-            <Nav
-              className="flexbox-row navbar-icons"
-              style={{
-                margin: "0",
-              }}
-            >
-              <DropdownButton
-                className="button-text"
-                size="sm"
-                title="Student check in"
-                id="student-check-in"
-              >
-                <Dropdown.Item href="/checkinwithid">
-                  with ID (Demo) &nbsp;
-                  <FontAwesomeIcon icon={faIdCard} />
-                </Dropdown.Item>
-                <Dropdown.Item disabled>with form</Dropdown.Item>
-              </DropdownButton>
-              <NavLink
-                className="nav-link"
-                to="/checkinwithid"
-                style={{ padding: "0" }}
-              >
-                <Button className="mobile-only" size="sm">
-                  <FontAwesomeIcon icon={faIdCard} />
-                </Button>
-              </NavLink>
-              {!active.user ? (
-                <NavLink
-                  className="nav-link"
-                  to="/login"
-                  style={{ padding: "0" }}
-                >
-                  <Button size="sm" style={{ float: "right" }}>
-                    <span className="button-text">Log in</span>{" "}
-                    <span>
-                      <FontAwesomeIcon icon={faUser} />
-                    </span>
-                  </Button>
-                </NavLink>
-              ) : (
-                <UserPanel />
-              )}
             </Nav>
           </div>
+        </Navbar>
+        <Navbar data-bs-theme="dark">
+          <Nav
+            className="flexbox-row navbar-icons"
+            style={{
+              position: "fixed",
+              top: "0",
+              right: "0",
+              zIndex: 1,
+            }}
+          >
+            <NavDropdown
+              className="button-text"
+              title="Student check in"
+              id="student-check-in"
+            >
+              <NavDropdown.Item>
+                <NavLink to="/checkinwithid">
+                  with ID (Demo) &nbsp;
+                  <FontAwesomeIcon icon={faIdCard} />
+                </NavLink>
+              </NavDropdown.Item>
+              <NavDropdown.Item disabled>with form</NavDropdown.Item>
+            </NavDropdown>
+            <Nav.Item className="mobile-only" style={{ padding: "0 .25em" }}>
+              <NavLink className="nav-link" to="/checkinwithid">
+                <FontAwesomeIcon icon={faIdCard} />
+              </NavLink>
+            </Nav.Item>
+            {!active.user ? (
+              <NavLink className="nav-link" to="/login">
+                <Nav.Item style={{ float: "right", padding: ".25em" }}>
+                  <span className="button-text">Log in</span>{" "}
+                  <span>
+                    <FontAwesomeIcon icon={faUser} />
+                  </span>
+                </Nav.Item>
+              </NavLink>
+            ) : (
+              <UserPanel />
+            )}
+          </Nav>
         </Navbar>
         <Routes>
           <Route

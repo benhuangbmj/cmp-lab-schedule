@@ -2,13 +2,13 @@ import { useSelector } from "react-redux";
 import { selectActive } from "/src/reducers/activeReducer.js";
 import { selectUserData } from "/src/reducers/userDataReducer";
 import OffcanvasWrapper from "/src/util-components/OffcanvasWrapper";
+import Nav from "react-bootstrap/Nav";
 import SignOut from "/src/auth/SignOut";
 export default function UserPanel() {
 	const userData = useSelector(selectUserData);
 	const active = useSelector(selectActive);
 	return (
-		<div
-			className="nav-link"
+		<Nav.Link
 			style={{
 				padding: "0",
 				marginRight: ".25em",
@@ -18,8 +18,7 @@ export default function UserPanel() {
 				placement="end"
 				trigger={
 					<>
-						<div
-							type="button"
+						<Nav.Item
 							style={{ border: "none" }}
 							className="navbar-icons flexbox-row"
 						>
@@ -32,16 +31,16 @@ export default function UserPanel() {
 								}
 								className="user-icon"
 							/>
-							<div className="button-text">
+							<Nav.Item className="button-text">
 								&nbsp; Hello,{" "}
 								{userData?.items[active?.user]?.name}
-							</div>
-						</div>
+							</Nav.Item>
+						</Nav.Item>
 					</>
 				}
 			>
 				<SignOut />
 			</OffcanvasWrapper>
-		</div>
+		</Nav.Link>
 	);
 }
