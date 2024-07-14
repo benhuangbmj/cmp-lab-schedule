@@ -1,5 +1,8 @@
-import { useRef, useEffect, useState } from "react";
-
+import FaceRecognition from "/src/computer-vision/FaceRecognition";
 export default function FrontendLab({ info, fetchInfo }) {
-  return <main></main>;
+  return (
+    <main>
+      <FaceRecognition />
+    </main>
+  );
 }

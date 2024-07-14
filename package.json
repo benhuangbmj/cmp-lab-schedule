@@ -31,6 +31,7 @@
     "contentful": "^10.9.3",
     "cypress": "^13.11.0",
     "dayjs": "^1.11.10",
+    "face-api.js": "^0.22.2",
     "lodash": "^4.17.21",
     "qrcode": "^1.5.3",
     "react-bootstrap": "^2.10.0",
