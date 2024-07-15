@@ -146,7 +146,7 @@ export default class VideoStream {
 		this._video.play();
 		this.projectTo(this._canvas);
 	}
-	captureImage() {
+	captureImage(toDataURL = false) {
 		if (!this._context) {
 			return;
 		}
@@ -164,7 +164,7 @@ export default class VideoStream {
 		ctx.putImageData(capturedData, 0, 0);
 		this.stopProjecting();
 		this._video.pause();
-		return canvas.toDataURL("image/png");
+		return toDataURL ? canvas.toDataURL("image/png") : canvas;
 	}
 	logProperties() {
 		console.table([
