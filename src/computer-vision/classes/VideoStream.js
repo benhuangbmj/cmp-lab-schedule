@@ -4,11 +4,18 @@ export default class VideoStream {
 	_tracks;
 	_canvas;
 	_context;
+	_devices;
+	_devicesNo = 0;
 	_animationFrame;
 	_minDimension = 0;
 	constructor(stream, video) {
 		this._stream = stream;
 		this._tracks = stream.getVideoTracks();
+		navigator.mediaDevices.enumerateDevices().then((devices) => {
+			this._devices = devices.filter(
+				(device) => device.kind === "videoinput",
+			);
+		});
 		if (video) {
 			this._video = video;
 			this._video.srcObject = this._stream;
@@ -23,8 +30,9 @@ export default class VideoStream {
 				},
 			});
 			callback(stream);
+			return stream;
 		} catch (err) {
-			console.error(err);
+			throw new Error(err);
 		}
 	}
 	set setVideo(video) {
@@ -41,6 +49,27 @@ export default class VideoStream {
 
 	stop() {
 		this._tracks.forEach((track) => track.stop());
+	}
+
+	switch() {
+		this.stop();
+		this._devicesNo = (this._devicesNo + 1) % this._devices.length;
+		navigator.mediaDevices
+			.getUserMedia({
+				audio: false,
+				video: {
+					deviceId: {
+						exact: this._devices[this._devicesNo].deviceId,
+					},
+				},
+			})
+			.then((stream) => {
+				this._stream = stream;
+				this._tracks = stream.getVideoTracks();
+				if (this._video) {
+					this._video.srcObject = this._stream;
+				}
+			});
 	}
 
 	projectTo(canvas, highlightAspectRatio = 5.3 / 8) {
