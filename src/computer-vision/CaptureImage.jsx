@@ -9,14 +9,21 @@ import {
 import Button from "react-bootstrap/Button";
 
 const CaptureImage = forwardRef(function CaptureImage(
-	{ videoStream, children, reset, streamStopped },
+	{
+		videoStream,
+		children,
+		reset,
+		streamStopped,
+		toDataURL = true,
+		triggerText = "Capture ID",
+	},
 	ref,
 ) {
 	const [captured, setCaptured] = useState(false);
 	const [imgDataURL, setImgDataURL] = useState();
 	function handleCapture() {
 		if (!captured) {
-			const dataURL = videoStream.captureImage();
+			const dataURL = videoStream.captureImage(toDataURL);
 			if (dataURL) {
 				setImgDataURL(dataURL);
 				setCaptured(true);
@@ -47,7 +54,7 @@ const CaptureImage = forwardRef(function CaptureImage(
 				type="button"
 				onClick={handleCapture}
 			>
-				{captured ? "Retake" : "Capture ID"}
+				{captured ? "Retake" : triggerText}
 			</Button>
 			{Children.map(children, (child, i) => {
 				return cloneElement(child, {
