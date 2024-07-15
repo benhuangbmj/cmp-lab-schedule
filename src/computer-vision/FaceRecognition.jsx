@@ -1,24 +1,29 @@
 import { useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
-const MODEL_URL = "/models";
 import { labels } from "/src/mockData";
+import VideoStream from "/src/computer-vision/classes/VideoStream";
+const MODEL_URL = "/models";
 export default function FaceRecognition() {
-	const refImg = useRef();
-	const refCanvas = useRef();
+	const refVideo = useRef();
+	const refVideoCanvas = useRef();
 	const [loaded, setLoaded] = useState(false);
+	useEffect(() => {
+		VideoStream.createVideoStream((stream) => {
+			refVideo.current.srcObject = stream;
+		});
+	}, []);
+
 	useEffect(() => {
 		if (loaded) {
 			(async () => {
+				const ctx = refVideoCanvas.current.getContext("2d");
 				await faceapi.loadSsdMobilenetv1Model(MODEL_URL);
 				await faceapi.loadFaceLandmarkModel(MODEL_URL);
 				await faceapi.loadFaceRecognitionModel(MODEL_URL);
 				const labeledFaceDescriptors = await Promise.all(
 					labels.map(async (label) => {
-						// fetch image data from urls and convert blob to HTMLImage element
 						const imgUrl = `/src/img/${label}.jpg`;
 						const img = await faceapi.fetchImage(imgUrl);
-
-						// detect the face with the highest score in the image and compute it's landmarks and face descriptor
 						const fullFaceDescription = await faceapi
 							.detectSingleFace(img)
 							.withFaceLandmarks()
@@ -37,55 +42,60 @@ export default function FaceRecognition() {
 						);
 					}),
 				);
-				let fullFaceDescriptions = await faceapi
-					.detectAllFaces(refImg.current)
-					.withFaceLandmarks()
-					.withFaceDescriptors();
-				const maxDescriptorDistance = 0.6;
-				const faceMatcher = new faceapi.FaceMatcher(
-					labeledFaceDescriptors,
-					maxDescriptorDistance,
-				);
+				async function draw() {
+					let fullFaceDescriptions = await faceapi
+						.detectAllFaces(refVideo.current)
+						.withFaceLandmarks()
+						.withFaceDescriptors();
+					const maxDescriptorDistance = 0.6;
+					const faceMatcher = new faceapi.FaceMatcher(
+						labeledFaceDescriptors,
+						maxDescriptorDistance,
+					);
 
-				const results = fullFaceDescriptions.map((fd) =>
-					faceMatcher.findBestMatch(fd.descriptor),
-				);
-				faceapi.draw.drawDetections(
-					refCanvas.current,
-					fullFaceDescriptions,
-				);
-				faceapi.draw.drawFaceLandmarks(
-					refCanvas.current,
-					fullFaceDescriptions,
-				);
-				results.forEach((bestMatch, i) => {
-					const box = fullFaceDescriptions[i].detection.box;
-					const text = bestMatch.toString();
-					const drawBox = new faceapi.draw.DrawBox(box, {
-						label: text,
+					const results = fullFaceDescriptions.map((fd) =>
+						faceMatcher.findBestMatch(fd.descriptor),
+					);
+					ctx.reset();
+					faceapi.draw.drawFaceLandmarks(
+						refVideoCanvas.current,
+						fullFaceDescriptions,
+					);
+					results.forEach((bestMatch, i) => {
+						const box = fullFaceDescriptions[i].detection.box;
+						const text = bestMatch.toString();
+						const drawBox = new faceapi.draw.DrawBox(box, {
+							label: text,
+						});
+						drawBox.draw(refVideoCanvas.current);
 					});
-					drawBox.draw(refCanvas.current);
-				});
+				}
+				setInterval(() => {
+					draw();
+				}, 100);
 			})();
 		}
-	});
+	}, [loaded]);
 	return (
-		<div>
-			<img
-				ref={refImg}
-				src="/src/img/1fc0cfd0513c4330b566d994374f607a.jpeg"
-				style={{ position: "absolute", display: "block" }}
-				onLoad={() => setLoaded(true)}
-			/>
-			{loaded && (
+		<>
+			<div style={{ width: "100%", height: "100vw" }}>
+				<video
+					ref={refVideo}
+					autoPlay
+					style={{ position: "absolute", display: "block" }}
+					onResize={() => {
+						refVideoCanvas.current.width =
+							refVideo.current.videoWidth;
+						refVideoCanvas.current.height =
+							refVideo.current.videoHeight;
+						setLoaded(true);
+					}}
+				/>
 				<canvas
-					className="designing"
-					ref={refCanvas}
-					width={refImg.current?.width}
-					height={refImg.current?.height}
+					ref={refVideoCanvas}
 					style={{ position: "absolute", display: "block" }}
 				/>
-			)}
-		</div>
+			</div>
+		</>
 	);
 }
