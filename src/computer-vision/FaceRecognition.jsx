@@ -7,43 +7,22 @@ export default function FaceRecognition() {
 	const refVideo = useRef();
 	const refVideoCanvas = useRef();
 	const [loaded, setLoaded] = useState(false);
+	const [labeledFaceDescriptors, setLabeledFaceDescriptors] = useState();
+	const videoStream = useRef();
 	useEffect(() => {
-		VideoStream.createVideoStream((stream) => {
-			refVideo.current.srcObject = stream;
-		});
+		prepare();
+		return () => {
+			videoStream.current?.stop();
+		};
 	}, []);
 
 	useEffect(() => {
-		if (loaded) {
+		let intervalDraw;
+		if (loaded && labeledFaceDescriptors) {
 			(async () => {
 				const ctx = refVideoCanvas.current.getContext("2d");
-				await faceapi.loadSsdMobilenetv1Model(MODEL_URL);
-				await faceapi.loadFaceLandmarkModel(MODEL_URL);
-				await faceapi.loadFaceRecognitionModel(MODEL_URL);
-				const labeledFaceDescriptors = await Promise.all(
-					labels.map(async (label) => {
-						const imgUrl = `/src/img/${label}.jpg`;
-						const img = await faceapi.fetchImage(imgUrl);
-						const fullFaceDescription = await faceapi
-							.detectSingleFace(img)
-							.withFaceLandmarks()
-							.withFaceDescriptor();
-
-						if (!fullFaceDescription) {
-							throw new Error(`no faces detected for ${label}`);
-						}
-
-						const faceDescriptors = [
-							fullFaceDescription.descriptor,
-						];
-						return new faceapi.LabeledFaceDescriptors(
-							label,
-							faceDescriptors,
-						);
-					}),
-				);
 				async function draw() {
-					let fullFaceDescriptions = await faceapi
+					const fullFaceDescriptions = await faceapi
 						.detectAllFaces(refVideo.current)
 						.withFaceLandmarks()
 						.withFaceDescriptors();
@@ -57,25 +36,37 @@ export default function FaceRecognition() {
 						faceMatcher.findBestMatch(fd.descriptor),
 					);
 					ctx.reset();
-					faceapi.draw.drawFaceLandmarks(
-						refVideoCanvas.current,
-						fullFaceDescriptions,
-					);
-					results.forEach((bestMatch, i) => {
-						const box = fullFaceDescriptions[i].detection.box;
-						const text = bestMatch.toString();
-						const drawBox = new faceapi.draw.DrawBox(box, {
-							label: text,
+					if (refVideoCanvas.current) {
+						faceapi.draw.drawFaceLandmarks(
+							refVideoCanvas.current,
+							fullFaceDescriptions,
+						);
+						results.forEach((bestMatch, i) => {
+							const box = fullFaceDescriptions[i].detection.box;
+							const text = bestMatch.toString();
+							const drawBox = new faceapi.draw.DrawBox(box, {
+								label: text,
+							});
+							drawBox.draw(refVideoCanvas.current);
 						});
-						drawBox.draw(refVideoCanvas.current);
-					});
+					}
 				}
-				setInterval(() => {
+				intervalDraw = setInterval(() => {
 					draw();
 				}, 100);
 			})();
 		}
-	}, [loaded]);
+		return () => {
+			if (intervalDraw) {
+				clearInterval(intervalDraw);
+			}
+		};
+	}, [loaded, labeledFaceDescriptors]);
+	useEffect(() => {
+		VideoStream.createVideoStream((stream) => {
+			videoStream.current = new VideoStream(stream, refVideo.current);
+		});
+	}, []);
 	return (
 		<>
 			<div style={{ width: "100%", height: "100vw" }}>
@@ -88,14 +79,56 @@ export default function FaceRecognition() {
 							refVideo.current.videoWidth;
 						refVideoCanvas.current.height =
 							refVideo.current.videoHeight;
-						setLoaded(true);
 					}}
 				/>
 				<canvas
 					ref={refVideoCanvas}
 					style={{ position: "absolute", display: "block" }}
 				/>
+				<button
+					type="button"
+					style={{ position: "absolute", display: "block" }}
+					onClick={() => {
+						videoStream.current?.switch();
+					}}
+				>
+					Flip
+				</button>
 			</div>
 		</>
 	);
+	function prepare() {
+		Promise.all([
+			VideoStream.createVideoStream((stream) => {
+				videoStream.current = new VideoStream(stream, refVideo.current);
+			}),
+			faceapi.loadSsdMobilenetv1Model(MODEL_URL),
+			faceapi.loadFaceLandmarkModel(MODEL_URL),
+			faceapi.loadFaceRecognitionModel(MODEL_URL),
+		]).then(() => {
+			Promise.all(
+				labels.map(async (label) => {
+					const imgUrl = `/src/img/${label}.jpg`;
+					const img = await faceapi.fetchImage(imgUrl);
+					const fullFaceDescription = await faceapi
+						.detectSingleFace(img)
+						.withFaceLandmarks()
+						.withFaceDescriptor();
+
+					if (!fullFaceDescription) {
+						throw new Error(`no faces detected for ${label}`);
+					}
+
+					const faceDescriptors = [fullFaceDescription.descriptor];
+					return new faceapi.LabeledFaceDescriptors(
+						label,
+						faceDescriptors,
+					);
+				}),
+			).then((labeledFaceDescriptors) => {
+				setLabeledFaceDescriptors(labeledFaceDescriptors);
+				setLoaded(true);
+			});
+		});
+	}
 }
