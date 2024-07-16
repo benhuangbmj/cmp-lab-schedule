@@ -25,7 +25,6 @@
     "@react-pdf/renderer": "^3.4.4",
     "@redux-devtools/extension": "^3.2.6",
     "@reduxjs/toolkit": "^2.0.1",
-    "@techstark/opencv-js": "^4.9.0-release.3",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.2",
     "contentful": "^10.9.3",
