@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
 import { labels } from "/src/mockData";
 import VideoStream from "/src/computer-vision/classes/VideoStream";
+import ShootingWindow from "/src/computer-vision/ShootingWindow";
+import CaptureImage from "/src/computer-vision/CaptureImage";
+import LabelFace from "/src/computer-vision/LabelFace";
 const MODEL_URL = "/models";
 export default function FaceRecognition() {
 	const refVideo = useRef();
@@ -9,92 +12,86 @@ export default function FaceRecognition() {
 	const [loaded, setLoaded] = useState(false);
 	const [labeledFaceDescriptors, setLabeledFaceDescriptors] = useState();
 	const videoStream = useRef();
+	const labelStream = useRef();
+	const refContainer = useRef();
+	const refCaptureImage = useRef();
+	const refLabeledFaces = useRef([]);
+	const [dimensions, setDimensions] = useState([0, 0]);
+	const [intervalDraw, setIntervalDraw] = useState();
 	useEffect(() => {
+		VideoStream.createVideoStream((stream) => {
+			videoStream.current = new VideoStream(stream, refVideo.current);
+			labelStream.current = new VideoStream(stream);
+		});
 		prepare();
 		return () => {
 			videoStream.current?.stop();
+			labelStream.current?.stop();
 		};
 	}, []);
 
 	useEffect(() => {
-		let intervalDraw;
-		if (loaded && labeledFaceDescriptors) {
-			(async () => {
-				const ctx = refVideoCanvas.current.getContext("2d");
-				async function draw() {
-					const fullFaceDescriptions = await faceapi
-						.detectAllFaces(refVideo.current)
-						.withFaceLandmarks()
-						.withFaceDescriptors();
-					const maxDescriptorDistance = 0.6;
-					const faceMatcher = new faceapi.FaceMatcher(
-						labeledFaceDescriptors,
-						maxDescriptorDistance,
-					);
-
-					const results = fullFaceDescriptions.map((fd) =>
-						faceMatcher.findBestMatch(fd.descriptor),
-					);
-					ctx.reset();
-					if (refVideoCanvas.current) {
-						faceapi.draw.drawFaceLandmarks(
-							refVideoCanvas.current,
-							fullFaceDescriptions,
-						);
-						results.forEach((bestMatch, i) => {
-							const box = fullFaceDescriptions[i].detection.box;
-							const text = bestMatch.toString();
-							const drawBox = new faceapi.draw.DrawBox(box, {
-								label: text,
-							});
-							drawBox.draw(refVideoCanvas.current);
-						});
-					}
-				}
-				intervalDraw = setInterval(() => {
-					draw();
-				}, 100);
-			})();
-		}
 		return () => {
 			if (intervalDraw) {
 				clearInterval(intervalDraw);
 			}
 		};
-	}, [loaded, labeledFaceDescriptors]);
-	useEffect(() => {
-		VideoStream.createVideoStream((stream) => {
-			videoStream.current = new VideoStream(stream, refVideo.current);
-		});
-	}, []);
+	}, [intervalDraw]);
 	return (
 		<>
-			<div style={{ width: "100%", height: "100vw" }}>
-				<video
-					ref={refVideo}
-					autoPlay
-					style={{ position: "absolute", display: "block" }}
-					onResize={() => {
-						refVideoCanvas.current.width =
-							refVideo.current.videoWidth;
-						refVideoCanvas.current.height =
-							refVideo.current.videoHeight;
-					}}
-				/>
-				<canvas
-					ref={refVideoCanvas}
-					style={{ position: "absolute", display: "block" }}
-				/>
-				<button
-					type="button"
-					style={{ position: "absolute", display: "block" }}
-					onClick={() => {
-						videoStream.current?.switch();
-					}}
-				>
-					Flip
-				</button>
+			<button type="button" onClick={handleFaceRecognition}>
+				Face Recognition
+			</button>
+			<div
+				ref={refContainer}
+				className="designing"
+				style={{
+					width: dimensions[0],
+					height: dimensions[1],
+					margin: "auto",
+				}}
+			>
+				<div>
+					<video
+						className="designing"
+						ref={refVideo}
+						autoPlay
+						style={{ position: "absolute", display: "block" }}
+						onResize={() => {
+							setDimensions([
+								refVideo.current.videoWidth,
+								refVideo.current.videoHeight,
+							]);
+						}}
+					/>
+					<canvas
+						className="designing"
+						ref={refVideoCanvas}
+						style={{ position: "absolute", display: "block" }}
+						width={dimensions[0]}
+						height={dimensions[1]}
+					/>
+					<button
+						type="button"
+						style={{ position: "absolute", display: "block" }}
+						onClick={() => {
+							videoStream.current?.switch();
+							labelStream.current?.switch();
+						}}
+					>
+						Flip
+					</button>
+				</div>
 			</div>
+			<ShootingWindow videoStream={labelStream.current} loaded={loaded} />
+			<CaptureImage
+				videoStream={labelStream.current}
+				streamStopped={false}
+				toDataURL={false}
+				triggerText="Capture Face"
+			>
+				<LabelFace labeledFaces={refLabeledFaces.current} />
+			</CaptureImage>
 		</>
 	);
 	function prepare() {
@@ -106,6 +103,7 @@ export default function FaceRecognition() {
 			faceapi.loadFaceLandmarkModel(MODEL_URL),
 			faceapi.loadFaceRecognitionModel(MODEL_URL),
 		]).then(() => {
+			/*
 			Promise.all(
 				labels.map(async (label) => {
 					const imgUrl = `/src/img/${label}.jpg`;
@@ -128,7 +126,42 @@ export default function FaceRecognition() {
 			).then((labeledFaceDescriptors) => {
 				setLabeledFaceDescriptors(labeledFaceDescriptors);
 				setLoaded(true);
-			});
+			});*/
+			setLoaded(true);
 		});
+	}
+	async function handleFaceRecognition() {
+		const ctx = refVideoCanvas.current.getContext("2d");
+		async function draw() {
+			const fullFaceDescriptions = await faceapi
+				.detectAllFaces(refVideo.current)
+				.withFaceLandmarks()
+				.withFaceDescriptors();
+			const maxDescriptorDistance = 0.6;
+			const faceMatcher = new faceapi.FaceMatcher(
+				//labeledFaceDescriptors,
+				refLabeledFaces.current,
+				maxDescriptorDistance,
+			);
+
+			const results = fullFaceDescriptions.map((fd) =>
+				faceMatcher.findBestMatch(fd.descriptor),
+			);
+			ctx.reset();
+			if (refVideoCanvas.current) {
+				results.forEach((bestMatch, i) => {
+					const box = fullFaceDescriptions[i].detection.box;
+					const text = bestMatch.toString();
+					const drawBox = new faceapi.draw.DrawBox(box, {
+						label: text,
+					});
+					drawBox.draw(refVideoCanvas.current);
+				});
+			}
+		}
+		const interval = setInterval(() => {
+			draw();
+		}, 100);
+		setIntervalDraw(interval);
 	}
 }
