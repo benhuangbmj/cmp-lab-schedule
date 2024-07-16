@@ -7,7 +7,7 @@ export default function ShootingWindow({ loaded, videoStream }) {
 	const video = videoStream;
 
 	useEffect(() => {
-		if (videoStream) {
+		if (video) {
 			video.setVideo = refVideo.current;
 			video.projectTo(refCanvas.current);
 			return () => {
