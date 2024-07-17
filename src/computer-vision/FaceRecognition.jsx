@@ -138,9 +138,13 @@ export default function FaceRecognition() {
 			<div
 				ref={refContainer}
 				style={{
+					boxSizing: "border-box",
 					width: dimensions[0],
 					height: dimensions[1],
 					margin: "auto",
+					maxWidth: "100vw",
+					overflowX: "hidden",
+					position: "relative",
 				}}
 			>
 				<div>
