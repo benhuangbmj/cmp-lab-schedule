@@ -31,7 +31,8 @@ const CaptureImage = forwardRef(function CaptureImage(
 		} else {
 			if (reset) {
 				reset();
-			} else setCaptured(false);
+			}
+			setCaptured(false);
 		}
 	}
 	useImperativeHandle(
