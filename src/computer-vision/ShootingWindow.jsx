@@ -1,10 +1,13 @@
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo, useContext } from "react";
+import { CVContext } from "/src/contexts/CVContext";
 import Spinner from "react-bootstrap/Spinner";
 
 export default function ShootingWindow({ loaded, videoStream }) {
+	const cVContext = useContext(CVContext);
 	const refVideo = useRef();
 	const refCanvas = useRef();
-	const video = videoStream;
+	const video = cVContext?.labelStream || videoStream;
+	console.log(video);
 
 	useEffect(() => {
 		if (video) {
@@ -15,7 +18,7 @@ export default function ShootingWindow({ loaded, videoStream }) {
 				video.stopProjecting();
 			};
 		}
-	}, [videoStream]);
+	}, [video]);
 	return (
 		<div
 			style={{
@@ -45,7 +48,7 @@ export default function ShootingWindow({ loaded, videoStream }) {
 							paddingTop: "min(190px, 45vw)",
 						}}
 					>
-						<Spinner variant={videoStream ? "light" : "dark"} />
+						<Spinner variant={video ? "light" : "dark"} />
 					</div>
 				)}
 				<canvas ref={refCanvas} />
