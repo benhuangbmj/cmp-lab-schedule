@@ -7,7 +7,6 @@ export default function ShootingWindow({ loaded, videoStream }) {
 	const refVideo = useRef();
 	const refCanvas = useRef();
 	const video = cVContext?.labelStream || videoStream;
-	console.log(video);
 
 	useEffect(() => {
 		if (video) {
@@ -38,14 +37,14 @@ export default function ShootingWindow({ loaded, videoStream }) {
 					height: 0,
 				}}
 			/>
-			<div>
+			<div style={{ position: "relative" }}>
 				{!loaded && (
 					<div
 						style={{
 							position: "absolute",
 							display: "block",
 							width: "100%",
-							paddingTop: "min(190px, 45vw)",
+							top: "50%",
 						}}
 					>
 						<Spinner variant={video ? "light" : "dark"} />
