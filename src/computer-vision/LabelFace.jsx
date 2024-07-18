@@ -49,7 +49,8 @@ export default forwardRef(function LabelFace({ imgDataURL }, ref) {
 		});
 		refDescriptor.current = [fullFaceDescription.descriptor];
 	}
-	const addLabel = () => {
+	const addLabel = (e) => {
+		e.preventDefault();
 		const faceDescriptors = refDescriptor.current;
 		const newLabeledFace = new faceapi.LabeledFaceDescriptors(
 			labelText,
@@ -78,19 +79,20 @@ export default forwardRef(function LabelFace({ imgDataURL }, ref) {
 	}, [imgDataURL]);
 	return (
 		<div>
-			<input
-				value={labelText}
-				onChange={(e) => {
-					setLabelText(e.target.value);
-				}}
-			/>
-			<Button
-				type="button"
-				onClick={addLabel}
-				disabled={!detectedFace.src || labelText == ""}
-			>
-				Add Labeled Face
-			</Button>
+			<form onSubmit={addLabel}>
+				<input
+					value={labelText}
+					onChange={(e) => {
+						setLabelText(e.target.value);
+					}}
+				/>
+				<Button
+					type="submit"
+					disabled={!detectedFace.src || labelText == ""}
+				>
+					Add Labeled Face
+				</Button>
+			</form>
 		</div>
 	);
 });
