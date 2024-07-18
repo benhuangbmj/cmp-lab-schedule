@@ -8,6 +8,7 @@ import LabelFace from "/src/computer-vision/LabelFace";
 import ImageGallery from "/src/util-components/ImageGallery";
 import SingleFace from "/src/computer-vision/SingleFace";
 import { CVContext } from "/src/contexts/CVContext";
+import Button from "react-bootstrap/Button";
 const MODEL_URL = "/models";
 export default function FaceRecognition() {
 	const cVContext = useContext(CVContext);
@@ -128,13 +129,13 @@ export default function FaceRecognition() {
 			>
 				<LabelFace ref={refLabelFace} />
 			</CaptureImage>
-			<button
+			<Button
 				type="button"
 				onClick={handleFaceRecognition}
 				disabled={labeledFaces.length == 0}
 			>
 				{recognizing ? "Stop" : "Recognize Faces"}
-			</button>
+			</Button>
 			<div
 				ref={refContainer}
 				style={{
@@ -165,7 +166,7 @@ export default function FaceRecognition() {
 						width={dimensions[0]}
 						height={dimensions[1]}
 					/>
-					<button
+					<Button
 						type="button"
 						style={{ position: "absolute", display: "block" }}
 						onClick={() => {
@@ -174,7 +175,7 @@ export default function FaceRecognition() {
 						}}
 					>
 						Flip
-					</button>
+					</Button>
 				</div>
 			</div>
 		</>

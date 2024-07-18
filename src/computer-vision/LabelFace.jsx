@@ -8,6 +8,7 @@ import {
 } from "react";
 import { CVContext } from "/src/contexts/CVContext";
 import * as faceapi from "face-api.js";
+import Button from "react-bootstrap/Button";
 
 export default forwardRef(function LabelFace({ imgDataURL }, ref) {
 	const cVContext = useContext(CVContext);
@@ -83,13 +84,13 @@ export default forwardRef(function LabelFace({ imgDataURL }, ref) {
 					setLabelText(e.target.value);
 				}}
 			/>
-			<button
+			<Button
 				type="button"
 				onClick={addLabel}
 				disabled={!detectedFace.src || labelText == ""}
 			>
 				Add Labeled Face
-			</button>
+			</Button>
 		</div>
 	);
 });
