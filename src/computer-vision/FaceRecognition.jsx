@@ -20,6 +20,7 @@ export default function FaceRecognition() {
 	const { faceCollection } = cVContext;
 	const refContainer = useRef();
 	const refLabelFace = useRef();
+	const refCaptureImage = useRef();
 	const { labeledFaces, dispatchLabeledFaces } = cVContext;
 	const [dimensions, setDimensions] = useState([0, 0]);
 	const [intervalDraw, setIntervalDraw] = useState();
@@ -121,13 +122,17 @@ export default function FaceRecognition() {
 				/>
 			</div>
 			<CaptureImage
+				ref={refCaptureImage}
 				videoStream={labelStream}
 				streamStopped={false}
 				toDataURL={false}
 				triggerText="Capture Face"
 				reset={refLabelFace.current?.reset}
 			>
-				<LabelFace ref={refLabelFace} />
+				<LabelFace
+					ref={refLabelFace}
+					setCaptured={refCaptureImage.current?.setCaptured}
+				/>
 			</CaptureImage>
 			<Button
 				type="button"

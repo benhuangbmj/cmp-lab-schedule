@@ -7,7 +7,7 @@ export default function ImageGallery({ collection = [], captions = [] }) {
 				justifyContent: "flex-start",
 				border: "5px double black",
 				padding: "0.2em",
-				height: "7em",
+				height: "7.5em",
 				overflowY: "auto",
 				gap: ".25em",
 			}}

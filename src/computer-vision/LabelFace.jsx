@@ -10,7 +10,7 @@ import { CVContext } from "/src/contexts/CVContext";
 import * as faceapi from "face-api.js";
 import Button from "react-bootstrap/Button";
 
-export default forwardRef(function LabelFace({ imgDataURL }, ref) {
+export default forwardRef(function LabelFace({ imgDataURL, setCaptured }, ref) {
 	const cVContext = useContext(CVContext);
 	const {
 		dispatchLabeledFaces,
@@ -27,6 +27,7 @@ export default forwardRef(function LabelFace({ imgDataURL }, ref) {
 	function reset() {
 		dispatchDetectedFace({ type: "reset" });
 		refDescriptor.current = null;
+		setCaptured(false);
 	}
 	async function detectFace() {
 		const fullFaceDescription = await faceapi
