@@ -11,9 +11,14 @@ export default class VideoStream {
 	constructor(stream, video) {
 		this._stream = stream;
 		this._tracks = stream.getVideoTracks();
+		const settings = this._tracks[0].getSettings();
+		const deviceId = settings.deviceId;
 		navigator.mediaDevices.enumerateDevices().then((devices) => {
 			this._devices = devices.filter(
 				(device) => device.kind === "videoinput",
+			);
+			this._devicesNo = this._devices.findIndex(
+				(e) => e.deviceId == deviceId,
 			);
 		});
 		if (video) {
@@ -28,6 +33,11 @@ export default class VideoStream {
 				video: {
 					facingMode: "environment",
 				},
+			});
+			const tracks = stream.getTracks();
+			tracks.forEach((e) => {
+				const settings = e.getSettings();
+				console.log(settings);
 			});
 			callback(stream);
 			return stream;
@@ -165,6 +175,38 @@ export default class VideoStream {
 		this.stopProjecting();
 		this._video.pause();
 		return toDataURL ? canvas.toDataURL("image/png") : canvas;
+	}
+	renew(stream) {
+		this._stream = stream;
+		this._tracks = stream.getVideoTracks();
+		if (this._video) {
+			this._video.srcObject = this._stream;
+		}
+	}
+	static switchTogether() {
+		const baseDevices = arguments[0]._devices;
+		const baseDevicesNo = arguments[0]._devicesNo;
+		const newDevicesNo = (baseDevicesNo + 1) % baseDevices.length;
+		const newDeviceId = baseDevices[newDevicesNo].deviceId;
+		for (let i = 0; i < arguments.length; i++) {
+			arguments[i].stop();
+		}
+		navigator.mediaDevices
+			.getUserMedia({
+				audio: false,
+				video: {
+					deviceId: {
+						exact: newDeviceId,
+					},
+				},
+			})
+			.then((stream) => {
+				for (let i = 0; i < arguments.length; i++) {
+					arguments[i]._devices = baseDevices;
+					arguments[i]._devicesNo = newDevicesNo;
+					arguments[i].renew(stream);
+				}
+			});
 	}
 	logProperties() {
 		console.table([

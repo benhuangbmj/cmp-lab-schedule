@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, useCallback, useContext } from "react";
 import * as faceapi from "face-api.js";
-import { labels } from "/src/mockData";
 import VideoStream from "/src/computer-vision/classes/VideoStream";
 import ShootingWindow from "/src/computer-vision/ShootingWindow";
 import CaptureImage from "/src/computer-vision/CaptureImage";
@@ -175,8 +174,10 @@ export default function FaceRecognition() {
 						type="button"
 						style={{ position: "absolute", display: "block" }}
 						onClick={() => {
-							recognizeStream?.switch();
-							labelStream?.switch();
+							VideoStream.switchTogether(
+								labelStream,
+								recognizeStream,
+							);
 						}}
 					>
 						Flip
