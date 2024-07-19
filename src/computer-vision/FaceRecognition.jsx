@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState, useCallback, useContext } from "react";
+import {
+	useEffect,
+	useRef,
+	useState,
+	useCallback,
+	useContext,
+	memo,
+} from "react";
 import * as faceapi from "face-api.js";
 import VideoStream from "/src/computer-vision/classes/VideoStream";
 import ShootingWindow from "/src/computer-vision/ShootingWindow";
@@ -24,6 +31,19 @@ export default function FaceRecognition() {
 	const [dimensions, setDimensions] = useState([0, 0]);
 	const [intervalDraw, setIntervalDraw] = useState();
 	const [recognizing, setRecognizing] = useState(false);
+	const FlipCamButton = memo(function FlipCamButton() {
+		return (
+			<Button
+				type="button"
+				style={{ position: "absolute", display: "block", top: "0" }}
+				onClick={() => {
+					VideoStream.switchTogether(labelStream, recognizeStream);
+				}}
+			>
+				Flip
+			</Button>
+		);
+	});
 	var processFaceRecognition = useCallback(
 		async function () {
 			if (intervalDraw) {
@@ -121,8 +141,9 @@ export default function FaceRecognition() {
 				className="flexbox-row"
 				style={{ justifyContent: "center", gap: "1em 2em" }}
 			>
-				<div>
+				<div style={{ position: "relative" }}>
 					<ShootingWindow loaded={loaded} />
+					<FlipCamButton />
 				</div>
 				<SingleFace
 					src={refLabelFace.current?.imgSrc}
@@ -179,18 +200,7 @@ export default function FaceRecognition() {
 						width={dimensions[0]}
 						height={dimensions[1]}
 					/>
-					<Button
-						type="button"
-						style={{ position: "absolute", display: "block" }}
-						onClick={() => {
-							VideoStream.switchTogether(
-								labelStream,
-								recognizeStream,
-							);
-						}}
-					>
-						Flip
-					</Button>
+					<FlipCamButton />
 				</div>
 			</div>
 		</>
