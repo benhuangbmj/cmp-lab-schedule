@@ -270,6 +270,11 @@ export default function App() {
                 <FontAwesomeIcon icon={faIdCard} />
               </NavLink>
             </Nav.Item>
+            <Nav.Item className="mobile-only" style={{ padding: "0 .25em" }}>
+              <NavLink className="nav-link" to="/checkinwithface">
+                <FontAwesomeIcon icon={faCameraRetro} />
+              </NavLink>
+            </Nav.Item>
             {!active.user ? (
               <NavLink className="nav-link" to="/login">
                 <Nav.Item style={{ float: "right", padding: ".25em" }}>
