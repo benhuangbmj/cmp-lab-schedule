@@ -239,7 +239,11 @@ export default function App() {
               id="student-check-in"
             >
               <NavDropdown.Item>
-                <NavLink to="/checkinwithid">
+                <NavLink
+                  className="nav-link"
+                  style={{ paddingLeft: 0 }}
+                  to="/checkinwithid"
+                >
                   with ID (Demo) &nbsp;
                   <FontAwesomeIcon icon={faIdCard} />
                 </NavLink>
