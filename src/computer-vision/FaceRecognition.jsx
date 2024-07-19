@@ -104,6 +104,15 @@ export default function FaceRecognition() {
 	}, [recognizeStream, labelStream]);
 	return (
 		<>
+			<div
+				style={{
+					backgroundColor: "red",
+					color: "white",
+					marginBottom: "0.25em",
+				}}
+			>
+				This is a front-end demo.
+			</div>
 			<ImageGallery
 				collection={faceCollection}
 				captions={labeledFaces.map((e) => e.label)}

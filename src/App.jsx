@@ -33,7 +33,11 @@ import Button from "react-bootstrap/Button";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faIdCard } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUser,
+  faIdCard,
+  faCameraRetro,
+} from "@fortawesome/free-solid-svg-icons";
 
 import Schedule from "./Schedule";
 import Profile from "./profile/Profile";
@@ -44,6 +48,7 @@ import SignOut from "/src/auth/SignOut";
 import Admin from "/src/admin/Admin";
 import Progress from "/src/progress/Progress";
 import CheckInWithID from "/src/checkInWithID/CheckInWithID";
+import CheckInWithFace from "/src/checkInWithFace/CheckInWithFace";
 import UserPanel from "/src/userPanel/UserPanel";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
@@ -248,6 +253,16 @@ export default function App() {
                   <FontAwesomeIcon icon={faIdCard} />
                 </NavLink>
               </NavDropdown.Item>
+              <NavDropdown.Item>
+                <NavLink
+                  className="nav-link"
+                  style={{ paddingLeft: 0 }}
+                  to="/checkinwithface"
+                >
+                  with face (Demo) &nbsp;
+                  <FontAwesomeIcon icon={faCameraRetro} />
+                </NavLink>
+              </NavDropdown.Item>
               <NavDropdown.Item disabled>with form</NavDropdown.Item>
             </NavDropdown>
             <Nav.Item className="mobile-only" style={{ padding: "0 .25em" }}>
@@ -327,6 +342,8 @@ export default function App() {
           />
           <Route path="/login" element={<LogIn />} />
           <Route path="/checkinwithid" element={<CheckInWithID />} />
+
+          <Route path="/checkinwithface" element={<CheckInWithFace />} />
         </Routes>
       </div>
     );

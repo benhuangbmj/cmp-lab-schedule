@@ -37,7 +37,6 @@ export default class VideoStream {
 			const tracks = stream.getTracks();
 			tracks.forEach((e) => {
 				const settings = e.getSettings();
-				console.log(settings);
 			});
 			callback(stream);
 			return stream;
