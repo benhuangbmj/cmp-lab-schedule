@@ -1,5 +1,5 @@
 import { createContext, useReducer, useRef } from "react";
-
+import * as faceapi from "face-api.js";
 const CVContext = createContext(null);
 
 function CVContextProvider({ children }) {
@@ -33,6 +33,7 @@ function CVContextProvider({ children }) {
 				dispatchFaceCollection,
 				detectedFace,
 				dispatchDetectedFace,
+				faceapi,
 			}}
 		>
 			{children}

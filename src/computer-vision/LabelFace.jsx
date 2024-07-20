@@ -7,7 +7,6 @@ import {
 	useImperativeHandle,
 } from "react";
 import { CVContext } from "/src/contexts/CVContext";
-import * as faceapi from "face-api.js";
 import Button from "react-bootstrap/Button";
 
 export default forwardRef(function LabelFace({ imgDataURL, setCaptured }, ref) {
@@ -17,6 +16,7 @@ export default forwardRef(function LabelFace({ imgDataURL, setCaptured }, ref) {
 		dispatchFaceCollection,
 		dispatchDetectedFace,
 		detectedFace,
+		faceapi,
 	} = cVContext;
 	const [labelText, setLabelText] = useState("");
 	const [errorMessage, setErrorMessage] = useState();
