@@ -13,6 +13,7 @@ import LabelFace from "/src/computer-vision/LabelFace";
 import ImageGallery from "/src/util-components/ImageGallery";
 import SingleFace from "/src/computer-vision/SingleFace";
 import RecognizeFaces from "/src/computer-vision/RecognizeFaces";
+import FlipCamButton from "/src/computer-vision/FlipCamButton";
 import { CVContext } from "/src/contexts/CVContext";
 import Button from "react-bootstrap/Button";
 const MODEL_URL = "/models";
@@ -28,22 +29,10 @@ export default function FaceRecognition() {
 		labeledFaces,
 		dispatchLabeledFaces,
 		faceapi,
+		dispatchActiveStreams,
 	} = cVContext;
 	const refLabelFace = useRef();
 	const refCaptureImage = useRef();
-	const FlipCamButton = memo(function FlipCamButton() {
-		return (
-			<Button
-				type="button"
-				style={{ position: "absolute", display: "block", top: "0" }}
-				onClick={() => {
-					VideoStream.switchTogether(labelStream, recognizeStream);
-				}}
-			>
-				Flip
-			</Button>
-		);
-	});
 	useEffect(() => {
 		VideoStream.createVideoStream((stream) => {
 			dispatchRecognizeStream({
@@ -58,6 +47,12 @@ export default function FaceRecognition() {
 		prepare();
 	}, []);
 	useEffect(() => {
+		if (recognizeStream && labelStream) {
+			dispatchActiveStreams({
+				type: "set",
+				payload: [recognizeStream, labelStream],
+			});
+		}
 		return () => {
 			recognizeStream?.stop();
 			labelStream?.stop();

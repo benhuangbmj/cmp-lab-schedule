@@ -20,6 +20,10 @@ function CVContextProvider({ children }) {
 		detectedFaceReducer,
 		{ src: null, errorMessage: null },
 	);
+	const [activeStreams, dispatchActiveStreams] = useReducer(
+		streamReducer,
+		null,
+	);
 	return (
 		<CVContext.Provider
 			value={{
@@ -34,6 +38,8 @@ function CVContextProvider({ children }) {
 				detectedFace,
 				dispatchDetectedFace,
 				faceapi,
+				activeStreams,
+				dispatchActiveStreams,
 			}}
 		>
 			{children}
@@ -76,6 +82,12 @@ function streamReducer(state, action) {
 	switch (action.type) {
 		case "set": {
 			return action.payload;
+		}
+		case "clear": {
+			return null;
+		}
+		case "added": {
+			return [...state, action.payload];
 		}
 		default: {
 			return state;

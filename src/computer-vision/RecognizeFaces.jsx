@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext, useCallback, useRef } from "react";
 import { CVContext } from "/src/contexts/CVContext";
 import Button from "react-bootstrap/Button";
+import FlipCamButton from "/src/computer-vision/FlipCamButton";
 
 export default function RecognizeFaces() {
 	const cVContext = useContext(CVContext);
@@ -111,6 +112,7 @@ export default function RecognizeFaces() {
 						width={dimensions[0]}
 						height={dimensions[1]}
 					/>
+					<FlipCamButton />
 				</div>
 			</div>
 		</>
