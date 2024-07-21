@@ -73,10 +73,7 @@ export default function FaceRecognition() {
 				className="flexbox-row"
 				style={{ justifyContent: "center", gap: "1em 2em" }}
 			>
-				<div style={{ position: "relative" }}>
-					<ShootingWindow loaded={loaded} />
-					<FlipCamButton />
-				</div>
+				<ShootingWindow loaded={loaded} />
 				<SingleFace
 					src={refLabelFace.current?.imgSrc}
 					errorMessage={refLabelFace.current?.errorMessage}
