@@ -21,7 +21,7 @@ const getSingleAsset = async function (assetId) {
   return asset;
 };
 
-const fetchInfo = (setCourseTutor, setInfo, setShifts, next) => {
+const fetchInfo = (setCourseTutor, setInfo, setShifts, next, showBoundary) => {
   const query = `{
     tutorsCollection {
       items {
@@ -40,7 +40,13 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts, next) => {
     },
     body: JSON.stringify({ query }),
   })
-    .then((res) => res.json())
+    .then((res) => {
+      console.log("res ok", res.ok);
+      if (res.ok) return res.json();
+      else {
+        throw Error("Something went wrong. Please try again later.");
+      }
+    })
     .then((res) => {
       const tutorInfo = res.data.tutorsCollection.items.find(
         (e, i) => e.sys.id == userInfoId,
@@ -86,6 +92,12 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts, next) => {
       if (next) {
         next();
       }
+    })
+    .catch((err) => {
+      const myError = new Error(
+        "Something went wrong. Please try again later. If the error persists, please contact your administrator.",
+      );
+      showBoundary(myError);
     });
 };
 

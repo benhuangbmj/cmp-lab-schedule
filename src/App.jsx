@@ -77,7 +77,7 @@ export default function App() {
   const location = useLocation();
   const { showBoundary } = useErrorBoundary();
   const fetchInfo = useCallback(async (next) => {
-    return preFetchInfo(setCourseTutor, setInfo, setShifts, next);
+    return preFetchInfo(setCourseTutor, setInfo, setShifts, next, showBoundary);
   }, []);
 
   const checkActive = async () => {
