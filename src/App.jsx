@@ -13,7 +13,7 @@ import {
 } from "react";
 import { Route, Routes, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { ErrorBoundary, useErrorBoundary } from "react-error-boundary";
+import { useErrorBoundary } from "react-error-boundary";
 
 import { selectActive, updateActive } from "/src/reducers/activeReducer.js";
 import { fetchUserData, selectUserData } from "/src/reducers/userDataReducer";
@@ -23,15 +23,11 @@ import { useLocation, Navigate } from "react-router-dom";
 import {
   fetchInfo as preFetchInfo,
   fetchKey,
-  update,
   update3_0,
 } from "./api-operations.js";
 
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import Button from "react-bootstrap/Button";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Dropdown from "react-bootstrap/Dropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
@@ -44,7 +40,6 @@ import Profile from "./profile/Profile";
 import FrontendLab from "./FrontendLab";
 import LogIn from "/src/auth/LogIn";
 import ProtectedRoute from "/src/util-components/ProtectedRoute";
-import SignOut from "/src/auth/SignOut";
 import Admin from "/src/admin/Admin";
 import Progress from "/src/progress/Progress";
 import CheckInWithID from "/src/checkInWithID/CheckInWithID";
@@ -63,7 +58,7 @@ export default function App() {
   const [fetchLogin, setFetchLogin] = useState(false);
   const observer = useMemo(
     () =>
-      new MutationObserver((rec) => {
+      new MutationObserver(() => {
         setNavHeight(refNav.current.offsetHeight);
       }),
     [],

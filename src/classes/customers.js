@@ -111,19 +111,14 @@ function getDayNum(day) {
   switch (day) {
     case "Monday":
       return 1;
-      break;
     case "Tuesday":
       return 2;
-      break;
     case "Wednesday":
       return 3;
-      break;
     case "Thursday":
       return 4;
-      break;
     case "Friday":
       return 5;
-      break;
   }
 }
 
@@ -131,22 +126,16 @@ function getDayStr(num) {
   switch (num) {
     case 0:
       return "Sunday";
-      break;
     case 1:
       return "Monday";
-      break;
     case 2:
       return "Tuesday";
-      break;
     case 3:
       return "Wednesday";
-      break;
     case 4:
       return "Thursday";
-      break;
     case 5:
       return "Friday";
-      break;
     case 6:
       return "Saturday";
   }
