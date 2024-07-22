@@ -55,7 +55,6 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 const routes = ["profile", "admin", "progress", "experimental"];
 
 export default function App() {
-  const [modelLoaded, setModelLoaded] = useState(false);
   const [info, setInfo] = useState(null);
   const [courseTutor, setCourseTutor] = useState(null);
   const [shifts, setShifts] = useState(null);
@@ -125,19 +124,17 @@ export default function App() {
                 fetchInfo: fetchInfo,
                 next: () => {
                   dispatch(fetchUserData());
-                  setFetchLogin(true);
                 },
               });
-            } else {
-              setFetchLogin(true);
             }
             dispatch(updateActive(res.user));
-          } else {
-            setFetchLogin(true);
           }
         })
         .catch((err) => {
-          showBoundary(err);
+          console.error(err);
+        })
+        .finally(() => {
+          setFetchLogin(true);
         });
     }
   }, [userData]);
@@ -336,12 +333,7 @@ export default function App() {
             path="/experimental"
             element={
               <ProtectedRoute role="developer">
-                <FrontendLab
-                  info={info}
-                  fetchInfo={fetchInfo}
-                  modelLoaded={modelLoaded}
-                  setModelLoaded={setModelLoaded}
-                />
+                <FrontendLab info={info} fetchInfo={fetchInfo} />
               </ProtectedRoute>
             }
           />
