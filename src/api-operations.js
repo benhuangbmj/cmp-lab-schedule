@@ -41,7 +41,6 @@ const fetchInfo = (setCourseTutor, setInfo, setShifts, next, showBoundary) => {
     body: JSON.stringify({ query }),
   })
     .then((res) => {
-      console.log("res ok", res.ok);
       if (res.ok) return res.json();
       else {
         throw Error("Something went wrong. Please try again later.");

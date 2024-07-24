@@ -42,6 +42,7 @@ import LogIn from "/src/auth/LogIn";
 import ProtectedRoute from "/src/util-components/ProtectedRoute";
 import Admin from "/src/admin/Admin";
 import Progress from "/src/progress/Progress";
+import Charts from "/src/dashboard/Charts";
 import CheckInWithID from "/src/checkInWithID/CheckInWithID";
 import CheckInWithFace from "/src/checkInWithFace/CheckInWithFace";
 import UserPanel from "/src/userPanel/UserPanel";
@@ -152,6 +153,9 @@ export default function App() {
       });
     }
   }, [info, fetchLogin]);
+  useEffect(() => {
+    console.log("App.jsx", location);
+  });
 
   if (!info || !fetchLogin) {
     return (
@@ -195,6 +199,12 @@ export default function App() {
                   </Navbar.Brand>
                 </NavLink>
               </Nav.Item>
+              <NavLink className="nav-link" to="/">
+                Schedule
+              </NavLink>
+              <NavLink to="/dashboard" className="nav-link">
+                Dashboard
+              </NavLink>
               <Navbar.Toggle
                 aria-controls="basic-navbar-nav"
                 style={!active.user ? { display: "none" } : {}}
@@ -202,9 +212,6 @@ export default function App() {
               <Navbar.Collapse style={{ width: "0px" }}>
                 {active.user && (
                   <Nav ref={refNavCollapse}>
-                    <NavLink className="nav-link" to="/">
-                      Schedule
-                    </NavLink>
                     {routes.map((route) => (
                       <NavLink
                         key={route}
@@ -334,8 +341,8 @@ export default function App() {
           />
           <Route path="/login" element={<LogIn />} />
           <Route path="/checkinwithid" element={<CheckInWithID />} />
-
           <Route path="/checkinwithface" element={<CheckInWithFace />} />
+          <Route path="/dashboard" element={<Charts />} />
         </Routes>
       </div>
     );

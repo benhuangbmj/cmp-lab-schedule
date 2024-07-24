@@ -108,7 +108,6 @@ export default function Schedule({ shift, courses, setNavbar }) {
           Toggle navbar
         </button>
       </div>
-      <Charts />
     </main>
   );
 }
