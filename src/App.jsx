@@ -153,9 +153,6 @@ export default function App() {
       });
     }
   }, [info, fetchLogin]);
-  useEffect(() => {
-    console.log("App.jsx", location);
-  });
 
   if (!info || !fetchLogin) {
     return (
@@ -199,19 +196,25 @@ export default function App() {
                   </Navbar.Brand>
                 </NavLink>
               </Nav.Item>
-              <NavLink className="nav-link" to="/">
-                Schedule
-              </NavLink>
-              <NavLink to="/dashboard" className="nav-link">
-                Dashboard
-              </NavLink>
-              <Navbar.Toggle
-                aria-controls="basic-navbar-nav"
-                style={!active.user ? { display: "none" } : {}}
-              />
+              <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse style={{ width: "0px" }}>
-                {active.user && (
+                {!active.user ? (
+                  <>
+                    <NavLink className="nav-link" to="/">
+                      Schedule
+                    </NavLink>
+                    <NavLink to="/dashboard" className="nav-link">
+                      Dashboard
+                    </NavLink>
+                  </>
+                ) : (
                   <Nav ref={refNavCollapse}>
+                    <NavLink className="nav-link" to="/">
+                      Schedule
+                    </NavLink>
+                    <NavLink to="/dashboard" className="nav-link">
+                      Dashboard
+                    </NavLink>
                     {routes.map((route) => (
                       <NavLink
                         key={route}
