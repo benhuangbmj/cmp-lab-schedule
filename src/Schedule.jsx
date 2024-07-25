@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useContext } from "react";
 import { useReactToPrint } from "react-to-print";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -6,6 +6,7 @@ import { days } from "/src/utils";
 import { sortCriterionHelper } from "/src/utils";
 import { useSelector } from "react-redux";
 import Table from "react-bootstrap/Table";
+import { AppContext } from "/src/contexts/AppContext";
 
 import Charts from "/src/dashboard/Charts";
 
@@ -33,8 +34,9 @@ function processUserInfo(info) {
   return combinedInfo;
 }
 
-export default function Schedule({ shift, courses, setNavbar }) {
+export default function Schedule({ shift, courses }) {
   const [onScreen, setOnScreen] = useState("none");
+  const { setNavbar } = useContext(AppContext);
   const activeUser = useSelector((state) => state.active.user);
   const userData = useSelector((state) => state.userData.items);
   const toPrint = useRef();

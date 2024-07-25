@@ -1,4 +1,10 @@
-import { useContext, useRef } from "react";
+import {
+	useContext,
+	useRef,
+	useEffect,
+	useState,
+	useLayoutEffect,
+} from "react";
 import NavbarToggle from "/src/navbar/components/NavbarToggle";
 import NavbarBrand from "/src/navbar/components/NavbarBrand";
 import NavbarRight from "/src/navbar/components/NavbarRight";
@@ -7,18 +13,38 @@ import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
 import { AppContext } from "/src/contexts/AppContext";
 export default function Navbar() {
-	const { refNav, navbar, refBrand } = useContext(AppContext);
+	const { refNav, navbar, refBrand, setNavHeight } = useContext(AppContext);
+	const [didMount, setDidMount] = useState(false);
+	const observer = new MutationObserver(() =>
+		setNavHeight(refNav.current.offsetHeight),
+	);
+	useEffect(() => setDidMount(true), []);
+	useLayoutEffect(() => {
+		if (refNav.current) {
+			observer.observe(refNav.current, {
+				subtree: true,
+				attributeFilter: ["class"],
+			});
+			setNavHeight(refNav.current.offsetHeight);
+		}
+	}, [didMount]);
 	return (
-		<>
+		<div
+			style={{
+				visibility: navbar ? "visible" : "hidden",
+				position: navbar ? "sticky" : "absolute",
+				top: 0,
+				zIndex: 1,
+			}}
+		>
 			<BootstrapNavbar
 				ref={refNav}
 				style={{
-					display: navbar ? "initial" : "none",
-					zIndex: 1,
+					width: "100%",
+					padding: 0,
 				}}
 				data-bs-theme="dark"
 				expand="xl"
-				sticky="top"
 			>
 				<Nav
 					className="flexbox-row bk-institutional-navy"
@@ -37,6 +63,6 @@ export default function Navbar() {
 				</Nav>
 			</BootstrapNavbar>
 			<NavbarRight />
-		</>
+		</div>
 	);
 }

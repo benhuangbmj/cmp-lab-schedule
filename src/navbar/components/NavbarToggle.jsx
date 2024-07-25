@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, useEffect } from "react";
 const routes = ["profile", "admin", "progress", "experimental"];
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -10,6 +10,17 @@ import { selectActive } from "/src/reducers/activeReducer.js";
 export default function NavbarToggle() {
 	const refNavCollapse = useRef();
 	const active = useSelector(selectActive);
+	useEffect(() => {
+		const navbarToggler = document.querySelector("button.navbar-toggler");
+		if (refNavCollapse.current) {
+			const children = Array.from(refNavCollapse.current.children);
+			children.forEach((child) => {
+				child.onclick = () => {
+					navbarToggler.click();
+				};
+			});
+		}
+	}, []);
 	return (
 		<>
 			<Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -2,14 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import utils from "/src/utils";
 
-import {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  useLayoutEffect,
-  useMemo,
-} from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useErrorBoundary } from "react-error-boundary";
@@ -42,18 +35,7 @@ export default function App() {
   const [info, setInfo] = useState(null);
   const [courseTutor, setCourseTutor] = useState(null);
   const [shifts, setShifts] = useState(null);
-  const [navbar, setNavbar] = useState(true);
-  const [navHeight, setNavHeight] = useState();
   const [fetchLogin, setFetchLogin] = useState(false);
-  const observer = useMemo(
-    () =>
-      new MutationObserver(() => {
-        setNavHeight(refNav.current.offsetHeight);
-      }),
-    [],
-  );
-  const refNav = useRef();
-  const refNavCollapse = useRef();
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const location = useLocation();
@@ -121,25 +103,6 @@ export default function App() {
     }
   }, [userData]);
 
-  useLayoutEffect(() => {
-    if (refNav.current) {
-      observer.observe(refNav.current, {
-        subtree: true,
-        attributeFilter: ["class"],
-      });
-      setNavHeight(refNav.current.offsetHeight);
-    }
-    const navbarToggler = document.querySelector("button.navbar-toggler");
-    if (refNavCollapse.current) {
-      const children = Array.from(refNavCollapse.current.children);
-      children.forEach((child) => {
-        child.onclick = () => {
-          navbarToggler.click();
-        };
-      });
-    }
-  }, [info, fetchLogin]);
-
   if (!info || !fetchLogin) {
     return (
       <main>
@@ -158,23 +121,13 @@ export default function App() {
         <Routes>
           <Route
             path="/"
-            element={
-              <Schedule
-                shift={shifts}
-                courses={courseTutor}
-                setNavbar={setNavbar}
-              />
-            }
+            element={<Schedule shift={shifts} courses={courseTutor} />}
           />
           <Route
             path="/profile"
             element={
               <ProtectedRoute>
-                <Profile
-                  info={info}
-                  fetchInfo={fetchInfo}
-                  navHeight={navHeight}
-                />
+                <Profile info={info} fetchInfo={fetchInfo} />
               </ProtectedRoute>
             }
           />
@@ -190,11 +143,7 @@ export default function App() {
             path="/admin"
             element={
               <ProtectedRoute role="admin">
-                <Admin
-                  info={info}
-                  fetchInfo={fetchInfo}
-                  navHeight={navHeight}
-                />
+                <Admin info={info} fetchInfo={fetchInfo} />
               </ProtectedRoute>
             }
           />

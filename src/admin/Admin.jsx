@@ -2,7 +2,8 @@ import devTools from "/src/devTools"; //remove
 
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef, useContext } from "react";
+import { AppContext } from "/src/contexts/AppContext";
 
 import utils, { fieldOptions } from "/src/utils";
 import contentful from "/src//api-operations";
@@ -69,7 +70,8 @@ function setBackground(active) {
   return active ? { background: "#11698c30" } : {};
 }
 
-export default function Admin({ info, fetchInfo, navHeight }) {
+export default function Admin({ info, fetchInfo }) {
+  const { navHeight } = useContext(AppContext);
   const userData = useSelector((state) => state.userData.items);
   const activeUser = useSelector((state) => state.active.user);
   const resetCount = useRef(0);

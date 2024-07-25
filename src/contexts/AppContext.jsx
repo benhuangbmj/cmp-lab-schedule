@@ -5,6 +5,7 @@ export const AppContextProvider = function ({ children }) {
 	const refNav = useRef();
 	const refBrand = useRef();
 	const [navbar, setNavbar] = useState(true);
+	const [navHeight, setNavHeight] = useState();
 	return (
 		<AppContext.Provider
 			value={{
@@ -12,6 +13,8 @@ export const AppContextProvider = function ({ children }) {
 				navbar,
 				setNavbar,
 				refBrand,
+				navHeight,
+				setNavHeight,
 			}}
 		>
 			{children}

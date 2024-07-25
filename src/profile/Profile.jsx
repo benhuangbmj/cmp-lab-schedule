@@ -1,10 +1,18 @@
 import bcrypt from "bcryptjs";
 
-import { useState, useEffect, useCallback, useRef, forwardRef } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  forwardRef,
+  useContext,
+} from "react";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { useSelector, useDispatch } from "react-redux";
 import { updateActive } from "/src/reducers/activeReducer.js";
+import { AppContext } from "/src/contexts/AppContext";
 
 import { getSingleAsset, update, fetchKey } from "/src/api-operations";
 import { schema as dataSchema, courseOptions, blankForm } from "/src/utils";
@@ -35,7 +43,7 @@ const privilege = import.meta.env.VITE_PRIVILEGE;
 const display = ["username", "name", "subject", "links", "password"];
 
 const Profile = forwardRef(function Profile(
-  { info, fetchInfo, user = null, navHeight },
+  { info, fetchInfo, user = null },
   ref,
 ) {
   const {
@@ -61,6 +69,7 @@ const Profile = forwardRef(function Profile(
   const currUser = useRef();
   const newUsername = watch("username");
   const dispatch = useDispatch();
+  const { navHeight } = useContext(AppContext);
 
   function generateUsernameError() {
     setError("username", {
