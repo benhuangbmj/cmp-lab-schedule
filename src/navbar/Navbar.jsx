@@ -8,11 +8,11 @@ import {
 import NavbarToggle from "/src/navbar/components/NavbarToggle";
 import NavbarBrand from "/src/navbar/components/NavbarBrand";
 import NavbarRight from "/src/navbar/components/NavbarRight";
-import BootstrapNavbar from "react-bootstrap/Navbar";
+import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
 import { AppContext } from "/src/contexts/AppContext";
-export default function Navbar() {
+export default function () {
 	const { refNav, navbar, refBrand, setNavHeight } = useContext(AppContext);
 	const [didMount, setDidMount] = useState(false);
 	const observer = new MutationObserver(() =>
@@ -37,7 +37,7 @@ export default function Navbar() {
 				zIndex: 1,
 			}}
 		>
-			<BootstrapNavbar
+			<Navbar
 				ref={refNav}
 				style={{
 					width: "100%",
@@ -61,7 +61,7 @@ export default function Navbar() {
 						<NavbarToggle />
 					</Nav>
 				</Nav>
-			</BootstrapNavbar>
+			</Navbar>
 			<NavbarRight />
 		</div>
 	);
