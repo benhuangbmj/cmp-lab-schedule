@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import store from "./store";
 import { Provider } from "react-redux";
 import { ErrorBoundary } from "react-error-boundary";
+import { AppContextProvider } from "/src/contexts/AppContext.jsx";
 
 const logError = (error, info) => {
   console.log(error, info);
@@ -24,7 +25,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Provider store={store}>
       <ErrorBoundary fallbackRender={fallbackRender} onError={logError}>
-        <App />
+        <AppContextProvider>
+          <App />
+        </AppContextProvider>
       </ErrorBoundary>
     </Provider>
   </BrowserRouter>,

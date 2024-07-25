@@ -1,7 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import utils from "/src/utils";
-import { capitalize } from "lodash";
 
 import {
   useState,
@@ -11,11 +10,11 @@ import {
   useLayoutEffect,
   useMemo,
 } from "react";
-import { Route, Routes, NavLink } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useErrorBoundary } from "react-error-boundary";
 
-import { selectActive, updateActive } from "/src/reducers/activeReducer.js";
+import { updateActive } from "/src/reducers/activeReducer.js";
 import { fetchUserData, selectUserData } from "/src/reducers/userDataReducer";
 
 import { useLocation, Navigate } from "react-router-dom";
@@ -26,14 +25,7 @@ import {
   update3_0,
 } from "./api-operations.js";
 
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUser,
-  faIdCard,
-  faCameraRetro,
-} from "@fortawesome/free-solid-svg-icons";
+import Navbar from "/src/navbar/Navbar";
 
 import Schedule from "./Schedule";
 import Profile from "./profile/Profile";
@@ -45,10 +37,6 @@ import Progress from "/src/progress/Progress";
 import Charts from "/src/dashboard/Charts";
 import CheckInWithID from "/src/checkInWithID/CheckInWithID";
 import CheckInWithFace from "/src/checkInWithFace/CheckInWithFace";
-import UserPanel from "/src/userPanel/UserPanel";
-import NavDropdown from "react-bootstrap/NavDropdown";
-
-const routes = ["profile", "admin", "progress", "experimental"];
 
 export default function App() {
   const [info, setInfo] = useState(null);
@@ -66,8 +54,6 @@ export default function App() {
   );
   const refNav = useRef();
   const refNavCollapse = useRef();
-  const refBrand = useRef();
-  const active = useSelector(selectActive);
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const location = useLocation();
@@ -168,129 +154,7 @@ export default function App() {
     }
     return (
       <div>
-        <Navbar
-          ref={refNav}
-          style={{
-            display: navbar ? "initial" : "none",
-            zIndex: 1,
-          }}
-          data-bs-theme="dark"
-          expand="xl"
-          sticky="top"
-        >
-          <div
-            className="flexbox-row bk-institutional-navy"
-            style={{ alignItems: "start" }}
-          >
-            <Nav
-              className="flexbox-row"
-              style={{
-                justifyContent: "flex-start",
-                margin: 0,
-              }}
-            >
-              <Nav.Item ref={refBrand}>
-                <NavLink className="nav-link" to="/">
-                  <Navbar.Brand>
-                    <span className="shrink-on-mobile">CMP-Lab@Messiah</span>
-                  </Navbar.Brand>
-                </NavLink>
-              </Nav.Item>
-              <Navbar.Toggle aria-controls="basic-navbar-nav" />
-              <Navbar.Collapse style={{ width: "0px" }}>
-                {!active.user ? (
-                  <>
-                    <NavLink className="nav-link" to="/">
-                      Schedule
-                    </NavLink>
-                    <NavLink to="/dashboard" className="nav-link">
-                      Dashboard
-                    </NavLink>
-                  </>
-                ) : (
-                  <Nav ref={refNavCollapse}>
-                    <NavLink className="nav-link" to="/">
-                      Schedule
-                    </NavLink>
-                    <NavLink to="/dashboard" className="nav-link">
-                      Dashboard
-                    </NavLink>
-                    {routes.map((route) => (
-                      <NavLink
-                        key={route}
-                        className="nav-link"
-                        to={`/${route}`}
-                      >
-                        {capitalize(route)}
-                      </NavLink>
-                    ))}
-                  </Nav>
-                )}
-              </Navbar.Collapse>
-            </Nav>
-          </div>
-        </Navbar>
-        <Navbar data-bs-theme="dark">
-          <Nav
-            className="flexbox-row"
-            style={{
-              position: "fixed",
-              top: "0",
-              right: "0",
-              zIndex: 1,
-            }}
-          >
-            <NavDropdown
-              className="button-text"
-              title="Student check in"
-              id="student-check-in"
-            >
-              <NavDropdown.Item>
-                <NavLink
-                  className="nav-link"
-                  style={{ paddingLeft: 0 }}
-                  to="/checkinwithid"
-                >
-                  with ID (Demo) &nbsp;
-                  <FontAwesomeIcon icon={faIdCard} />
-                </NavLink>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <NavLink
-                  className="nav-link"
-                  style={{ paddingLeft: 0 }}
-                  to="/checkinwithface"
-                >
-                  with face (Demo) &nbsp;
-                  <FontAwesomeIcon icon={faCameraRetro} />
-                </NavLink>
-              </NavDropdown.Item>
-              <NavDropdown.Item disabled>with form</NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Item className="mobile-only" style={{ padding: "0 .25em" }}>
-              <NavLink className="nav-link" to="/checkinwithid">
-                <FontAwesomeIcon icon={faIdCard} />
-              </NavLink>
-            </Nav.Item>
-            <Nav.Item className="mobile-only" style={{ padding: "0 .25em" }}>
-              <NavLink className="nav-link" to="/checkinwithface">
-                <FontAwesomeIcon icon={faCameraRetro} />
-              </NavLink>
-            </Nav.Item>
-            {!active.user ? (
-              <NavLink className="nav-link" to="/login">
-                <Nav.Item style={{ float: "right", padding: ".25em" }}>
-                  <span className="button-text">Log in</span>{" "}
-                  <span>
-                    <FontAwesomeIcon icon={faUser} />
-                  </span>
-                </Nav.Item>
-              </NavLink>
-            ) : (
-              <UserPanel height={refBrand.current?.clientHeight} />
-            )}
-          </Nav>
-        </Navbar>
+        <Navbar />
         <Routes>
           <Route
             path="/"
