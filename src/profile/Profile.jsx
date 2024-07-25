@@ -197,7 +197,11 @@ const Profile = forwardRef(function Profile(
         <form onSubmit={handleSubmit(handleUpdate)} style={{ width: "100%" }}>
           <div
             className="sticky-top flexbox-column "
-            style={{ margin: "0", float: "right", top: navHeight + 20 + "px" }}
+            style={{
+              marginBottom: "1em",
+              top: navHeight + 10 + "px",
+              left: "100%",
+            }}
           >
             <ButtonGroup vertical>
               <Button
