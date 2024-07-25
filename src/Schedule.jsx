@@ -34,9 +34,13 @@ function processUserInfo(info) {
   return combinedInfo;
 }
 
-export default function Schedule({ shift, courses }) {
+export default function Schedule() {
   const [onScreen, setOnScreen] = useState("none");
-  const { setNavbar } = useContext(AppContext);
+  const {
+    setNavbar,
+    shifts: shift,
+    courseTutor: courses,
+  } = useContext(AppContext);
   const activeUser = useSelector((state) => state.active.user);
   const userData = useSelector((state) => state.userData.items);
   const toPrint = useRef();

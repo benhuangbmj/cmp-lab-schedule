@@ -70,8 +70,8 @@ function setBackground(active) {
   return active ? { background: "#11698c30" } : {};
 }
 
-export default function Admin({ info, fetchInfo }) {
-  const { navHeight } = useContext(AppContext);
+export default function Admin() {
+  const { navHeight, info, fetchInfo } = useContext(AppContext);
   const userData = useSelector((state) => state.userData.items);
   const activeUser = useSelector((state) => state.active.user);
   const resetCount = useRef(0);

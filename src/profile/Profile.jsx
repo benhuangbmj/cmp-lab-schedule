@@ -42,10 +42,7 @@ const privilege = import.meta.env.VITE_PRIVILEGE;
 
 const display = ["username", "name", "subject", "links", "password"];
 
-const Profile = forwardRef(function Profile(
-  { info, fetchInfo, user = null },
-  ref,
-) {
+const Profile = forwardRef(function Profile({ user = null }, ref) {
   const {
     register,
     reset,
@@ -69,7 +66,7 @@ const Profile = forwardRef(function Profile(
   const currUser = useRef();
   const newUsername = watch("username");
   const dispatch = useDispatch();
-  const { navHeight } = useContext(AppContext);
+  const { navHeight, info, fetchInfo } = useContext(AppContext);
 
   function generateUsernameError() {
     setError("username", {
