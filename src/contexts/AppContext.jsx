@@ -1,12 +1,7 @@
 import React from "react";
 export const AppContext = React.createContext(null);
 import { useErrorBoundary } from "react-error-boundary";
-import {
-	fetchInfo as preFetchInfo,
-	fetchKey,
-	update3_0,
-} from "/src/api-operations.js";
-
+import { fetchInfo as preFetchInfo } from "/src/api-operations.js";
 export const AppContextProvider = function ({ children }) {
 	const refNav = React.useRef();
 	const refBrand = React.useRef();
@@ -15,23 +10,11 @@ export const AppContextProvider = function ({ children }) {
 	const [info, setInfo] = React.useState(null);
 	const [courseTutor, setCourseTutor] = React.useState(null);
 	const [shifts, setShifts] = React.useState(null);
+	const [loginCheck, setLoginCheck] = React.useState(false);
 	const { showBoundary } = useErrorBoundary();
-	const fetchInfo = React.useCallback(
-		async (next) =>
-			preFetchInfo(
-				setCourseTutor,
-				setInfo,
-				setShifts,
-				next,
-				showBoundary,
-			),
-		[],
-	);
-	React.useEffect(() => {
-		if (!info) {
-			fetchInfo();
-		}
-	}, []);
+	async function fetchInfo(next) {
+		preFetchInfo(setCourseTutor, setInfo, setShifts, next, showBoundary);
+	}
 	return (
 		<AppContext.Provider
 			value={{
@@ -45,6 +28,8 @@ export const AppContextProvider = function ({ children }) {
 				courseTutor,
 				shifts,
 				info,
+				loginCheck,
+				setLoginCheck,
 			}}
 		>
 			{children}
