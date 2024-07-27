@@ -11,6 +11,7 @@ export const AppContextProvider = function ({ children }) {
 	const [courseTutor, setCourseTutor] = React.useState(null);
 	const [shifts, setShifts] = React.useState(null);
 	const [loginCheck, setLoginCheck] = React.useState(false);
+	const [brand, setBrand] = React.useState("CMP-Lab@Messiah");
 	const [basePath, setBasePath] = React.useState("/");
 	const { showBoundary } = useErrorBoundary();
 	async function fetchInfo(next) {
@@ -33,6 +34,8 @@ export const AppContextProvider = function ({ children }) {
 				setLoginCheck,
 				basePath,
 				setBasePath,
+				brand,
+				setBrand,
 			}}
 		>
 			{children}
