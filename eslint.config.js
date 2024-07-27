@@ -1,8 +1,11 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import pluginReact from "eslint-plugin-react";
-pluginReact.configs.flat.recommended.rules["react/react-in-jsx-scope"] = 0;
-
+const reactRules = {
+  "react/react-in-jsx-scope": 0,
+  "react/display-name": 0,
+};
+Object.assign(pluginReact.configs.flat.recommended.rules, reactRules);
 export default [
   { files: ["**/*.{js,mjs,cjs,jsx}"] },
   { ignores: ["cypress/", "cypress.*", "dist/", "node_modules/"] },
