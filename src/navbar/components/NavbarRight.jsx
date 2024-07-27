@@ -13,8 +13,10 @@ import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectActive } from "/src/reducers/activeReducer.js";
+import { useNormalizedBasePath } from "/src/hooks/customHooks";
 
 export default function () {
+	const basePath = useNormalizedBasePath();
 	const { refBrand } = useContext(AppContext);
 	const active = useSelector(selectActive);
 	const [didMount, setDidMount] = useState(false);
@@ -40,7 +42,7 @@ export default function () {
 						<NavLink
 							className="nav-link"
 							style={{ paddingLeft: 0 }}
-							to="/checkinwithid"
+							to={basePath + "checkinwithid"}
 						>
 							with ID (Demo) &nbsp;
 							<FontAwesomeIcon icon={faIdCard} />
@@ -50,7 +52,7 @@ export default function () {
 						<NavLink
 							className="nav-link"
 							style={{ paddingLeft: 0 }}
-							to="/checkinwithface"
+							to={basePath + "checkinwithface"}
 						>
 							with face (Demo) &nbsp;
 							<FontAwesomeIcon icon={faCameraRetro} />
@@ -62,7 +64,10 @@ export default function () {
 					className="mobile-only"
 					style={{ padding: "0 .25em" }}
 				>
-					<NavLink className="nav-link" to="/checkinwithid">
+					<NavLink
+						className="nav-link"
+						to={basePath + "checkinwithid"}
+					>
 						<FontAwesomeIcon icon={faIdCard} />
 					</NavLink>
 				</Nav.Item>
@@ -70,12 +75,15 @@ export default function () {
 					className="mobile-only"
 					style={{ padding: "0 .25em" }}
 				>
-					<NavLink className="nav-link" to="/checkinwithface">
+					<NavLink
+						className="nav-link"
+						to={basePath + "checkinwithface"}
+					>
 						<FontAwesomeIcon icon={faCameraRetro} />
 					</NavLink>
 				</Nav.Item>
 				{!active.user ? (
-					<NavLink className="nav-link" to="/login">
+					<NavLink className="nav-link" to={basePath + "login"}>
 						<Nav.Item style={{ float: "right", padding: ".25em" }}>
 							<span className="button-text">Log in</span>{" "}
 							<span>

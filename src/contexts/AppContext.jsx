@@ -11,6 +11,7 @@ export const AppContextProvider = function ({ children }) {
 	const [courseTutor, setCourseTutor] = React.useState(null);
 	const [shifts, setShifts] = React.useState(null);
 	const [loginCheck, setLoginCheck] = React.useState(false);
+	const [basePath, setBasePath] = React.useState("/");
 	const { showBoundary } = useErrorBoundary();
 	async function fetchInfo(next) {
 		preFetchInfo(setCourseTutor, setInfo, setShifts, next, showBoundary);
@@ -30,6 +31,8 @@ export const AppContextProvider = function ({ children }) {
 				info,
 				loginCheck,
 				setLoginCheck,
+				basePath,
+				setBasePath,
 			}}
 		>
 			{children}

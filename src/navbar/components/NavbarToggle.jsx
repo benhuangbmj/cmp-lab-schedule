@@ -1,13 +1,15 @@
-import { useContext, useRef, useEffect } from "react";
-const routes = ["profile", "admin", "progress", "experimental"];
+import { useRef, useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
 import { capitalize } from "lodash";
 import { useSelector } from "react-redux";
 import { selectActive } from "/src/reducers/activeReducer.js";
+import { useNormalizedBasePath } from "/src/hooks/customHooks";
 
+const routes = ["profile", "admin", "progress", "experimental"];
 export default function NavbarToggle() {
+	const basePath = useNormalizedBasePath();
 	const refNavCollapse = useRef();
 	const active = useSelector(selectActive);
 	useEffect(() => {
@@ -35,7 +37,7 @@ export default function NavbarToggle() {
 								<NavLink
 									key={route}
 									className="nav-link"
-									to={`/${route}`}
+									to={`${basePath}${route}`}
 								>
 									{capitalize(route)}
 								</NavLink>
@@ -46,17 +48,16 @@ export default function NavbarToggle() {
 			</Navbar.Collapse>
 		</>
 	);
-}
-
-function DefaultItem() {
-	return (
-		<>
-			<NavLink className="nav-link" to="/">
-				Schedule
-			</NavLink>
-			<NavLink to="/dashboard" className="nav-link">
-				Dashboard
-			</NavLink>
-		</>
-	);
+	function DefaultItem() {
+		return (
+			<>
+				<NavLink className="nav-link" to={basePath}>
+					Schedule
+				</NavLink>
+				<NavLink to={basePath + "dashboard"} className="nav-link">
+					Dashboard
+				</NavLink>
+			</>
+		);
+	}
 }
