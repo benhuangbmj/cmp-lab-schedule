@@ -68,7 +68,7 @@ export default function Schedule() {
         <h1>
           <img
             className="qr-code"
-            src="src/img/static-qr-code-6939aa416818b250434bfed8a036658a.png"
+            src="/img/static-qr-code-6939aa416818b250434bfed8a036658a.png"
           />
           <div className="schedule-title">
             CMP Lounge Schedule
@@ -76,7 +76,7 @@ export default function Schedule() {
             {currDate.getMonth() >= 6 ? "Fall" : "Spring"}{" "}
             {currDate.getFullYear()}
           </div>
-          <img className="qr-code" src="src/img/qr-code.png" />
+          <img className="qr-code" src="/img/qr-code.png" />
         </h1>
         <div>
           <Table bordered striped="columns" className="table-schedule">

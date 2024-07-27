@@ -101,7 +101,7 @@ const makeLogo = (canvas, setLogo) => {
   const cvs = canvas.current;
   const ctx = cvs.getContext("2d");
   const img = new Image();
-  img.src = `/src/img/see your ${word} anew-${color}word.jpg`;
+  img.src = `/img/see your ${word} anew-${color}word.jpg`;
   img.onload = () => {
     ctx.drawImage(img, 37, 168, 429, 167, 0, 0, 429, 167);
     const logo = cvs.toDataURL();

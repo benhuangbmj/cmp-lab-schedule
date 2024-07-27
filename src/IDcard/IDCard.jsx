@@ -214,7 +214,7 @@ export default function IDCard({ user, canvas, reversed }) {
       <View style={styles.company}>
         <Image
           style={[styles.brand, { backgroundColor: companyBackground }]}
-          src="src/img/MULogo-DeptCMP-White-Horiz.png"
+          src="/img/MULogo-DeptCMP-White-Horiz.png"
         />
       </View>
       <View style={styles.content}>
@@ -267,7 +267,7 @@ export default function IDCard({ user, canvas, reversed }) {
           <Text style={{ width: "100%", paddingRight: "2px" }}>
             Please scan the QR code below to sign in for tutoring
           </Text>
-          <Image style={styles.icon} src="src/img/tutorForm.png" />
+          <Image style={styles.icon} src="/img/tutorForm.png" />
         </View>
       </View>
       <View style={styles.category}>
