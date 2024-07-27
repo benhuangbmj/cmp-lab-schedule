@@ -7,7 +7,7 @@ const databaseId = import.meta.env.VITE_DATABASE_ID;
 const backupId = import.meta.env.VITE_BACKUP_ID;
 const userInfoId = import.meta.env.VITE_USER_INFO_ID;
 
-const getSingleAsset = async function (assetId) {
+export const getSingleAsset = async function (assetId) {
   let asset = await fetch(
     `https://api.contentful.com/spaces/${spaceId}/environments/master/assets/${assetId}`,
     {
@@ -21,7 +21,13 @@ const getSingleAsset = async function (assetId) {
   return asset;
 };
 
-const fetchInfo = (setCourseTutor, setInfo, setShifts, next, showBoundary) => {
+export const fetchInfo = (
+  setCourseTutor,
+  setInfo,
+  setShifts,
+  next,
+  showBoundary,
+) => {
   const query = `{
     tutorsCollection {
       items {
@@ -129,7 +135,13 @@ export const fetchKey = async (user, key) => {
   return userData[key];
 };
 
-const update = async (targetKey, keys, value, fetchInfo, backup = false) => {
+export const update = async (
+  targetKey,
+  keys,
+  value,
+  fetchInfo,
+  backup = false,
+) => {
   const entryId = backup ? backupId : databaseId;
   return fetch(
     `https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`,
@@ -444,13 +456,16 @@ export const createAsset = async function (file, title) {
   }
 };
 
-export { getSingleAsset, update, fetchInfo };
+export async function fetchBrand(id) {
+  if (id == "demo") return "Demo";
+}
 
 export default {
-  update: update,
-  update2_0: update2_0,
-  fetchKey: fetchKey,
-  deleteAsset: deleteAsset,
-  createAsset: createAsset,
+  update,
+  update2_0,
+  fetchKey,
+  deleteAsset,
+  createAsset,
   update3_0,
+  fetchBrand,
 };
