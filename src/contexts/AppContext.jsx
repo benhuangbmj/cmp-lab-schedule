@@ -1,3 +1,5 @@
+const userInfoId = import.meta.env.VITE_USER_INFO_ID; //to distinguish from other JSON file (e.g. the backup file)
+
 import React from "react";
 export const AppContext = React.createContext(null);
 import { useErrorBoundary } from "react-error-boundary";
@@ -13,10 +15,20 @@ export const AppContextProvider = function ({ children }) {
 	const [loginCheck, setLoginCheck] = React.useState(false);
 	const [brand, setBrand] = React.useState("CMP-Lab@Messiah");
 	const [basePath, setBasePath] = React.useState("/");
+	const [fetchInfo, dispatchFetchInfo] = React.useReducer(
+		fetchInfoReducer,
+		async function (next) {
+			preFetchInfo(
+				setCourseTutor,
+				setInfo,
+				setShifts,
+				next,
+				showBoundary,
+				userInfoId,
+			);
+		},
+	);
 	const { showBoundary } = useErrorBoundary();
-	async function fetchInfo(next) {
-		preFetchInfo(setCourseTutor, setInfo, setShifts, next, showBoundary);
-	}
 	return (
 		<AppContext.Provider
 			value={{
@@ -27,9 +39,11 @@ export const AppContextProvider = function ({ children }) {
 				navHeight,
 				setNavHeight,
 				fetchInfo,
+				dispatchFetchInfo,
 				courseTutor,
 				shifts,
 				info,
+				setInfo,
 				loginCheck,
 				setLoginCheck,
 				basePath,
@@ -41,4 +55,23 @@ export const AppContextProvider = function ({ children }) {
 			{children}
 		</AppContext.Provider>
 	);
+	function fetchInfoReducer(state, action) {
+		switch (action.type) {
+			case "set_id": {
+				return async function (next) {
+					preFetchInfo(
+						setCourseTutor,
+						setInfo,
+						setShifts,
+						next,
+						showBoundary,
+						action.payload,
+					);
+				};
+			}
+			default: {
+				return state;
+			}
+		}
+	}
 };

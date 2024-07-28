@@ -1,11 +1,24 @@
 import { sortByLastName, days } from "./utils";
+import * as contentful from "contentful";
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
 const cmaToken = import.meta.env.VITE_CMA_TOKEN;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 const databaseId = import.meta.env.VITE_DATABASE_ID;
 const backupId = import.meta.env.VITE_BACKUP_ID;
-const userInfoId = import.meta.env.VITE_USER_INFO_ID;
+const userInfoId = import.meta.env.VITE_USER_INFO_ID; //to distinguish from other JSON file (e.g. the backup file)
+const deptInfoId = import.meta.env.VITE_DEPT_INFO_ID;
+
+const client = contentful.createClient({
+  accessToken: accessToken,
+  space: spaceId,
+});
+
+async function getDeptInfo() {
+  const entry = await client.getEntry(deptInfoId);
+  const deptInfo = entry.fields.deptInfo;
+  return deptInfo;
+}
 
 export const getSingleAsset = async function (assetId) {
   let asset = await fetch(
@@ -27,6 +40,7 @@ export const fetchInfo = (
   setShifts,
   next,
   showBoundary,
+  userInfoId,
 ) => {
   const query = `{
     tutorsCollection {
@@ -456,8 +470,9 @@ export const createAsset = async function (file, title) {
   }
 };
 
-export async function fetchBrand(id) {
-  if (id == "demo") return "Demo";
+export async function fetchDeptInfoById(id) {
+  const deptInfo = await getDeptInfo();
+  return deptInfo[id];
 }
 
 export default {
@@ -467,5 +482,5 @@ export default {
   deleteAsset,
   createAsset,
   update3_0,
-  fetchBrand,
+  fetchDeptInfoById,
 };

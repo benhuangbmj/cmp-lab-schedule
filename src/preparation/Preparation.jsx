@@ -17,7 +17,7 @@ export default function () {
 			fetchInfo();
 		}
 		checkActive();
-	}, []);
+	}, [fetchInfo]);
 	useEffect(() => {
 		handleLoginCheck();
 	}, [userData]);

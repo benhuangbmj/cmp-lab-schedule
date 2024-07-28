@@ -8,13 +8,18 @@ export default function () {
 	const match = useMatch("/dept/:id/*");
 	React.useLayoutEffect(() => {
 		match && appContext.setBasePath(match.pathnameBase);
-		handleBrand();
+		handleDeptInfo();
 	}, []);
 
-	async function handleBrand() {
+	async function handleDeptInfo() {
 		if (id) {
-			const brand = await contentfulApi.fetchBrand(id);
-			appContext.setBrand(brand);
+			const deptInfo = await contentfulApi.fetchDeptInfoById(id);
+			appContext.setBrand(deptInfo.brand);
+			appContext.dispatchFetchInfo({
+				type: "set_id",
+				payload: deptInfo.tutorInfo,
+			});
+			appContext.setInfo(null);
 		}
 	}
 }
