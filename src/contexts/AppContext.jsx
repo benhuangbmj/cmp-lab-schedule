@@ -1,5 +1,3 @@
-const userInfoId = import.meta.env.VITE_USER_INFO_ID; //to distinguish from other JSON file (e.g. the backup file)
-
 import React from "react";
 export const AppContext = React.createContext(null);
 import { useErrorBoundary } from "react-error-boundary";
@@ -14,21 +12,13 @@ export const AppContextProvider = function ({ children }) {
 	const [shifts, setShifts] = React.useState(null);
 	const [loginCheck, setLoginCheck] = React.useState(false);
 	const [brand, setBrand] = React.useState("CMP-Lab@Messiah");
-	const [basePath, setBasePath] = React.useState("/");
+	const [basePath, setBasePath] = React.useState();
 	const [fetchInfo, dispatchFetchInfo] = React.useReducer(
 		fetchInfoReducer,
-		async function (next) {
-			preFetchInfo(
-				setCourseTutor,
-				setInfo,
-				setShifts,
-				next,
-				showBoundary,
-				userInfoId,
-			);
-		},
+		null,
 	);
 	const { showBoundary } = useErrorBoundary();
+
 	return (
 		<AppContext.Provider
 			value={{

@@ -56,7 +56,6 @@ export default function () {
 				<Route path="checkinwithface" element={<CheckInWithFace />} />
 				<Route path="dashboard" element={<Charts />} />
 			</Route>
-			<Route path="/dept/:id/*" element={<Reroute />} />
 			<Route path="*" element={<Schedule />} />
 		</Routes>
 	);

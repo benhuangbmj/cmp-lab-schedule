@@ -7,7 +7,9 @@ export default function () {
 	const { id } = useParams();
 	const match = useMatch("/dept/:id/*");
 	React.useLayoutEffect(() => {
-		match && appContext.setBasePath(match.pathnameBase);
+		match
+			? appContext.setBasePath(match.pathnameBase)
+			: appContext.setBasePath("/");
 		handleDeptInfo();
 	}, []);
 
@@ -19,6 +21,7 @@ export default function () {
 				type: "set_id",
 				payload: deptInfo.tutorInfo,
 			});
+			console.log(deptInfo);
 			appContext.setInfo(null);
 		}
 	}

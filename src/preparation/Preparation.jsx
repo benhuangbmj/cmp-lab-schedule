@@ -1,18 +1,31 @@
 import { useState, useEffect, useContext } from "react";
+import { Route, Routes, Outlet } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateActive } from "/src/reducers/activeReducer.js";
 import { fetchUserData, selectUserData } from "/src/reducers/userDataReducer";
 import { AppContext } from "/src/contexts/AppContext";
 import { fetchKey, update3_0 } from "/src/api-operations.js";
 import Spinner from "react-bootstrap/Spinner";
+import Reroute from "/src/routes/components/Reroute";
+import Schedule from "/src/Schedule";
 import utils from "/src/utils";
+const userInfoId = import.meta.env.VITE_USER_INFO_ID; //to distinguish from other JSON file (e.g. the backup file)
+
 export default function () {
-	const { setLoginCheck, info, fetchInfo } = useContext(AppContext);
+	const { setLoginCheck, info, fetchInfo, basePath, dispatchFetchInfo } =
+		useContext(AppContext);
 	const dispatch = useDispatch();
 	const userData = useSelector(selectUserData);
-
 	useEffect(() => {
-		if (!info) {
+		if (basePath == "/") {
+			dispatchFetchInfo({
+				type: "set_id",
+				payload: userInfoId,
+			});
+		}
+	}, [basePath]);
+	useEffect(() => {
+		if (fetchInfo) {
 			dispatch(fetchUserData());
 			fetchInfo();
 		}
@@ -21,12 +34,6 @@ export default function () {
 	useEffect(() => {
 		handleLoginCheck();
 	}, [userData]);
-
-	return (
-		<h1>
-			Loading ... <Spinner />
-		</h1>
-	);
 
 	function handleLoginCheck() {
 		if (userData.status == "succeeded") {
@@ -77,4 +84,16 @@ export default function () {
 		}
 		dispatch(updateActive(activeUser));
 	}
+
+	return (
+		<main>
+			<h1>
+				Loading ... <Spinner />
+			</h1>
+			<Routes>
+				<Route path="/dept/:id/*" element={<Reroute />} />
+				<Route path="*" element={<Reroute />} />
+			</Routes>
+		</main>
+	);
 }
