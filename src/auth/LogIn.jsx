@@ -6,7 +6,7 @@ import { generateVerificationCode, apiBaseUrl } from "/src/utils.js";
 import { update2_0 } from "/src/api-operations.js";
 import { fetchKey } from "/src/api-operations.js";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUserData } from "/src/reducers/userDataReducer.js";
@@ -14,10 +14,11 @@ import { selectActive, updateActive } from "/src/reducers/activeReducer.js";
 import { useLocation, Navigate } from "react-router-dom";
 
 import Button from "react-bootstrap/Button";
-
 import ResetPassword from "./ResetPassword";
+import { AppContext } from "/src/contexts/AppContext";
 
 export default function LogIn() {
+  const { basePath } = useContext(AppContext);
   const {
     register: registerLogin,
     handleSubmit: handleSubmitLogin,
@@ -74,7 +75,16 @@ export default function LogIn() {
           "Content-Type": "text/plain",
         },
         credentials: "include",
-        body: location.state?.to,
+        body: location.state.to,
+      }).then(() => (window.location.href = apiBaseUrl + "/auth/microsoft"));
+    } else if (basePath != "/") {
+      fetch(apiBaseUrl + "/auth/microsoft", {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain",
+        },
+        credentials: "include",
+        body: basePath,
       }).then(() => (window.location.href = apiBaseUrl + "/auth/microsoft"));
     } else {
       window.location.href = apiBaseUrl + "/auth/microsoft";
@@ -83,7 +93,6 @@ export default function LogIn() {
   const handleRedirect = () => {
     setRedirect(true);
   };
-
   return (
     <main className="center-fit">
       {/*!active.user ? (

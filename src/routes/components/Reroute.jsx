@@ -21,7 +21,6 @@ export default function () {
 				type: "set_id",
 				payload: deptInfo.tutorInfo,
 			});
-			console.log(deptInfo);
 			appContext.setInfo(null);
 		}
 	}
