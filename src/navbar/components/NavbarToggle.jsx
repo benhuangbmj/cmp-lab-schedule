@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
@@ -12,6 +12,21 @@ export default function NavbarToggle() {
 	const basePath = useNormalizedBasePath();
 	const refNavCollapse = useRef();
 	const active = useSelector(selectActive);
+	const DefaultItems = useCallback(
+		function () {
+			return (
+				<>
+					<NavLink className="nav-link" to={basePath}>
+						Schedule
+					</NavLink>
+					<NavLink to={basePath + "dashboard"} className="nav-link">
+						Dashboard
+					</NavLink>
+				</>
+			);
+		},
+		[basePath],
+	);
 	useEffect(() => {
 		const navbarToggler = document.querySelector("button.navbar-toggler");
 		if (refNavCollapse.current) {
@@ -28,36 +43,19 @@ export default function NavbarToggle() {
 			<Navbar.Toggle aria-controls="basic-navbar-nav" />
 			<Navbar.Collapse style={{ width: "0px" }}>
 				<Nav ref={refNavCollapse}>
-					{!active.user ? (
-						<DefaultItem />
-					) : (
-						<>
-							<DefaultItem />
-							{routes.map((route) => (
-								<NavLink
-									key={route}
-									className="nav-link"
-									to={`${basePath}${route}`}
-								>
-									{capitalize(route)}
-								</NavLink>
-							))}
-						</>
-					)}
+					<DefaultItems />
+					{active.user &&
+						routes.map((route) => (
+							<NavLink
+								key={route}
+								className="nav-link"
+								to={`${basePath}${route}`}
+							>
+								{capitalize(route)}
+							</NavLink>
+						))}
 				</Nav>
 			</Navbar.Collapse>
 		</>
 	);
-	function DefaultItem() {
-		return (
-			<>
-				<NavLink className="nav-link" to={basePath}>
-					Schedule
-				</NavLink>
-				<NavLink to={basePath + "dashboard"} className="nav-link">
-					Dashboard
-				</NavLink>
-			</>
-		);
-	}
 }
