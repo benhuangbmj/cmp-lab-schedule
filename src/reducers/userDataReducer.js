@@ -16,6 +16,7 @@ export const userDataSlice = createSlice({
   reducers: {
     updateUserData: (state, action) => {
       state.items = action.payload;
+      state.status = "succeeded";
     },
   },
   extraReducers(builder) {

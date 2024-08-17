@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateActive } from "/src/reducers/activeReducer.js";
-import { fetchUserData, selectUserData } from "/src/reducers/userDataReducer";
+import { updateUserData, selectUserData } from "/src/reducers/userDataReducer";
 import { AppContext } from "/src/contexts/AppContext";
 import { fetchKey, update3_0 } from "/src/api-operations.js";
 import Spinner from "react-bootstrap/Spinner";
@@ -26,12 +26,21 @@ export default function () {
 	}, [basePath]);
 	useEffect(() => {
 		if (fetchInfo) {
-			dispatch(fetchUserData());
 			fetchInfo();
 		}
 	}, [fetchInfo]);
 	useEffect(() => {
-		handleLoginCheck();
+		if (info) {
+			dispatch(updateUserData(info));
+		}
+	}, [info]);
+	useEffect(() => {
+		if (basePath == "/dept/demo" && userData.status == "succeeded") {
+			dispatch(updateActive("demouser"));
+			setLoginCheck(true);
+		} else {
+			handleLoginCheck();
+		}
 	}, [userData]);
 
 	function handleLoginCheck() {
