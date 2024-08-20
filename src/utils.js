@@ -1,5 +1,9 @@
 import bcrypt from "bcryptjs";
 import { io } from "socket.io-client";
+import * as dotenv from "dotenv";
+if (typeof process != "undefined") {
+  dotenv.config({ path: "../../.env.local" });
+}
 
 const saltRounds = 10;
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday"];
@@ -149,7 +153,8 @@ export {
   blankForm,
 };
 
-export const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+export const apiBaseUrl =
+  import.meta.env?.VITE_API_BASE_URL || process.env.VITE_API_BASE_URL;
 
 export const fieldOptions = {
   roles: Object.keys(schema.roles),

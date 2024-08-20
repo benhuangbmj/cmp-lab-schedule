@@ -1,20 +1,28 @@
 import { sortByLastName, days } from "./utils.js";
-import * as contentful from "contentful";
+import * as preContentful from "contentful";
+import * as dotenv from "dotenv";
+if (typeof process != "undefined") {
+  dotenv.config({ path: "../../.env.local" });
+  var contentful = preContentful.default;
+} else {
+  var contentful = preContentful;
+}
 
-const spaceId = import.meta.env.VITE_SPACE_ID;
-const cmaToken = import.meta.env.VITE_CMA_TOKEN;
-const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
-const databaseId = import.meta.env.VITE_DATABASE_ID;
-const backupId = import.meta.env.VITE_BACKUP_ID;
-const userInfoId = import.meta.env.VITE_USER_INFO_ID; //to distinguish from other JSON file (e.g. the backup file)
-const deptInfoId = import.meta.env.VITE_DEPT_INFO_ID;
+const myEnv = import.meta.env || process.env;
 
-const client = contentful.createClient({
+const spaceId = myEnv.VITE_SPACE_ID;
+const cmaToken = myEnv.VITE_CMA_TOKEN;
+const accessToken = myEnv.VITE_ACCESS_TOKEN;
+const databaseId = myEnv.VITE_DATABASE_ID;
+const backupId = myEnv.VITE_BACKUP_ID;
+const userInfoIdDefault = myEnv.VITE_USER_INFO_ID; //to distinguish from other JSON file (e.g. the backup file)
+const deptInfoId = myEnv.VITE_DEPT_INFO_ID;
+export const client = contentful.createClient({
   accessToken: accessToken,
   space: spaceId,
 });
 
-async function getDeptInfo() {
+export async function getDeptInfo() {
   const entry = await client.getEntry(deptInfoId);
   const deptInfo = entry.fields.deptInfo;
   return deptInfo;
@@ -38,8 +46,8 @@ export const fetchInfo = (
   setCourseTutor,
   setInfo,
   setShifts,
-  next,
-  showBoundary,
+  next = () => {},
+  showBoundary = () => {},
   userInfoId,
 ) => {
   const query = `{
@@ -487,4 +495,5 @@ export default {
   createAsset,
   update3_0,
   fetchDeptInfoById,
+  getDeptInfo,
 };
