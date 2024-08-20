@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateActive } from "/src/reducers/activeReducer.js";
 import { AppContext } from "/src/contexts/AppContext";
 
-import { getSingleAsset, update, fetchKey } from "/src/api-operations";
+import { getSingleAsset, fetchKey } from "/src/api-operations";
 import { schema as dataSchema, courseOptions, blankForm } from "/src/utils";
 import { handleSignOut } from "/src/auth/SignOut";
 
@@ -66,7 +66,7 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
   const currUser = useRef();
   const newUsername = watch("username");
   const dispatch = useDispatch();
-  const { navHeight, info, fetchInfo } = useContext(AppContext);
+  const { navHeight, info, fetchInfo, update } = useContext(AppContext);
 
   function generateUsernameError() {
     setError("username", {
@@ -101,11 +101,13 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
     }
     data.lastUpdate = new Date().toString();
     data = Object.assign(dataSchema, data);
-    update(username, [], data, fetchInfo).then(() => {
-      if (!selected) {
-        resetAll();
-      }
-    });
+    update({ targetKey: username, keys: [], value: data, fetchInfo }).then(
+      () => {
+        if (!selected) {
+          resetAll();
+        }
+      },
+    );
   };
   const handleSelect = (currSelected) => {
     if (currSelected) {
@@ -155,7 +157,7 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
   const handleDelete = function () {
     const confirm = prompt('Type "Confirm" to proceed to delete the user');
     if (confirm === "Confirm") {
-      update(selected, [], null, fetchInfo);
+      update({ targetKey: selected, keys: [], value: null, fetchInfo });
       if (selected == activeUser) {
         handleSignOut(dispatch);
       }

@@ -21,6 +21,14 @@ export default function () {
 				type: "set_id",
 				payload: deptInfo.tutorInfo,
 			});
+			appContext.dispatchUpdate({
+				type: "set_id",
+				payload: deptInfo.tutorInfo,
+			});
+			appContext.dispatchUpdateWithoutFetch({
+				type: "set_id_without_fetch",
+				payload: deptInfo.tutorInfo,
+			});
 			appContext.setInfo(null);
 		}
 	}

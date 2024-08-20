@@ -1,3 +1,4 @@
+//Note: Currently ResetPassword is removed from the app
 import { useState, useRef } from "react";
 import "reactjs-popup/dist/index.css";
 

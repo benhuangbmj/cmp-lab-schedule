@@ -6,7 +6,7 @@ import { useEffect, useState, useMemo, useRef, useContext } from "react";
 import { AppContext } from "/src/contexts/AppContext";
 
 import utils, { fieldOptions } from "/src/utils";
-import contentful from "/src//api-operations";
+//import contentful from "/src//api-operations";
 
 import Popup from "reactjs-popup";
 import Button from "react-bootstrap/Button";
@@ -71,7 +71,7 @@ function setBackground(active) {
 }
 
 export default function Admin() {
-  const { navHeight, info, fetchInfo } = useContext(AppContext);
+  const { navHeight, info, fetchInfo, update } = useContext(AppContext);
   const userData = useSelector((state) => state.userData.items);
   const activeUser = useSelector((state) => state.active.user);
   const resetCount = useRef(0);
@@ -147,7 +147,7 @@ export default function Admin() {
   const handleUpdate = (data) => {
     delete data.selected;
     data = utils.getReadyForUpdate(usernames, data);
-    contentful.update(null, null, data, fetchInfo);
+    update({ target: null, keys: null, value: data, fetchInfo });
   };
   const handleInactivate = () => {
     setInative(true);

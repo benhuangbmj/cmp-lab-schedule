@@ -1,4 +1,4 @@
-import { sortByLastName, days } from "./utils";
+import { sortByLastName, days } from "./utils.js";
 import * as contentful from "contentful";
 
 const spaceId = import.meta.env.VITE_SPACE_ID;
@@ -224,8 +224,12 @@ export const update = async (
     });
 };
 //changelog: update2_0 doesn't call fetchInfo.
-export const update2_0 = async (targetKey, keys, value) => {
-  const entryId = databaseId;
+export const update2_0 = async (
+  targetKey,
+  keys,
+  value,
+  entryId = databaseId,
+) => {
   let res = await fetch(
     `https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`,
     {
@@ -283,9 +287,9 @@ export const update3_0 = async ({
   keys,
   value,
   fetchInfo,
-  next,
+  next = () => {},
+  entryId = databaseId,
 }) => {
-  const entryId = databaseId;
   let userData = await fetch(
     `https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`,
     {

@@ -1,3 +1,4 @@
+//Note: Currently Login is removed from the app altogether.
 import "/src/App.css";
 
 import bcrypt from "bcryptjs";

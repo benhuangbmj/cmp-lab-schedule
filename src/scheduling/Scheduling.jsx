@@ -1,11 +1,12 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
+import { AppContext } from "/src/contexts/AppContext";
 import { days, times } from "/src/utils";
-import { update } from "../api-operations";
 
 import Timetable from "./Timetable";
 import Button from "react-bootstrap/Button";
 
 export default function Scheduling({ info, fetchInfo, selected }) {
+  const { update } = useContext(AppContext);
   const cleanSlate = Array.from(times, () => Array.from(Array(4), () => false));
   const [slots, setSlots] = useState(cleanSlate);
   const tutorSlots = useRef();
@@ -53,7 +54,7 @@ export default function Scheduling({ info, fetchInfo, selected }) {
       return output;
     };
     const data = createSchedule();
-    update(selected, [], data, fetchInfo);
+    update({ targetKey: selected, keys: [], value: data, fetchInfo });
   };
 
   useEffect(() => {

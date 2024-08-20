@@ -1,16 +1,25 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { useSelector } from "react-redux";
 
+import { AppContext } from "/src/contexts/AppContext";
+
 import Button from "react-bootstrap/Button";
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from "react-bootstrap/Spinner";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 
-import {faCamera, faEraser, faFileArrowUp, faRotateRight, faRotateLeft} from "@fortawesome/free-solid-svg-icons";
+import {
+  faCamera,
+  faEraser,
+  faFileArrowUp,
+  faRotateRight,
+  faRotateLeft,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import contentfulApi from "/src/api-operations";
 
 export default function ChangePic({ selected, setRenew }) {
+  const { updateWithoutFetch } = useContext(AppContext);
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState(false);
   const [profile, setProfile] = useState();
@@ -49,11 +58,11 @@ export default function ChangePic({ selected, setRenew }) {
         `${(Number(currDeg) + newDeg) % 360}`,
       );
     }
-    contentfulApi
-      .update2_0("transform", [selected, "profilePic"], newRotate)
-      .then(() => {
+    updateWithoutFetch("transform", [selected, "profilePic"], newRotate).then(
+      () => {
         setRenew((state) => state + 1);
-      });
+      },
+    );
   }
 
   async function uploadPic() {
@@ -73,7 +82,9 @@ export default function ChangePic({ selected, setRenew }) {
   }
   return (
     <div>
-      <div style={{margin: 'auto', width: 'fit-content', position: 'relative'}} >
+      <div
+        style={{ margin: "auto", width: "fit-content", position: "relative" }}
+      >
         {selected ? (
           <img
             className="profile-container"
@@ -89,7 +100,14 @@ export default function ChangePic({ selected, setRenew }) {
             <span style={{ position: "relative", top: "20px" }}>picture</span>
           </div>
         )}
-        <Button className='rounded-circle' type='button' onClick={() => { refInput.current.click() }} style={{ position: 'absolute', top: "0px", right: "-20px" }}>
+        <Button
+          className="rounded-circle"
+          type="button"
+          onClick={() => {
+            refInput.current.click();
+          }}
+          style={{ position: "absolute", top: "0px", right: "-20px" }}
+        >
           <FontAwesomeIcon icon={faCamera} />
         </Button>
       </div>
@@ -106,8 +124,14 @@ export default function ChangePic({ selected, setRenew }) {
           disabled={newPic ? false : true}
           onClick={uploadPic}
         >
-          <span className="button-text">{uploadStatus? "Uploading..." : "Upload"} &nbsp;</span>{" "} 
-          {uploadStatus? <Spinner size='sm'></Spinner> : <FontAwesomeIcon icon={faFileArrowUp} />}
+          <span className="button-text">
+            {uploadStatus ? "Uploading..." : "Upload"} &nbsp;
+          </span>{" "}
+          {uploadStatus ? (
+            <Spinner size="sm"></Spinner>
+          ) : (
+            <FontAwesomeIcon icon={faFileArrowUp} />
+          )}
         </Button>
         <Button
           type="button"
@@ -117,7 +141,7 @@ export default function ChangePic({ selected, setRenew }) {
           }}
         >
           <span className="button-text">Remove &nbsp;</span>{" "}
-          <FontAwesomeIcon icon={faEraser}/>
+          <FontAwesomeIcon icon={faEraser} />
         </Button>
         <Button
           type="button"
@@ -126,7 +150,8 @@ export default function ChangePic({ selected, setRenew }) {
             handleRotate(true);
           }}
         >
-          <span className="button-text">Rotate &nbsp;</span>{" "} <FontAwesomeIcon icon={faRotateRight} />
+          <span className="button-text">Rotate &nbsp;</span>{" "}
+          <FontAwesomeIcon icon={faRotateRight} />
         </Button>
         <Button
           type="button"
@@ -135,7 +160,8 @@ export default function ChangePic({ selected, setRenew }) {
             handleRotate(false);
           }}
         >
-          <span className="button-text">Rotate &nbsp;</span>{" "} <FontAwesomeIcon icon={faRotateLeft} />
+          <span className="button-text">Rotate &nbsp;</span>{" "}
+          <FontAwesomeIcon icon={faRotateLeft} />
         </Button>
       </ButtonGroup>
     </div>
