@@ -45,7 +45,7 @@ export default function Scheduling({ info, fetchInfo, selected }) {
           tutorDays.push(days[j]);
         }
       }
-      const output = Object.assign(info[selected], {
+      const output = Object.assign({}, info[selected], {
         day: tutorDays,
         time: tutorTimes,
         schedule: slots,
