@@ -39,6 +39,7 @@ const schema = {
   inactive: true,
   title: null,
   bio: null,
+  permission: false,
 };
 
 let blankForm = Object.assign({}, schema, { username: null });
