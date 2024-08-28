@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateActive } from "/src/reducers/activeReducer.js";
 import { updateUserData, selectUserData } from "/src/reducers/userDataReducer";
 import { AppContext } from "/src/contexts/AppContext";
-import { fetchKey, update3_0 } from "/src/api-operations.js";
+import { update3_0 } from "/src/api-operations.js";
 import Spinner from "react-bootstrap/Spinner";
 import Reroute from "/src/routes/components/Reroute";
 import Schedule from "/src/Schedule";

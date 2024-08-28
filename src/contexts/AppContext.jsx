@@ -5,6 +5,7 @@ import {
 	fetchInfo as preFetchInfo,
 	update3_0 as preUpdate,
 	update2_0 as preUpdateWithoutFetch,
+	fetchKey as preFetchKey,
 } from "/src/api-operations.js";
 export const AppContextProvider = function ({ children }) {
 	const refNav = React.useRef();
@@ -25,6 +26,10 @@ export const AppContextProvider = function ({ children }) {
 	const [updateWithoutFetch, dispatchUpdateWithoutFetch] = React.useReducer(
 		updateReducer,
 		preUpdateWithoutFetch,
+	);
+	const [fetchKey, dispatchFetchKey] = React.useReducer(
+		fetchKeyReducer,
+		preFetchInfo,
 	);
 	const { showBoundary } = useErrorBoundary();
 
@@ -53,6 +58,8 @@ export const AppContextProvider = function ({ children }) {
 				dispatchUpdate,
 				updateWithoutFetch,
 				dispatchUpdateWithoutFetch,
+				fetchKey,
+				dispatchFetchKey,
 			}}
 		>
 			{children}
@@ -80,14 +87,14 @@ export const AppContextProvider = function ({ children }) {
 	function updateReducer(state, action) {
 		switch (action.type) {
 			case "set_id": {
-				return function ({
+				return async function ({
 					targetKey,
 					keys,
 					value,
 					fetchInfo,
 					next = () => {},
 				}) {
-					preUpdate({
+					return await preUpdate({
 						targetKey,
 						keys,
 						value,
@@ -109,6 +116,15 @@ export const AppContextProvider = function ({ children }) {
 			}
 			default: {
 				return state;
+			}
+		}
+	}
+	function fetchKeyReducer(state, action) {
+		switch (action.type) {
+			case "set_id": {
+				return async function (user, key) {
+					return await preFetchInfo(user, key, action.payload);
+				};
 			}
 		}
 	}

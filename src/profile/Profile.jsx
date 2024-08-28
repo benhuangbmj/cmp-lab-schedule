@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateActive } from "/src/reducers/activeReducer.js";
 import { AppContext } from "/src/contexts/AppContext";
 
-import { getSingleAsset, fetchKey } from "/src/api-operations";
+import { getSingleAsset } from "/src/api-operations";
 import { schema as dataSchema, courseOptions, blankForm } from "/src/utils";
 import { handleSignOut } from "/src/auth/SignOut";
 
@@ -66,7 +66,8 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
   const currUser = useRef();
   const newUsername = watch("username");
   const dispatch = useDispatch();
-  const { navHeight, info, fetchInfo, update } = useContext(AppContext);
+  const { navHeight, info, fetchInfo, update, fetchKey } =
+    useContext(AppContext);
 
   function generateUsernameError() {
     setError("username", {

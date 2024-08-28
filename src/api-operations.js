@@ -128,7 +128,7 @@ export const fetchInfo = (
     });
 };
 
-export const fetchKey = async (user, key) => {
+export const fetchKey = async (user, key, userInfoId = userInfoIdDefault) => {
   const query = `{
     tutorsCollection {
       items {

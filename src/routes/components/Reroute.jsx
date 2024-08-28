@@ -15,15 +15,14 @@ export default function () {
 
 	async function handleDeptInfo() {
 		if (id) {
+			const toDispatch = ["FetchInfo", "Update", "FetchKey"];
 			const deptInfo = await contentfulApi.fetchDeptInfoById(id);
 			appContext.setBrand(deptInfo.brand);
-			appContext.dispatchFetchInfo({
-				type: "set_id",
-				payload: deptInfo.tutorInfo,
-			});
-			appContext.dispatchUpdate({
-				type: "set_id",
-				payload: deptInfo.tutorInfo,
+			toDispatch.forEach((operator) => {
+				appContext["dispatch" + operator]({
+					type: "set_id",
+					payload: deptInfo.tutorInfo,
+				});
 			});
 			appContext.dispatchUpdateWithoutFetch({
 				type: "set_id_without_fetch",
