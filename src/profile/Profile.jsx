@@ -268,6 +268,12 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
               )}
             </div>
             <div className="center-fit ">
+              <input
+                id="permission"
+                type="checkbox"
+                {...register("permission")}
+              />
+              <label htmlFor={"permission"}>permission</label>
               {["username"].concat(Object.keys(dataSchema)).map((e) => {
                 if (display.includes(e)) {
                   return e != "links" ? (
