@@ -157,6 +157,8 @@ export default function Admin() {
     setInative(false);
   };
 
+  const handleClearSchedule = () => {};
+
   useEffect(() => {
     if (userData) {
       const userObj = {};
@@ -427,7 +429,7 @@ export default function Admin() {
           </Button>
 
           <Button
-            type="Button"
+            type="button"
             onClick={handleBackup}
             disabled={
               !(
@@ -439,6 +441,7 @@ export default function Admin() {
             <span className="button-text">Backup&nbsp;</span>{" "}
             <FontAwesomeIcon icon={faDatabase} />
           </Button>
+          <Button type="button">Clear Schedule</Button>
         </form>
         <div
           ref={refCardDisp}
