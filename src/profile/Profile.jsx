@@ -40,7 +40,7 @@ const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 const cmaToken = import.meta.env.VITE_CMA_TOKEN;
 const privilege = import.meta.env.VITE_PRIVILEGE;
 
-const display = ["username", "name", "subject", "links", "password"];
+const display = ["username", "name", "subject", "links"];
 
 const Profile = forwardRef(function Profile({ user = null }, ref) {
   const form = useForm({
