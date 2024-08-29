@@ -66,62 +66,64 @@ export default function Timetable({ tutor, slots, setSlots }) {
   function handleTouchEnd(ev) {}
 
   return (
-    <div className={styles.container}>
-      <h5>{tutor ? `${tutor}'s Schedule` : ""}</h5>
-      <Button
-        style={{ marginBottom: ".5rem" }}
-        type="button"
-        onClick={handleExtend}
-      >
-        {extended ? "Collapse" : "Expand"}
-      </Button>
-      <Table
-        size="sm"
-        bordered
-        className="non-select"
-        style={{ touchAction: touchAction }}
-      >
-        <thead>
-          <tr>
-            {days.map((e) => (
-              <th key={e}>{e}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody
-          onPointerMove={(ev) => {
-            if (ev.pointerType == "touch")
-              ev.target.releasePointerCapture(ev.pointerId);
-          }}
+    slots && (
+      <div className={styles.container}>
+        <h5>{tutor ? `${tutor}'s Schedule` : ""}</h5>
+        <Button
+          style={{ marginBottom: ".5rem" }}
+          type="button"
+          onClick={handleExtend}
         >
-          {times.map((time, i) => {
-            if (extended || restrict(i)) {
-              return (
-                <tr key={i}>
-                  {days.map((day, j) => (
-                    <td
-                      key={j}
-                      style={
-                        slots[i][j] == true
-                          ? {
-                              backgroundColor: themeColor.grey,
-                              color: "white",
-                            }
-                          : {}
-                      }
-                      onPointerDown={tutor && handlePointerDown}
-                      onPointerEnter={tutor && handlePointerEnter}
-                      data-pos={[i, j]}
-                    >
-                      {time}
-                    </td>
-                  ))}
-                </tr>
-              );
-            }
-          })}
-        </tbody>
-      </Table>
-    </div>
+          {extended ? "Collapse" : "Expand"}
+        </Button>
+        <Table
+          size="sm"
+          bordered
+          className="non-select"
+          style={{ touchAction: touchAction }}
+        >
+          <thead>
+            <tr>
+              {days.map((e) => (
+                <th key={e}>{e}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody
+            onPointerMove={(ev) => {
+              if (ev.pointerType == "touch")
+                ev.target.releasePointerCapture(ev.pointerId);
+            }}
+          >
+            {times.map((time, i) => {
+              if (extended || restrict(i)) {
+                return (
+                  <tr key={i}>
+                    {days.map((day, j) => (
+                      <td
+                        key={j}
+                        style={
+                          slots[i][j] == true
+                            ? {
+                                backgroundColor: themeColor.grey,
+                                color: "white",
+                              }
+                            : {}
+                        }
+                        onPointerDown={tutor && handlePointerDown}
+                        onPointerEnter={tutor && handlePointerEnter}
+                        data-pos={[i, j]}
+                      >
+                        {time}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              }
+            })}
+          </tbody>
+        </Table>
+      </div>
+    )
   );
 }

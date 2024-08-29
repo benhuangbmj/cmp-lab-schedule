@@ -1,14 +1,13 @@
-import { useState, useRef, useEffect, useContext } from "react";
-import { AppContext } from "/src/contexts/AppContext";
+import { useState, useRef, useEffect } from "react";
 import { days, times } from "/src/utils";
 
 import Timetable from "./Timetable";
 import Button from "react-bootstrap/Button";
 
-export default function Scheduling({ info, fetchInfo, selected }) {
-  const { update } = useContext(AppContext);
+export default function Scheduling({ info, fetchInfo, selected, form }) {
+  const { setValue } = form;
   const cleanSlate = Array.from(times, () => Array.from(Array(4), () => false));
-  const [slots, setSlots] = useState(cleanSlate);
+  const [slots, setSlots] = useState(null);
   const tutorSlots = useRef();
 
   const handleReset = () => {
@@ -54,9 +53,15 @@ export default function Scheduling({ info, fetchInfo, selected }) {
       return output;
     };
     const data = createSchedule();
-    update({ targetKey: selected, keys: [], value: data, fetchInfo });
+    for (let key in data) {
+      setValue(key, data[key]);
+    }
   };
-
+  useEffect(() => {
+    if (slots) {
+      handleUpdate();
+    }
+  }, [slots]);
   useEffect(() => {
     if (selected) {
       if (info[selected].schedule) {
@@ -89,14 +94,6 @@ export default function Scheduling({ info, fetchInfo, selected }) {
         setSlots={setSlots}
       />
       <div>
-        <Button
-          disabled={selected == null}
-          type="button"
-          style={{ display: "inline-block" }}
-          onClick={handleUpdate}
-        >
-          Update
-        </Button>
         <Button
           type="button"
           style={{ display: "inline-block" }}

@@ -43,6 +43,9 @@ const privilege = import.meta.env.VITE_PRIVILEGE;
 const display = ["username", "name", "subject", "links", "password"];
 
 const Profile = forwardRef(function Profile({ user = null }, ref) {
+  const form = useForm({
+    reValidateMode: "onSubmit",
+  });
   const {
     register,
     reset,
@@ -52,9 +55,7 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
     setError,
     clearErrors,
     getValues,
-  } = useForm({
-    reValidateMode: "onSubmit",
-  });
+  } = form;
   const activeUser = useSelector((state) => state.active.user);
   const userData = useSelector((state) => state.userData.items);
   const [renew, setRenew] = useState(0);
@@ -356,6 +357,7 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
                 info={info}
                 fetchInfo={fetchInfo}
                 selected={loggedIn ? selected : null}
+                form={form}
               />
             </div>
             <div className="">
