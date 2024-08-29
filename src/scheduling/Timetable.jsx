@@ -20,7 +20,7 @@ export default function Timetable({ tutor, slots, setSlots }) {
   const [extended, setExtended] = useState(false);
 
   useEffect(() => {
-    document.addEventListener("pointerup", HandlePointerUp);
+    document.addEventListener("pointerup", handlePointerUp);
   }, []);
 
   const handlePointerDown = (e) => {
@@ -31,7 +31,7 @@ export default function Timetable({ tutor, slots, setSlots }) {
     setSlots(newSlots);
   };
 
-  const HandlePointerUp = () => {
+  const handlePointerUp = () => {
     pointerDown.current = false;
   };
 
