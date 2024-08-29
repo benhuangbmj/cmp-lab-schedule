@@ -268,13 +268,23 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
                 <div className="card-holder">ID card</div>
               )}
             </div>
-            <div className="center-fit ">
+            <div className="flexbox-row" style={{ marginTop: "1em" }}>
               <input
                 id="permission"
                 type="checkbox"
                 {...register("permission")}
+                style={{ display: "block" }}
               />
-              <label htmlFor={"permission"}>permission</label>
+              <label
+                htmlFor={"permission"}
+                style={{ display: "block", width: "90%" }}
+              >
+                I give my permission to display my name and profile picture in
+                the tutor schedule, which will be publicly accessible on the
+                website.
+              </label>
+            </div>
+            <div className="center-fit ">
               {["username"].concat(Object.keys(dataSchema)).map((e) => {
                 if (display.includes(e)) {
                   return e != "links" ? (
