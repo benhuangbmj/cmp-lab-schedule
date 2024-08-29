@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { days, times } from "/src/utils";
+import { cleanSlate } from "/src/utils";
 
 import Timetable from "./Timetable";
 import Button from "react-bootstrap/Button";
 
 export default function Scheduling({ info, fetchInfo, selected, form }) {
   const { setValue } = form;
-  const cleanSlate = Array.from(times, () => Array.from(Array(4), () => false));
   const [slots, setSlots] = useState(null);
   const tutorSlots = useRef();
 

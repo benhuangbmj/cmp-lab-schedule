@@ -8,6 +8,9 @@ if (typeof process != "undefined") {
 const saltRounds = 10;
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday"];
 const times = Array.from(Array(57), (e, i) => generateTime(i));
+export const cleanSlate = Array.from(times, () =>
+  Array.from(Array(4), () => false),
+);
 const schema = {
   password: null,
   name: null,
@@ -298,4 +301,5 @@ export default {
   sortByLastName: sortByLastName,
   getTaskStatus: getTaskStatus,
   schema,
+  cleanSlate,
 };
