@@ -43,6 +43,8 @@ const privilege = import.meta.env.VITE_PRIVILEGE;
 const display = ["username", "name", "subject", "links"];
 
 const Profile = forwardRef(function Profile({ user = null }, ref) {
+  const { navHeight, info, fetchInfo, update, fetchKey } =
+    useContext(AppContext);
   const form = useForm({
     reValidateMode: "onSubmit",
   });
@@ -64,11 +66,10 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
   const [profile, setProfile] = useState();
   const [selected, setSelected] = useState(user ? user : activeUser);
   const [loggedIn, setLoggedIn] = useState(true);
+  const [selectedInfo, setSelectedInfo] = useState({ user: info[selected] });
   const currUser = useRef();
   const newUsername = watch("username");
   const dispatch = useDispatch();
-  const { navHeight, info, fetchInfo, update, fetchKey } =
-    useContext(AppContext);
 
   function generateUsernameError() {
     setError("username", {
@@ -188,6 +189,11 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
     }
   }, [renew]);
 
+  useEffect(() => {
+    if (selected) setSelectedInfo({ user: info[selected] });
+    else setSelectedInfo(null);
+  }, [info, selected]);
+
   return (
     <main>
       <div
@@ -261,7 +267,7 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
                   <CardDisplay
                     pageSize={[220, 290]}
                     pageOrientation="landscape"
-                    info={{ user: info[selected] }}
+                    info={selectedInfo}
                     profile={true}
                   />
                 </div>
