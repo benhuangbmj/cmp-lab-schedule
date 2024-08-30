@@ -298,15 +298,21 @@ export const update3_0 = async ({
   next = () => {},
   entryId = databaseId,
 }) => {
-  let userData = await fetch(
-    `https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${cmaToken}`,
+  const fetchUserData = () =>
+    fetch(
+      `https://api.contentful.com//spaces/${spaceId}/environments/master/entries/${entryId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${cmaToken}`,
+        },
       },
-    },
-  );
+    );
+  let userData = await fetchUserData();
+  if (!userData.ok) {
+    alert("Update failed.");
+    throw Error(userData.status);
+  }
   userData = await userData.json();
 
   const currVersion = userData.sys.version;
@@ -337,6 +343,10 @@ export const update3_0 = async ({
       body: JSON.stringify(userData),
     },
   );
+  if (!updatedData.ok) {
+    alert("Update failed.");
+    throw Error(updatedData.status);
+  }
   updatedData = await updatedData.json();
   const newVersion = updatedData.sys.version;
   let publishedData = await fetch(
@@ -349,16 +359,22 @@ export const update3_0 = async ({
       },
     },
   );
-  if (publishedData.ok) {
-    if (fetchInfo) {
-      fetchInfo(next).then(() => {
-        alert("Update user database successfully!");
-      });
-    }
-  } else {
+  if (!publishedData.ok) {
     alert("Update failed.");
-    throw Error(res.status);
+    throw Error(publishedData.status);
   }
+  publishedData = await publishedData.json();
+  const verifyVersion = setInterval(async () => {
+    userData = await (await fetchUserData())?.json?.();
+    if (userData?.sys?.version == publishedData.sys.version) {
+      if (fetchInfo) {
+        fetchInfo(next).then(() => {
+          alert("Update user database successfully!");
+        });
+      }
+      clearInterval(verifyVersion);
+    }
+  }, 1000);
 };
 export const deleteAsset = async function (assetId) {
   let currAsset = await fetch(
