@@ -121,7 +121,7 @@ export const AppContextProvider = function ({ children }) {
 			}
 			case "set_id_without_fetch": {
 				return async function (targetKey, keys, value) {
-					return preUpdateWithoutFetch(
+					return await preUpdateWithoutFetch(
 						targetKey,
 						keys,
 						value,
@@ -130,12 +130,22 @@ export const AppContextProvider = function ({ children }) {
 				};
 			}
 			case "set_fetchInfo": {
+				const fetchInfoAlias = fetchInfo;
 				return async function ({
 					targetKey,
 					keys,
 					value,
-					fetchInfo,
-				}) {};
+					fetchInfo = fetchInfoAlias,
+					next = () => {},
+				}) {
+					return await state({
+						targetKey,
+						keys,
+						value,
+						fetchInfo,
+						next,
+					});
+				};
 			}
 			default: {
 				return state;

@@ -13,6 +13,12 @@ export default function () {
 		handleDeptInfo();
 	}, []);
 
+	React.useEffect(() => {
+		appContext.dispatchUpdate({
+			type: "set_fetchInfo",
+		});
+	}, [appContext.fetchInfo]);
+
 	async function handleDeptInfo() {
 		if (id) {
 			const toDispatch = [

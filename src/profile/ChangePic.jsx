@@ -17,8 +17,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function ChangePic({ selected }) {
-  const { updateWithoutFetch, fetchInfo, contentfulApi } =
-    useContext(AppContext);
+  const { update, fetchInfo, contentfulApi } = useContext(AppContext);
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState(false);
   const [profile, setProfile] = useState();
@@ -57,7 +56,11 @@ export default function ChangePic({ selected }) {
         `${(Number(currDeg) + newDeg) % 360}`,
       );
     }
-    updateWithoutFetch("transform", [selected, "profilePic"], newRotate);
+    update({
+      targetKey: "transform",
+      keys: [selected, "profilePic"],
+      value: newRotate,
+    });
   }
 
   async function uploadPic() {
