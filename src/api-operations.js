@@ -517,8 +517,11 @@ export async function fetchDeptInfoById(id) {
 }
 
 export class Contentful {
-  constructor(userInfoId) {
-    this.createAsset = async function () {};
+  constructor(userInfoId = userInfoIdDefault) {
+    this.createAsset = async function (file, title) {
+      return createAsset(file, title, userInfoId);
+    };
+    this.deleteAsset = deleteAsset;
   }
 }
 
@@ -531,4 +534,5 @@ export default {
   update3_0,
   fetchDeptInfoById,
   getDeptInfo,
+  Contentful,
 };
