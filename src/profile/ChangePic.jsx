@@ -16,10 +16,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import contentfulApi from "/src/api-operations";
-
 export default function ChangePic({ selected }) {
-  const { updateWithoutFetch, fetchInfo } = useContext(AppContext);
+  const { updateWithoutFetch, fetchInfo, contentfulApi } =
+    useContext(AppContext);
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState(false);
   const [profile, setProfile] = useState();
