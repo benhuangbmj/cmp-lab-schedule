@@ -9,6 +9,7 @@ import {
 	Contentful,
 } from "/src/api-operations.js";
 export const AppContextProvider = function ({ children }) {
+	const { showBoundary } = useErrorBoundary();
 	const refNav = React.useRef();
 	const refBrand = React.useRef();
 	const [navbar, setNavbar] = React.useState(true);
@@ -21,7 +22,15 @@ export const AppContextProvider = function ({ children }) {
 	const [basePath, setBasePath] = React.useState();
 	const [fetchInfo, dispatchFetchInfo] = React.useReducer(
 		fetchInfoReducer,
-		null,
+		async function (next) {
+			preFetchInfo(
+				setCourseTutor,
+				setInfo,
+				setShifts,
+				next,
+				showBoundary,
+			);
+		},
 	);
 	const [update, dispatchUpdate] = React.useReducer(updateReducer, preUpdate);
 	const [updateWithoutFetch, dispatchUpdateWithoutFetch] = React.useReducer(
@@ -36,7 +45,6 @@ export const AppContextProvider = function ({ children }) {
 		contentfulApiReducer,
 		new Contentful(),
 	);
-	const { showBoundary } = useErrorBoundary();
 
 	return (
 		<AppContext.Provider
@@ -120,6 +128,14 @@ export const AppContextProvider = function ({ children }) {
 						action.payload,
 					);
 				};
+			}
+			case "set_fetchInfo": {
+				return async function ({
+					targetKey,
+					keys,
+					value,
+					fetchInfo,
+				}) {};
 			}
 			default: {
 				return state;

@@ -48,7 +48,7 @@ export const fetchInfo = (
   setShifts,
   next = () => {},
   showBoundary = () => {},
-  userInfoId,
+  userInfoId = userInfoIdDefault,
 ) => {
   const query = `{
     tutorsCollection {

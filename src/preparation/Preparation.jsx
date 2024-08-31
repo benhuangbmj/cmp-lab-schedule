@@ -22,14 +22,6 @@ export default function () {
 	const dispatch = useDispatch();
 	const userData = useSelector(selectUserData);
 	useEffect(() => {
-		if (basePath == "/") {
-			dispatchFetchInfo({
-				type: "set_id",
-				payload: userInfoId,
-			});
-		}
-	}, [basePath]);
-	useEffect(() => {
 		if (fetchInfo) {
 			fetchInfo();
 		}
