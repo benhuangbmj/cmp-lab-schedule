@@ -18,8 +18,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import contentfulApi from "/src/api-operations";
 
-export default function ChangePic({ selected, setRenew }) {
-  const { updateWithoutFetch } = useContext(AppContext);
+export default function ChangePic({ selected }) {
+  const { updateWithoutFetch, fetchInfo } = useContext(AppContext);
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState(false);
   const [profile, setProfile] = useState();
@@ -58,11 +58,7 @@ export default function ChangePic({ selected, setRenew }) {
         `${(Number(currDeg) + newDeg) % 360}`,
       );
     }
-    updateWithoutFetch("transform", [selected, "profilePic"], newRotate).then(
-      () => {
-        setRenew((state) => state + 1);
-      },
-    );
+    updateWithoutFetch("transform", [selected, "profilePic"], newRotate);
   }
 
   async function uploadPic() {
@@ -74,9 +70,9 @@ export default function ChangePic({ selected, setRenew }) {
       var deleted = true;
     }
     if (deleted) {
-      contentfulApi.createAsset(newPic, selected).then(() => {
+      contentfulApi.createAsset(newPic, selected).then((res) => {
         setUploadStatus(false);
-        setRenew((state) => state + 1);
+        fetchInfo();
       });
     }
   }

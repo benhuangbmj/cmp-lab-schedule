@@ -60,7 +60,6 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
   } = form;
   const activeUser = useSelector((state) => state.active.user);
   const userData = useSelector((state) => state.userData.items);
-  const [renew, setRenew] = useState(0);
   const [newPic, setNewPic] = useState();
   const [uploadStatus, setUploadStatus] = useState("Upload");
   const [profile, setProfile] = useState();
@@ -184,12 +183,6 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
   }, []);
 
   useEffect(() => {
-    if (renew) {
-      fetchInfo();
-    }
-  }, [renew]);
-
-  useEffect(() => {
     if (selected) setSelectedInfo({ user: info[selected] });
     else setSelectedInfo(null);
   }, [info, selected]);
@@ -261,7 +254,7 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
               </div>
             )}
             <div className="flexbox-column card-profile-frame ">
-              <ChangePic selected={selected} setRenew={setRenew} />
+              <ChangePic selected={selected} />
               {selected && loggedIn ? (
                 <div className="card-holder">
                   <CardDisplay

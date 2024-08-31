@@ -283,7 +283,7 @@ export const update2_0 = async (
     },
   );
   if (res.ok) {
-    return res.status;
+    return await res.json();
   } else {
     throw Error(res.status);
   }
@@ -413,7 +413,11 @@ export const deleteAsset = async function (assetId) {
   }
 };
 
-export const createAsset = async function (file, title) {
+export const createAsset = async function (
+  file,
+  title,
+  userInfoId = userInfoIdDefault,
+) {
   let uploaded = await fetch(
     `https://upload.contentful.com/spaces/${spaceId}/uploads`,
     {
@@ -471,36 +475,51 @@ export const createAsset = async function (file, title) {
     },
   );
   if (processed.ok) {
-    setTimeout(async () => {
-      var published = await fetch(
-        `https://api.contentful.com/spaces/${spaceId}/environments/master/assets/${createdId}/published`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${cmaToken}`,
-            "X-Contentful-Version": 2,
+    const result = await new Promise((resolve, reject) =>
+      setTimeout(async () => {
+        var published = await fetch(
+          `https://api.contentful.com/spaces/${spaceId}/environments/master/assets/${createdId}/published`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${cmaToken}`,
+              "X-Contentful-Version": 2,
+            },
           },
-        },
-      );
-      if (published.ok) {
-        alert("Change profile picture sucessfully!");
-      } else {
-        alert("Change profile picture failed");
-      }
-      const currAsset = await getSingleAsset(createdId);
-      const currUrl = currAsset.fields.file["en-US"].url;
-      const newProfile = {
-        url: currUrl,
-        id: createdId,
-      };
-      const res = await update2_0("profilePic", [title], newProfile);
-    }, 1000);
+        );
+        if (published.ok) {
+          alert("Change profile picture sucessfully!");
+        } else {
+          alert("Change profile picture failed");
+        }
+        const currAsset = await getSingleAsset(createdId);
+        const currUrl = currAsset.fields.file["en-US"].url;
+        const newProfile = {
+          url: currUrl,
+          id: createdId,
+        };
+        const res = await update2_0(
+          "profilePic",
+          [title],
+          newProfile,
+          userInfoId,
+        );
+        resolve(res);
+      }, 1000),
+    );
+    return result;
   }
 };
 
 export async function fetchDeptInfoById(id) {
   const deptInfo = await getDeptInfo();
   return deptInfo[id];
+}
+
+export class Contentful {
+  constructor(userInfoId) {
+    this.createAsset = async function () {};
+  }
 }
 
 export default {
