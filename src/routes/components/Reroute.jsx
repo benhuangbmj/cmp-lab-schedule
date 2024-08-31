@@ -15,7 +15,12 @@ export default function () {
 
 	async function handleDeptInfo() {
 		if (id) {
-			const toDispatch = ["FetchInfo", "Update", "FetchKey"];
+			const toDispatch = [
+				"FetchInfo",
+				"Update",
+				"FetchKey",
+				"ContentfulApi",
+			];
 			const deptInfo = await contentfulApi.fetchDeptInfoById(id);
 			appContext.setBrand(deptInfo.brand);
 			toDispatch.forEach((operator) => {
