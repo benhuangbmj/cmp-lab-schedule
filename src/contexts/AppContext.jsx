@@ -6,6 +6,7 @@ import {
 	update3_0 as preUpdate,
 	update2_0 as preUpdateWithoutFetch,
 	fetchKey as preFetchKey,
+	Contentful,
 } from "/src/api-operations.js";
 export const AppContextProvider = function ({ children }) {
 	const refNav = React.useRef();
@@ -30,6 +31,10 @@ export const AppContextProvider = function ({ children }) {
 	const [fetchKey, dispatchFetchKey] = React.useReducer(
 		fetchKeyReducer,
 		preFetchInfo,
+	);
+	const [contentfulApi, dispatchContentfulApi] = React.useReducer(
+		contentfulApiReducer,
+		new Contentful(),
 	);
 	const { showBoundary } = useErrorBoundary();
 
@@ -60,6 +65,8 @@ export const AppContextProvider = function ({ children }) {
 				dispatchUpdateWithoutFetch,
 				fetchKey,
 				dispatchFetchKey,
+				contentfulApi,
+				dispatchContentfulApi,
 			}}
 		>
 			{children}
@@ -125,6 +132,16 @@ export const AppContextProvider = function ({ children }) {
 				return async function (user, key) {
 					return await preFetchInfo(user, key, action.payload);
 				};
+			}
+		}
+	}
+	function contentfulApiReducer(state, action) {
+		switch (action.type) {
+			case "set_id": {
+				return new Contentful(action.payload);
+			}
+			default: {
+				return state;
 			}
 		}
 	}
