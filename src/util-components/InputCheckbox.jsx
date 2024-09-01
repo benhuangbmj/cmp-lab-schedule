@@ -29,44 +29,46 @@ export default function InputCheckbox({
 
   return (
     <div className="center-fit" style={{ textAlign: "left" }}>
-      {values.map((val) => (
-        <span key={val} className="checkbox-group">
-          <input
-            disabled={
-              (adminOnly && !userData[activeUser].roles.admin) ||
-              (developerOnly && !userData[activeUser].roles.developer)
-            }
-            type="checkbox"
-            id={`${name} ${val}`}
-            value={val}
-            {...register(name, options)}
-          />
-          <label htmlFor={`${name} ${val}`}>{val}</label>
-          <ErrorMessage
-            errors={errors}
-            name={name}
-            render={({ messages }) =>
-              messages && (
-                <ul>
-                  {Object.entries(messages).map(([type, message]) => (
-                    <li
-                      style={{
-                        width: "fit-content",
-                        fontSize: "8pt",
-                        border: "1px solid",
-                        color: "red",
-                      }}
-                      key={type}
-                    >
-                      {message}
-                    </li>
-                  ))}
-                </ul>
-              )
-            }
-          />
-        </span>
-      ))}
+      {values.map((val) => {
+        return (
+          <span key={val} className="checkbox-group">
+            <input
+              disabled={
+                (adminOnly && !userData[activeUser].roles.admin) ||
+                (developerOnly && !userData[activeUser].roles.developer)
+              }
+              type="checkbox"
+              id={`${name} ${val}`}
+              value={val}
+              {...register(name, options)}
+            />
+            <label htmlFor={`${name} ${val}`}>{val}</label>
+            <ErrorMessage
+              errors={errors}
+              name={name}
+              render={({ messages }) =>
+                messages && (
+                  <ul>
+                    {Object.entries(messages).map(([type, message]) => (
+                      <li
+                        style={{
+                          width: "fit-content",
+                          fontSize: "8pt",
+                          border: "1px solid",
+                          color: "red",
+                        }}
+                        key={type}
+                      >
+                        {message}
+                      </li>
+                    ))}
+                  </ul>
+                )
+              }
+            />
+          </span>
+        );
+      })}
     </div>
   );
 }

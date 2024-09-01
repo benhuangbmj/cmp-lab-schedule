@@ -1,12 +1,9 @@
-import devTools from "/src/devTools"; //remove
-
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { useEffect, useState, useMemo, useRef, useContext } from "react";
 import { AppContext } from "/src/contexts/AppContext";
 
 import utils, { fieldOptions } from "/src/utils";
-//import contentful from "/src//api-operations";
 
 import Popup from "reactjs-popup";
 import Button from "react-bootstrap/Button";
@@ -174,13 +171,13 @@ export default function Admin() {
       })
         .then((res) => res.json())
         .then((res) => setSupervisors(res));
-      setUsernames(Object.keys(userData).sort());
+      setUsernames(Object.keys(userData).toSorted());
       setActiveRows(Array(Object.keys(userData).length).fill(false));
     }
   }, [userData]);
 
   useEffect(() => {
-    if (defaultValues != null) {
+    if (defaultValues != null && !loaded) {
       formUtils.reset(defaultValues);
       setLoaded(true);
     }
@@ -347,18 +344,20 @@ export default function Admin() {
                         </div>
                       </td>
                     ))}
-                    {checkboxFields.map((field) => (
-                      <td key={fieldNameGen(field)}>
-                        <InputCheckbox
-                          name={fieldNameGen(field)}
-                          utils={formUtils}
-                          values={fieldOptions[field]}
-                          isReset={resetCount.current}
-                          options={registerOptions}
-                          developerOnly={true}
-                        />
-                      </td>
-                    ))}
+                    {checkboxFields.map((field) => {
+                      return (
+                        <td key={fieldNameGen(field)}>
+                          <InputCheckbox
+                            name={fieldNameGen(field)}
+                            utils={formUtils}
+                            values={fieldOptions[field]}
+                            isReset={resetCount.current}
+                            options={registerOptions}
+                            developerOnly={true}
+                          />
+                        </td>
+                      );
+                    })}
                     {popupTextFields.map((field) => {
                       return (
                         <td
