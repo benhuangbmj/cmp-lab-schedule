@@ -177,8 +177,8 @@ export default function Admin() {
   }, [userData]);
 
   useEffect(() => {
-    if (defaultValues != null && !loaded) {
-      formUtils.reset(defaultValues);
+    if (defaultValues != null) {
+      handleReset(defaultValues);
       setLoaded(true);
     }
   }, [defaultValues]);
