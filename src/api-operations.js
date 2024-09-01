@@ -314,7 +314,6 @@ export const update3_0 = async ({
     throw Error(userData.status);
   }
   userData = await userData.json();
-
   const currVersion = userData.sys.version;
   if (targetKey != null) {
     let currLevel = userData.fields.tutorInfo["en-US"];

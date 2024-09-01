@@ -70,6 +70,13 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
   const newUsername = watch("username");
   const dispatch = useDispatch();
 
+  function handleSubmitWithStopPropagation(callBack) {
+    return (event) => {
+      event.stopPropagation();
+      handleSubmit(callBack)(event);
+    };
+  }
+
   function generateUsernameError() {
     setError("username", {
       type: "conflict",
@@ -194,7 +201,10 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
         className="flexbox-column profile-page"
         style={{ padding: "0px 0px 1em 2em" }}
       >
-        <form onSubmit={handleSubmit(handleUpdate)} style={{ width: "100%" }}>
+        <form
+          onSubmit={handleSubmitWithStopPropagation(handleUpdate)}
+          style={{ width: "100%" }}
+        >
           <div
             className="sticky-top flexbox-column "
             style={{
