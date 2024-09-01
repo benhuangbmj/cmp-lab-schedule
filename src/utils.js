@@ -39,7 +39,7 @@ const schema = {
     developer: false,
     admin: false,
   },
-  inactive: true,
+  inactive: false,
   title: null,
   bio: null,
   permission: false,

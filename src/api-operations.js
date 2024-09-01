@@ -82,6 +82,7 @@ export const fetchInfo = (
       const courseMap = new Map();
       for (let student in tutorInfo) {
         const currInfo = tutorInfo[student];
+        if (currInfo.inactive) continue;
         delete currInfo.password;
         delete currInfo.resetPassword;
 
