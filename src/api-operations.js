@@ -80,28 +80,39 @@ export const fetchInfo = (
       ).tutorInfo;
       const shift = Array.from(Array(4), () => Array.from(Array(2), () => []));
       const courseMap = new Map();
+      const aliasMap = new Map();
+      Object.keys(tutorInfo)
+        .filter(
+          (username) =>
+            !tutorInfo[username].inactive && !tutorInfo[username].permission,
+        )
+        .forEach((username, i) => aliasMap.set(username, `Tutor ${i + 1}`));
       for (let student in tutorInfo) {
         const currInfo = tutorInfo[student];
         if (currInfo.inactive) continue;
         delete currInfo.password;
         delete currInfo.resetPassword;
+        const tutorName = aliasMap.get(student) || currInfo.name;
+        const profilePic = aliasMap.has(student)
+          ? null
+          : currInfo.profilePic
+            ? currInfo.profilePic.url
+            : null;
 
         for (let i = 0; i < currInfo.day.length; i++) {
           const day = currInfo.day[i];
           const index = days.indexOf(day);
           shift[index][0].push(
-            `${currInfo.name} (${currInfo.subject})` + "\n" + currInfo.time[i],
+            `${tutorName} (${currInfo.subject})` + "\n" + currInfo.time[i],
           );
-          currInfo.profilePic
-            ? shift[index][1].push(currInfo.profilePic.url)
-            : shift[index][1].push(null);
+          shift[index][1].push(profilePic);
         }
 
         for (let i = 0; i < currInfo.courses.length; i++) {
           if (!courseMap.has(currInfo.courses[i])) {
-            courseMap.set(currInfo.courses[i], [currInfo.name]);
+            courseMap.set(currInfo.courses[i], [tutorName]);
           } else {
-            courseMap.get(currInfo.courses[i]).push(currInfo.name);
+            courseMap.get(currInfo.courses[i]).push(tutorName);
           }
         }
       }
@@ -126,6 +137,7 @@ export const fetchInfo = (
         "Something went wrong. Please try again later. If the error persists, please contact your administrator.",
       );
       showBoundary(myError);
+      console.log(err);
     });
 };
 
