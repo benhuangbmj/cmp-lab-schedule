@@ -7,7 +7,7 @@ import LogIn from "/src/auth/LogIn";
 import ProtectedRoute from "/src/util-components/ProtectedRoute";
 import Admin from "/src/admin/Admin";
 import Progress from "/src/progress/Progress";
-import Charts from "/src/dashboard/Charts";
+import Dashboard from "/src/dashboard/Dashboard";
 import CheckInWithID from "/src/checkInWithID/CheckInWithID";
 import CheckInWithFace from "/src/checkInWithFace/CheckInWithFace";
 import Reroute from "/src/routes/components/Reroute";
@@ -58,7 +58,7 @@ export default function () {
 					path="dashboard"
 					element={
 						<ProtectedRoute role="admin">
-							<Charts />
+							<Dashboard />
 						</ProtectedRoute>
 					}
 				/>

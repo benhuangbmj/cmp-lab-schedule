@@ -8,8 +8,6 @@ import { useSelector } from "react-redux";
 import Table from "react-bootstrap/Table";
 import { AppContext } from "/src/contexts/AppContext";
 
-import Charts from "/src/dashboard/Charts";
-
 dayjs.extend(customParseFormat);
 const currDate = new Date();
 
