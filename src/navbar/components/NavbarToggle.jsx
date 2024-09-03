@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { selectActive } from "/src/reducers/activeReducer.js";
 import { useNormalizedBasePath } from "/src/hooks/customHooks";
 
-const routes = ["profile", "admin", "progress", "experimental"];
+const routes = ["profile", "admin", "progress", "experimental", "dashboard"];
 export default function NavbarToggle() {
 	const basePath = useNormalizedBasePath();
 	const refNavCollapse = useRef();
@@ -18,9 +18,6 @@ export default function NavbarToggle() {
 				<>
 					<NavLink className="nav-link" to={basePath}>
 						Schedule
-					</NavLink>
-					<NavLink to={basePath + "dashboard"} className="nav-link">
-						Dashboard
 					</NavLink>
 				</>
 			);

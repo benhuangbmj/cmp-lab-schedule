@@ -54,7 +54,14 @@ export default function () {
 				<Route path="login" element={<LogIn />} />
 				<Route path="checkinwithid" element={<CheckInWithID />} />
 				<Route path="checkinwithface" element={<CheckInWithFace />} />
-				<Route path="dashboard" element={<Charts />} />
+				<Route
+					path="dashboard"
+					element={
+						<ProtectedRoute role="admin">
+							<Charts />
+						</ProtectedRoute>
+					}
+				/>
 			</Route>
 			<Route path="*" element={<Schedule />} />
 		</Routes>
