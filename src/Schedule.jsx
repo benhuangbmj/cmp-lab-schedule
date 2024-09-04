@@ -45,7 +45,7 @@ export default function Schedule() {
       >
         <div style={{ position: "relative", width: "100%" }}>
           <ButtonPrint
-            className="hide-on-print"
+            className="hide-on-print hidden-on-mobile"
             size="sm"
             style={{ position: "absolute", right: 0 }}
             onClick={() => window.print()}
