@@ -13,7 +13,7 @@ import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
 import { AppContext } from "/src/contexts/AppContext";
 export default function () {
-	const { refNav, navbar, refBrand, setNavHeight } = useContext(AppContext);
+	const { refNav, refBrand, setNavHeight } = useContext(AppContext);
 	const [didMount, setDidMount] = useState(false);
 	const observer = new MutationObserver(() =>
 		setNavHeight(refNav.current.offsetHeight),
@@ -30,9 +30,9 @@ export default function () {
 	}, [didMount]);
 	return (
 		<div
+			className="hide-on-print"
 			style={{
-				visibility: navbar ? "visible" : "hidden",
-				position: navbar ? "sticky" : "absolute",
+				position: "sticky",
 				top: 0,
 				zIndex: 1,
 			}}

@@ -1,11 +1,11 @@
-import { useRef, useEffect, useState, useContext } from "react";
-import { useReactToPrint } from "react-to-print";
+import { useRef, useContext } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { days } from "/src/utils";
 import { sortCriterionHelper } from "/src/utils";
 import { useSelector } from "react-redux";
 import Table from "react-bootstrap/Table";
+import { ButtonPrint } from "/src/util-components/FontAwesomeComponents";
 import { AppContext } from "/src/contexts/AppContext";
 
 dayjs.extend(customParseFormat);
@@ -33,49 +33,40 @@ function processUserInfo(info) {
 }
 
 export default function Schedule() {
-  const [onScreen, setOnScreen] = useState("none");
-  const {
-    setNavbar,
-    shifts: shift,
-    courseTutor: courses,
-  } = useContext(AppContext);
+  const { shifts: shift, courseTutor: courses } = useContext(AppContext);
   const activeUser = useSelector((state) => state.active.user);
   const userData = useSelector((state) => state.userData.items);
-  const toPrint = useRef();
-  const handlePrint = useReactToPrint({
-    content: () => toPrint.current,
-  });
-
-  function handleToggleNavbar() {
-    setNavbar((state) => !state);
-  }
-
-  useEffect(() => {
-    if (userData && activeUser && userData[activeUser]?.roles.admin) {
-      setOnScreen("initial");
-    }
-  }, [activeUser, userData]);
 
   return (
     <main>
       <div
-        ref={toPrint}
         className="schedule-container letter-size flexbox-column"
         style={{ flexWrap: "nowrap" }}
       >
-        <h1>
-          <img
-            className="qr-code"
-            src="/img/static-qr-code-6939aa416818b250434bfed8a036658a.png"
-          />
-          <div className="schedule-title">
-            CMP Lounge Schedule
-            <br />
-            {currDate.getMonth() >= 6 ? "Fall" : "Spring"}{" "}
-            {currDate.getFullYear()}
-          </div>
-          <img className="qr-code" src="/img/qr-code.png" />
-        </h1>
+        <div style={{ position: "relative", width: "100%" }}>
+          <ButtonPrint
+            className="hide-on-print"
+            size="sm"
+            style={{ position: "absolute", right: 0 }}
+            onClick={() => window.print()}
+          >
+            {" "}
+            Print
+          </ButtonPrint>
+          <h1>
+            <img
+              className="qr-code"
+              src="/img/static-qr-code-6939aa416818b250434bfed8a036658a.png"
+            />
+            <div className="schedule-title">
+              CMP Lounge (Frey 351)
+              <br />
+              {currDate.getMonth() >= 6 ? "Fall" : "Spring"}{" "}
+              {currDate.getFullYear()}
+            </div>
+            <img className="qr-code" src="/img/qr-code.png" />
+          </h1>
+        </div>
         <div>
           <Table bordered striped="columns" className="table-schedule">
             <thead>
@@ -95,22 +86,6 @@ export default function Schedule() {
         <div>
           <Personnel courses={courses} />
         </div>
-      </div>
-      <div className="schedule-operations">
-        <button
-          type="button"
-          style={{ display: onScreen }}
-          onClick={handlePrint}
-        >
-          Print the schedule
-        </button>
-        <button
-          type="button"
-          style={{ display: onScreen }}
-          onClick={handleToggleNavbar}
-        >
-          Toggle navbar
-        </button>
       </div>
     </main>
   );

@@ -407,9 +407,6 @@ label {
   font-size: 30pt;
   vertical-align: bottom;
 }
-.schedule-operations {
-  margin-top: 100px;
-}
 
 .personnel {
   width: 100%;
@@ -510,9 +507,6 @@ label {
   .schedule-title {
     font-size: 1em;
   }
-  .schedule-operations {
-    display: none;
-  }
   .personnel {
     width: 95vw;
   }
@@ -542,5 +536,11 @@ label {
   }
   .mobile-only {
     display: initial;
+  }
+}
+
+@media print {
+  .hide-on-print {
+    display: none;
   }
 }

@@ -12,7 +12,6 @@ export const AppContextProvider = function ({ children }) {
 	const { showBoundary } = useErrorBoundary();
 	const refNav = React.useRef();
 	const refBrand = React.useRef();
-	const [navbar, setNavbar] = React.useState(true);
 	const [navHeight, setNavHeight] = React.useState();
 	const [info, setInfo] = React.useState(null);
 	const [courseTutor, setCourseTutor] = React.useState(null);
@@ -50,8 +49,6 @@ export const AppContextProvider = function ({ children }) {
 		<AppContext.Provider
 			value={{
 				refNav,
-				navbar,
-				setNavbar,
 				refBrand,
 				navHeight,
 				setNavHeight,
