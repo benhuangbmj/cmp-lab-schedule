@@ -73,6 +73,7 @@ const courseOptions = [
   "MATH105",
   "CIS284",
   "CIS181",
+  "CIS281",
 ];
 
 export const subjects = {
