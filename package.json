@@ -27,6 +27,7 @@
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.2",
     "contentful": "^10.9.3",
+    "contentful-management": "^11.33.0",
     "cypress": "^13.11.0",
     "dayjs": "^1.11.10",
     "esm": "^3.2.25",
