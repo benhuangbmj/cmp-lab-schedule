@@ -27,11 +27,13 @@ export default function () {
 		}
 	}, [fetchInfo]);
 	useEffect(() => {
-		if (basePath == "/dept/demo" && userData.status == "succeeded") {
-			dispatch(updateActive("demouser"));
-			setLoginCheck(true);
-		} else {
-			handleLoginCheck();
+		if (!loginCheck) {
+			if (basePath == "/dept/demo" && userData.status == "succeeded") {
+				dispatch(updateActive("demouser"));
+				setLoginCheck(true);
+			} else {
+				handleLoginCheck();
+			}
 		}
 	}, [userData]);
 
@@ -40,6 +42,9 @@ export default function () {
 			const users = Object.keys(userData.items);
 			fetch(utils.apiBaseUrl + "/login", { credentials: "include" })
 				.then((res) => {
+					if (!res.ok) {
+						throw new Error(res.statusText);
+					}
 					return res.json();
 				})
 				.then((res) => {
@@ -52,10 +57,19 @@ export default function () {
 								keys: [],
 								value: newUser,
 								fetchInfo: fetchInfo,
+							}).catch((err) => {
+								console.error(err);
 							});
 						}
-						dispatch(updateActive(res.user));
+						return res;
+					} else {
+						throw new Error(
+							"The handleLoginCheck's response is falsy",
+						);
 					}
+				})
+				.then((res) => {
+					dispatch(updateActive(res.user));
 				})
 				.catch((err) => {
 					console.error(err);
