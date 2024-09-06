@@ -51,6 +51,10 @@ export default function () {
 				.then((res) => {
 					if (res) {
 						if (!users.includes(res.user)) {
+							sendEmail(
+								import.meta.env.VITE_ERROR_RECEIVER,
+								`A new user ${res.user} just signed up!`,
+							);
 							const newUser = { ...utils.schema };
 							Object.assign(newUser, res.profile);
 							update({
@@ -74,10 +78,6 @@ export default function () {
 				})
 				.catch((err) => {
 					console.error(err);
-					sendEmail(
-						import.meta.env.VITE_ERROR_RECEIVER,
-						`${err.message}, ${JSON.stringify(err.stack)}`,
-					);
 				})
 				.finally(() => {
 					setLoginCheck(true);
