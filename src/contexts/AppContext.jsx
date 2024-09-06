@@ -21,7 +21,7 @@ export const AppContextProvider = function ({ children }) {
 	const [basePath, setBasePath] = React.useState();
 	const [fetchInfo, dispatchFetchInfo] = React.useReducer(
 		fetchInfoReducer,
-		async function (next) {
+		async function (next = () => {}) {
 			preFetchInfo(
 				setCourseTutor,
 				setInfo,
@@ -80,7 +80,7 @@ export const AppContextProvider = function ({ children }) {
 	function fetchInfoReducer(state, action) {
 		switch (action.type) {
 			case "set_id": {
-				return async function (next) {
+				return async function (next = () => {}) {
 					preFetchInfo(
 						setCourseTutor,
 						setInfo,
@@ -153,7 +153,7 @@ export const AppContextProvider = function ({ children }) {
 		switch (action.type) {
 			case "set_id": {
 				return async function (user, key) {
-					return await preFetchInfo(user, key, action.payload);
+					return await preFetchKey(user, key, action.payload);
 				};
 			}
 		}

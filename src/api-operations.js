@@ -379,7 +379,7 @@ export const update3_0 = async ({
   const verifyVersion = setInterval(async () => {
     userData = await (await fetchUserData())?.json?.();
     if (userData?.sys?.version == publishedData.sys.version) {
-      if (fetchInfo) {
+      if (typeof fetchInfo == "function") {
         fetchInfo(next).then(() => {
           alert("Update user database successfully!");
         });

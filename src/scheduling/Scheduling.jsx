@@ -5,7 +5,7 @@ import { cleanSlate } from "/src/utils";
 import Timetable from "./Timetable";
 import Button from "react-bootstrap/Button";
 
-export default function Scheduling({ info, fetchInfo, selected, form }) {
+export default function Scheduling({ info, selected, form }) {
   const { setValue } = form;
   const [slots, setSlots] = useState(null);
   const tutorSlots = useRef();
