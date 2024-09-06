@@ -67,14 +67,10 @@ export default function () {
 							});
 						}
 						return res;
-					} else {
-						throw new Error(
-							"The handleLoginCheck's response is falsy",
-						);
 					}
 				})
 				.then((res) => {
-					dispatch(updateActive(res.user));
+					if (res) dispatch(updateActive(res.user));
 				})
 				.catch((err) => {
 					console.error(err);
