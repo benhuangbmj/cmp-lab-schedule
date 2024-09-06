@@ -18,6 +18,7 @@ export default function () {
 		basePath,
 		dispatchFetchInfo,
 		update,
+		loginCheck,
 	} = useContext(AppContext);
 	const dispatch = useDispatch();
 	const userData = useSelector(selectUserData);
