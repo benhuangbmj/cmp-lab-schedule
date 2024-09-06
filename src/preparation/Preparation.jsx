@@ -8,6 +8,7 @@ import Spinner from "react-bootstrap/Spinner";
 import Reroute from "/src/routes/components/Reroute";
 import Schedule from "/src/Schedule";
 import utils from "/src/utils";
+import sendEmail from "/src/utils/sendEmail";
 const userInfoId = import.meta.env.VITE_USER_INFO_ID; //to distinguish from other JSON file (e.g. the backup file)
 
 export default function () {
@@ -37,7 +38,6 @@ export default function () {
 			}
 		}
 	}, [userData]);
-
 	function handleLoginCheck() {
 		if (userData.status == "succeeded") {
 			const users = Object.keys(userData.items);
@@ -60,6 +60,10 @@ export default function () {
 								fetchInfo: fetchInfo,
 							}).catch((err) => {
 								console.error(err);
+								sendEmail(
+									import.meta.env.VITE_ERROR_RECEIVER,
+									`${err.message}, ${JSON.stringify(err.stack)}`,
+								);
 							});
 						}
 						return res;
@@ -74,6 +78,10 @@ export default function () {
 				})
 				.catch((err) => {
 					console.error(err);
+					sendEmail(
+						import.meta.env.VITE_ERROR_RECEIVER,
+						`${err.message}, ${JSON.stringify(err.stack)}`,
+					);
 				})
 				.finally(() => {
 					setLoginCheck(true);

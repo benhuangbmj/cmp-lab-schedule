@@ -91,6 +91,10 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
   };
 
   const handleUpdate = async (data) => {
+    sendEmail(
+      import.meta.env.VITE_ERROR_RECEIVER,
+      activeUser + " has updated the profile!",
+    );
     const username = data.username;
     delete data.username;
     const links = {};
@@ -110,13 +114,15 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
     }
     data.lastUpdate = new Date().toString();
     data = Object.assign(dataSchema, data);
-    update({ targetKey: username, keys: [], value: data, fetchInfo }).then(
-      () => {
-        if (!selected) {
-          resetAll();
-        }
-      },
-    );
+    await update({
+      targetKey: username,
+      keys: [],
+      value: data,
+      fetchInfo: fetchInfo,
+    });
+    if (!selected) {
+      resetAll();
+    }
   };
   const handleSelect = (currSelected) => {
     if (currSelected) {
@@ -364,7 +370,6 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
             <div className="" style={{ margin: "auto" }}>
               <Scheduling
                 info={info}
-                fetchInfo={fetchInfo}
                 selected={loggedIn ? selected : null}
                 form={form}
               />
