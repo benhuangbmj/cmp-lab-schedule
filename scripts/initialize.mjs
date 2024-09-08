@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 dotenv.config({ path: "../.env.local" });
 import readline from "readline";
 import contentful from "contentful-management";
+import * as mockData from "./data.js";
 
 const { VITE_CMA_TOKEN: cmaToken, VITE_SPACE_ID: spaceId } = process.env;
 function createClient({ accessToken, spaceId }) {
@@ -19,268 +20,153 @@ function createClient({ accessToken, spaceId }) {
 	);
 	return client;
 }
-
-async function prepareContentType(client) {
-	const tutorsType = await client.contentType.create(
-		{},
-		{
-			name: "Users",
-			fields: [
-				{
-					id: "tutorInfo",
-					name: "tutor_info",
-					type: "Object",
-					localized: false,
-					required: false,
-					validations: [],
-					disabled: false,
-					omitted: false,
-				},
-				{
-					id: "title",
-					name: "title",
-					type: "Symbol",
-					localized: false,
-					required: false,
-					validations: [],
-					disabled: false,
-					omitted: false,
-				},
-			],
-		},
-	);
-	const tutorsTypePublished = await client.contentType.publish(
-		{ contentTypeId: tutorsType.sys.id },
-		{
-			sys: tutorsType.sys,
-		},
-	);
+async function prepareEntry(client, contentType, entryFields) {
 	const entryCreatedTutors = await client.entry.create(
 		{
-			contentTypeId: tutorsTypePublished.sys.id,
+			contentTypeId: contentType.sys.id,
 		},
 		{
-			fields: {
-				tutorInfo: {
-					"en-US": {
-						ajohnson: {
-							password: null,
-							name: "Alex Johnson",
-							time: ["10:00 AM - 11:30 AM"],
-							day: ["Monday"],
-							subject: null,
-							courses: [],
-							profilePic: {
-								url: null,
-								id: null,
-								transform: null,
-							},
-							schedule: null,
-							override: {},
-							links: {
-								linkedin: null,
-								twitter: null,
-								github: null,
-								instagram: null,
-								youtube: null,
-								facebook: null,
-							},
-							lastUpdate: null,
-							lastLogin: null,
-							roles: {
-								developer: false,
-								admin: false,
-							},
-							inactive: false,
-							title: null,
-							bio: null,
-							permission: true,
-						},
-						cbrown: {
-							password: null,
-							name: "Casey Brown",
-							time: ["02:00 PM - 03:30 PM"],
-							day: ["Wednesday"],
-							subject: null,
-							courses: [],
-							profilePic: {
-								url: null,
-								id: null,
-								transform: null,
-							},
-							schedule: null,
-							override: {},
-							links: {
-								linkedin: null,
-								twitter: null,
-								github: null,
-								instagram: null,
-								youtube: null,
-								facebook: null,
-							},
-							lastUpdate: null,
-							lastLogin: null,
-							roles: {
-								developer: false,
-								admin: false,
-							},
-							inactive: false,
-							title: null,
-							bio: null,
-							permission: true,
-						},
-						jdavis: {
-							password: null,
-							name: "Jamie Davis",
-							time: ["09:00 AM - 10:30 AM"],
-							day: ["Friday"],
-							subject: null,
-							courses: [],
-							profilePic: {
-								url: null,
-								id: null,
-								transform: null,
-							},
-							schedule: null,
-							override: {},
-							links: {
-								linkedin: null,
-								twitter: null,
-								github: null,
-								instagram: null,
-								youtube: null,
-								facebook: null,
-							},
-							lastUpdate: null,
-							lastLogin: null,
-							roles: {
-								developer: false,
-								admin: false,
-							},
-							inactive: false,
-							title: null,
-							bio: null,
-							permission: true,
-						},
-						mgreen: {
-							password: null,
-							name: "Morgan Green",
-							time: ["11:00 AM - 12:30 PM"],
-							day: ["Thursday"],
-							subject: null,
-							courses: [],
-							profilePic: {
-								url: null,
-								id: null,
-								transform: null,
-							},
-							schedule: null,
-							override: {},
-							links: {
-								linkedin: null,
-								twitter: null,
-								github: null,
-								instagram: null,
-								youtube: null,
-								facebook: null,
-							},
-							lastUpdate: null,
-							lastLogin: null,
-							roles: {
-								developer: false,
-								admin: false,
-							},
-							inactive: false,
-							title: null,
-							bio: null,
-							permission: true,
-						},
-						sbrooks: {
-							password: null,
-							name: "Sydney Brooks",
-							time: ["01:00 PM - 02:30 PM"],
-							day: ["Tuesday"],
-							subject: null,
-							courses: [],
-							profilePic: {
-								url: null,
-								id: null,
-								transform: null,
-							},
-							schedule: null,
-							override: {},
-							links: {
-								linkedin: null,
-								twitter: null,
-								github: null,
-								instagram: null,
-								youtube: null,
-								facebook: null,
-							},
-							lastUpdate: null,
-							lastLogin: null,
-							roles: {
-								developer: false,
-								admin: false,
-							},
-							inactive: false,
-							title: null,
-							bio: null,
-							permission: true,
-						},
-					},
-				},
-			},
+			fields: entryFields,
 		},
 	);
 	const entryPublishedTutors = await client.entry.publish(
 		{ entryId: entryCreatedTutors.sys.id },
 		{ ...entryCreatedTutors },
 	);
-	console.log("tutorsTypePublished", tutorsTypePublished);
-	console.log("entryPublishedTutors", entryPublishedTutors);
+	return entryPublishedTutors;
+}
+async function prepareContentType(client, name, fields) {
+	const contentType = await client.contentType.create(
+		{},
+		{
+			name: name,
+			fields: fields,
+		},
+	);
+	const contentTypePublished = await client.contentType.publish(
+		{ contentTypeId: contentType.sys.id },
+		{
+			sys: contentType.sys,
+		},
+	);
+	return contentTypePublished;
+}
+async function initializeContentful(client) {
+	const tutorContentType = await prepareContentType(
+		client,
+		"Users",
+		mockData.tutorTypeFields,
+	);
+	const deptContentType = await prepareContentType(
+		client,
+		"Depts",
+		mockData.deptTypeFields,
+	);
+	const tutorEntryFieldsCMP = {
+		tutorInfo: {
+			"en-US": mockData.mockTutors,
+		},
+		title: {
+			"en-US": "CMP",
+		},
+	};
+	const tutorEntryCMP = await prepareEntry(
+		client,
+		tutorContentType,
+		tutorEntryFieldsCMP,
+	);
+	const tutorEntryFieldsDemo = {
+		tutorInfo: {
+			"en-US": Object.assign({}, mockData.demoUser, mockData.mockTutors),
+		},
+		title: {
+			"en-US": "Demo",
+		},
+	};
+	const tutorEntryDemo = await prepareEntry(
+		client,
+		tutorContentType,
+		tutorEntryFieldsDemo,
+	);
+	const deptEntryFields = {
+		deptInfo: {
+			"en-US": {
+				cmp: {
+					brand: "CMP-Lab@Messiah",
+					tutorInfo: tutorEntryCMP.sys.id,
+				},
+				demo: {
+					brand: "Demo@Messiah",
+					tutorInfo: tutorEntryDemo.sys.id,
+				},
+			},
+		},
+		title: {
+			"en-US": "Dept_Info",
+		},
+	};
+	const deptEntry = await prepareEntry(
+		client,
+		deptContentType,
+		deptEntryFields,
+	);
+	console.log("deptEntry", deptEntry.fields.deptInfo["en-US"]);
 	await client.entry.unpublish(
 		{
-			entryId: entryPublishedTutors.sys.id,
+			entryId: tutorEntryCMP.sys.id,
 		},
 		{
-			...entryPublishedTutors,
+			...tutorEntryCMP,
 		},
 	);
 	await client.entry.delete({
-		entryId: entryPublishedTutors.sys.id,
+		entryId: tutorEntryCMP.sys.id,
+	});
+	await client.entry.unpublish(
+		{
+			entryId: tutorEntryDemo.sys.id,
+		},
+		{
+			...tutorEntryDemo,
+		},
+	);
+	await client.entry.delete({
+		entryId: tutorEntryDemo.sys.id,
+	});
+	await client.entry.unpublish(
+		{
+			entryId: deptEntry.sys.id,
+		},
+		{
+			...deptEntry,
+		},
+	);
+	await client.entry.delete({
+		entryId: deptEntry.sys.id,
 	});
 	await client.contentType.unpublish({
-		contentTypeId: tutorsTypePublished.sys.id,
+		contentTypeId: tutorContentType.sys.id,
 	});
 	await client.contentType.delete({
-		contentTypeId: tutorsTypePublished.sys.id,
+		contentTypeId: tutorContentType.sys.id,
+	});
+	await client.contentType.unpublish({
+		contentTypeId: deptContentType.sys.id,
+	});
+	await client.contentType.delete({
+		contentTypeId: deptContentType.sys.id,
 	});
 }
 const client = createClient({
 	accessToken: cmaToken,
 	spaceId: spaceId,
 });
-prepareContentType(client).then((res) => {
-	console.log("Prepare ContentType");
-});
-/*
-client.contentType.getMany().then((contentTypes) => {
-	console.log(contentTypes);
-});*/ /*
-client.entry
-	.get({
-		entryId: "UIushXQv9bsjZ5hAWxmUz",
-	})
-	.then((res) => console.log(res.fields));*/
-
+initializeContentful(client);
 const rl = readline.createInterface({
 	input: process.stdin,
 	output: process.stdout,
 });
-
 rl.close();
-
 function main() {
 	rl.question("Space ID: ", (spaceId) => {
 		rl.question("Access Token: ", (accessToken) => {

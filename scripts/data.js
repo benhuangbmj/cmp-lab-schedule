@@ -1,3 +1,47 @@
+export const deptTypeFields = [
+	{
+		id: "title",
+		name: "Title",
+		type: "Symbol",
+		localized: true,
+		required: true,
+		validations: [],
+		disabled: false,
+		omitted: false,
+	},
+	{
+		id: "deptInfo",
+		name: "dept_info",
+		type: "Object",
+		localized: true,
+		required: true,
+		validations: [],
+		disabled: false,
+		omitted: false,
+	},
+];
+export const tutorTypeFields = [
+	{
+		id: "tutorInfo",
+		name: "tutor_info",
+		type: "Object",
+		localized: false,
+		required: false,
+		validations: [],
+		disabled: false,
+		omitted: false,
+	},
+	{
+		id: "title",
+		name: "title",
+		type: "Symbol",
+		localized: false,
+		required: false,
+		validations: [],
+		disabled: false,
+		omitted: false,
+	},
+];
 export const mockTutors = {
 	ajohnson: {
 		password: null,
