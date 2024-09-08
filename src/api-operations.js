@@ -376,17 +376,14 @@ export const update3_0 = async ({
     throw Error(publishedData.status);
   }
   publishedData = await publishedData.json();
-  const verifyVersion = setInterval(async () => {
-    userData = await (await fetchUserData())?.json?.();
-    if (userData?.sys?.version == publishedData.sys.version) {
-      if (typeof fetchInfo == "function") {
-        fetchInfo(next).then(() => {
-          alert("Update user database successfully!");
-        });
-      }
-      clearInterval(verifyVersion);
+  userData = await (await fetchUserData())?.json?.();
+  if (userData?.sys?.version == publishedData.sys.version) {
+    if (typeof fetchInfo == "function") {
+      await fetchInfo(next);
+      alert("Update user database successfully!");
     }
-  }, 1000);
+  }
+  return publishedData;
 };
 export const deleteAsset = async function (assetId) {
   let currAsset = await fetch(

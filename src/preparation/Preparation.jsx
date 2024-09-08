@@ -66,15 +66,13 @@ export default function () {
 								console.error(err);
 								sendEmail(
 									import.meta.env.VITE_ERROR_RECEIVER,
-									`${err.message}, ${JSON.stringify(err.stack)}`,
+									`New user signing up, ${err.message}, ${JSON.stringify(err.stack)}`,
 								);
 							});
 						}
+						dispatch(updateActive(res.user));
 						return res;
 					}
-				})
-				.then((res) => {
-					if (res) dispatch(updateActive(res.user));
 				})
 				.catch((err) => {
 					console.error(err);
