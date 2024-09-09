@@ -36,10 +36,11 @@ async function prepareEntry(client, contentType, entryFields) {
 	return entryPublishedTutors;
 }
 async function prepareContentType(client, name, fields) {
-	const contentType = await client.contentType.create(
-		{},
+	const contentType = await client.contentType.createWithId(
+		{ contentTypeId: name.toLowerCase() },
 		{
 			name: name,
+			displayField: "title",
 			fields: fields,
 		},
 	);
@@ -54,7 +55,7 @@ async function prepareContentType(client, name, fields) {
 async function initializeContentful(client) {
 	const tutorContentType = await prepareContentType(
 		client,
-		"Users",
+		"Tutors",
 		mockData.tutorTypeFields,
 	);
 	const deptContentType = await prepareContentType(
