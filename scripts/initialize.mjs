@@ -3,9 +3,9 @@ dotenv.config({ path: "../.env.local" });
 import readline from "readline";
 import contentful from "contentful-management";
 import * as mockData from "./data.js";
+import { writeFile } from "fs/promises";
 
-const { VITE_CMA_TOKEN: cmaToken, VITE_SPACE_ID: spaceId } = process.env;
-function createClient({ accessToken, spaceId }) {
+function createClient({ cmaToken, spaceId }) {
 	const client = contentful.createClient(
 		{
 			accessToken: cmaToken,
@@ -109,8 +109,7 @@ async function initializeContentful(client) {
 		client,
 		deptContentType,
 		deptEntryFields,
-	);
-	console.log("deptEntry", deptEntry.fields.deptInfo["en-US"]);
+	); /*
 	await client.entry.unpublish(
 		{
 			entryId: tutorEntryCMP.sys.id,
@@ -155,29 +154,32 @@ async function initializeContentful(client) {
 	});
 	await client.contentType.delete({
 		contentTypeId: deptContentType.sys.id,
-	});
+	});*/
+	return {
+		tutorEntryCMP,
+		deptEntry,
+	};
 }
-const client = createClient({
-	accessToken: cmaToken,
-	spaceId: spaceId,
-});
-initializeContentful(client);
-const rl = readline.createInterface({
-	input: process.stdin,
-	output: process.stdout,
-});
-rl.close();
 function main() {
+	const rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout,
+	});
 	rl.question("Space ID: ", (spaceId) => {
-		rl.question("Access Token: ", (accessToken) => {
-			const client = contentful.createClient({
-				space: spaceId,
-				accessToken: accessToken,
-			});
-			client.getSpace().then((space) => {
-				console.log(space.name);
+		rl.question("Delivery Token: ", (deliveryToken) => {
+			rl.question("CMA Token: ", (cmaToken) => {
+				const client = createClient({
+					cmaToken,
+					spaceId,
+				});
+				initializeContentful(client).then((res) => {
+					const fileData = `VITE_SPACE_ID=${spaceId}\nVITE_ACCESS_TOKEN=${deliveryToken}\nVITE_CMA_TOKEN=${cmaToken}\nVITE_USER_INFO_ID=${res.tutorEntryCMP.sys.id}\nVITE_DEPT_INFO_ID=${res.deptEntry.sys.id}\nVITE_API_BASE_URL=https://localhost:3000`;
+					writeFile("../.env.local", fileData);
+				});
+				rl.close();
 			});
 		});
-		rl.close();
 	});
 }
+
+main();
