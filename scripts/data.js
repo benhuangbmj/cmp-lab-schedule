@@ -113,7 +113,7 @@ export const mockTutors = {
 		password: null,
 		name: "Jamie Davis",
 		time: ["09:00 AM - 10:30 AM"],
-		day: ["Friday"],
+		day: ["Monday"],
 		subject: null,
 		courses: [],
 		profilePic: {
