@@ -11,7 +11,7 @@ export default function () {
 			? appContext.setBasePath(match.pathnameBase)
 			: appContext.setBasePath("/");
 		handleDeptInfo();
-	}, []);
+	}, [match.pathnameBase]);
 
 	React.useEffect(() => {
 		appContext.dispatchUpdate({

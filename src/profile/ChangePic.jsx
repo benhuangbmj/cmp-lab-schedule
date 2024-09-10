@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useLayoutEffect, useRef, useContext } from "react";
 import { useSelector } from "react-redux";
 
 import { AppContext } from "/src/contexts/AppContext";
@@ -24,13 +24,13 @@ export default function ChangePic({ selected }) {
   const userData = useSelector((state) => state.userData.items);
   const refInput = useRef();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (selected && userData[selected].profilePic)
       setProfile(userData[selected].profilePic.url);
     else setProfile();
-  }, [selected]);
+  }, [selected, userData]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (newPic) {
       const newPicURL = URL.createObjectURL(newPic);
       setProfile(newPicURL);
