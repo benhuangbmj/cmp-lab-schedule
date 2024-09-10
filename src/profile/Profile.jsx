@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateActive } from "/src/reducers/activeReducer.js";
 import { AppContext } from "/src/contexts/AppContext";
 
-import { getSingleAsset } from "/src/api-operations";
+import { getSingleAsset, deleteAsset } from "/src/api-operations";
 import { schema as dataSchema, courseOptions, blankForm } from "/src/utils";
 import { handleSignOut } from "/src/auth/SignOut";
 
@@ -172,6 +172,9 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
   const handleDelete = function () {
     const confirm = prompt('Type "Confirm" to proceed to delete the user');
     if (confirm === "Confirm") {
+      if (info[selected]?.profilePic?.id) {
+        deleteAsset(info[selected].profilePic.id);
+      }
       update({ targetKey: selected, keys: [], value: null, fetchInfo });
       if (selected == activeUser) {
         handleSignOut(dispatch);

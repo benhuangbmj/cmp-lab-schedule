@@ -385,6 +385,7 @@ export const update3_0 = async ({
   return publishedData;
 };
 export const deleteAsset = async function (assetId) {
+  if (!assetId) return;
   let currAsset = await fetch(
     `https://api.contentful.com/spaces/${spaceId}/environments/master/assets/${assetId}`,
     {
