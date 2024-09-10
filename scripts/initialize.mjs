@@ -167,7 +167,7 @@ function main() {
 		output: process.stdout,
 	});
 	rl.question("Space ID: ", (spaceId) => {
-		rl.question("Delivery Token: ", (deliveryToken) => {
+		rl.question("CDA Token: ", (deliveryToken) => {
 			rl.question("CMA Token: ", (cmaToken) => {
 				const client = createClient({
 					cmaToken,
