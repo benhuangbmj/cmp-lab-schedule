@@ -18,13 +18,11 @@ git clone https://github.com/benhuangbmj/cmp-lab-schedule.git
 npm install
 ```
 
-3. In the root directory, run the `initialize` script:
+3. In the root directory, run the `initialize` script. Enter the space ID and CDA/CMA tokens from your Contentful account upon the prompts:
 
 ```bash
 node scripts/initialize.mjs
 ```
-
-Enter the space ID and CDA/CMA tokens from your Contentful account upon the prompts.
 
 4. To start the development server, run:
 
