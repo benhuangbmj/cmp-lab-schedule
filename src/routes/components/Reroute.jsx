@@ -11,7 +11,7 @@ export default function () {
 			? appContext.setBasePath(match.pathnameBase)
 			: appContext.setBasePath("/");
 		handleDeptInfo();
-	}, [match.pathnameBase]);
+	}, [match]);
 
 	React.useEffect(() => {
 		appContext.dispatchUpdate({
@@ -40,6 +40,10 @@ export default function () {
 				payload: deptInfo.tutorInfo,
 			});
 			appContext.setInfo(null);
+		} else {
+			appContext.dispatchFetchInfo({
+				type: "set_to_default",
+			});
 		}
 	}
 }

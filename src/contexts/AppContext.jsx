@@ -19,17 +19,14 @@ export const AppContextProvider = function ({ children }) {
 	const [loginCheck, setLoginCheck] = React.useState(false);
 	const [brand, setBrand] = React.useState("CMP-Lab@Messiah");
 	const [basePath, setBasePath] = React.useState();
+	const fetchInfoDefault = React.useCallback(async function (
+		next = () => {},
+	) {
+		preFetchInfo(setCourseTutor, setInfo, setShifts, next, showBoundary);
+	}, []);
 	const [fetchInfo, dispatchFetchInfo] = React.useReducer(
 		fetchInfoReducer,
-		async function (next = () => {}) {
-			preFetchInfo(
-				setCourseTutor,
-				setInfo,
-				setShifts,
-				next,
-				showBoundary,
-			);
-		},
+		null,
 	);
 	const [update, dispatchUpdate] = React.useReducer(updateReducer, preUpdate);
 	const [updateWithoutFetch, dispatchUpdateWithoutFetch] = React.useReducer(
@@ -90,6 +87,9 @@ export const AppContextProvider = function ({ children }) {
 						action.payload,
 					);
 				};
+			}
+			case "set_to_default": {
+				return fetchInfoDefault;
 			}
 			default: {
 				return state;
