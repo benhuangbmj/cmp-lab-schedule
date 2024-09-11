@@ -275,7 +275,10 @@ export default function Admin() {
                   setActiveRows(newActive);
                 }
                 return (
-                  <tr key={username + " row"} onClick={handleClickRow}>
+                  <tr
+                    key={username + " row " + usernames.length}
+                    onClick={handleClickRow}
+                  >
                     <td style={setBackground(activeRows[i])}>
                       <span className="checkbox-group">
                         <input
