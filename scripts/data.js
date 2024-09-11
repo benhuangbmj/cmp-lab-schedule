@@ -218,8 +218,9 @@ export const demoUser = {
 		subject: "demo",
 		courses: [],
 		profilePic: {
-			url: "//images.ctfassets.net/o0mxfnwxsmg0/sdy5i0XCFuM8QoS2vyxEr/ded2a754ec3ddc8f69b7d7dfcf0e5710/45200005_9065323.jpg",
-			id: "sdy5i0XCFuM8QoS2vyxEr",
+			url: null,
+			id: null,
+			transform: null,
 		},
 		schedule: [
 			[false, false, true, false],
