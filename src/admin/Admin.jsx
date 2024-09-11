@@ -170,7 +170,11 @@ export default function Admin() {
         body: JSON.stringify(userObj),
       })
         .then((res) => res.json())
-        .then((res) => setSupervisors(res));
+        .then((res) => setSupervisors(res))
+        .catch((err) => {
+          console.log(err);
+          setSupervisors(userObj);
+        });
       setUsernames(Object.keys(userData).toSorted());
       setActiveRows(Array(Object.keys(userData).length).fill(false));
     }
