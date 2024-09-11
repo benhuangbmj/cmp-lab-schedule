@@ -118,7 +118,7 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
       targetKey: username,
       keys: [],
       value: data,
-      fetchInfo: fetchInfo,
+      fetchInfo,
     });
     if (!selected) {
       resetAll();
@@ -175,7 +175,12 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
       if (info[selected]?.profilePic?.id) {
         deleteAsset(info[selected].profilePic.id);
       }
-      update({ targetKey: selected, keys: [], value: null, fetchInfo });
+      update({
+        targetKey: selected,
+        keys: [],
+        value: null,
+        fetchInfo,
+      });
       if (selected == activeUser) {
         handleSignOut(dispatch);
       }
@@ -244,7 +249,7 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
                 <FontAwesomeIcon icon={faRotateLeft} />
               </Button>
               <Button
-                type="Button"
+                type="button"
                 disabled={loggedIn ? false : true}
                 onClick={handleDelete}
               >
@@ -253,12 +258,12 @@ const Profile = forwardRef(function Profile({ user = null }, ref) {
               </Button>
             </ButtonGroup>
           </div>
-          <div className="" style={{ borderColor: "blue", width: "87%" }}>
+          <div style={{ borderColor: "blue", width: "87%" }}>
             {!user && userData[activeUser].roles.admin && (
               <div className=" center-fit">
                 <SelectUser info={info} handleSelect={handleSelect} />
                 <p> or </p>
-                <Button type="Button" onClick={() => handleSelect(null)}>
+                <Button type="button" onClick={() => handleSelect(null)}>
                   Create a New User
                 </Button>
               </div>
