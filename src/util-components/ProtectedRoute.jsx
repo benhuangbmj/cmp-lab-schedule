@@ -9,7 +9,7 @@ export default function ProtectedRoute({ children, role }) {
   const activeUser = useSelector((state) => state.active.user);
   const loaded = useSelector((state) => state.active.loaded);
   const userData = useSelector((state) => state.userData.items);
-  const [activeRole, setActiveRole] = useState();
+  const [activeRole, setActiveRole] = useState(false);
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
@@ -23,7 +23,7 @@ export default function ProtectedRoute({ children, role }) {
     if (!activeUser) {
       return <Navigate to="/" state={{ from: location }} replace />;
     } else if (role != undefined) {
-      if (activeRole === undefined) {
+      if (activeRole === false) {
         return <p>Loading</p>;
       } else if (!activeRole) {
         return <p>Unauthorised</p>;
