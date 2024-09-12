@@ -5,10 +5,14 @@ import { updateUserData } from "/src/reducers/userDataReducer";
 import { AppContext } from "/src/contexts/AppContext";
 import Preparation from "/src/preparation/Preparation";
 import UserInterface from "/src/userInterface/UserInterface";
-export default function () {
+import useCheckOffline from "./hooks/useCheckOffline";
+
+export default function Main() {
 	const { info, loginCheck } = useContext(AppContext);
 	const location = useLocation();
 	const dispatch = useDispatch();
+
+	useCheckOffline();
 
 	useEffect(() => {
 		if (info) {

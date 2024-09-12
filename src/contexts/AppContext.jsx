@@ -13,6 +13,7 @@ export const AppContextProvider = function ({ children }) {
 	const refNav = React.useRef();
 	const refBrand = React.useRef();
 	const [navHeight, setNavHeight] = React.useState();
+	const [offline, setOffline] = React.useState(false);
 	const [info, setInfo] = React.useState(null);
 	const [courseTutor, setCourseTutor] = React.useState(null);
 	const [shifts, setShifts] = React.useState(null);
@@ -69,6 +70,8 @@ export const AppContextProvider = function ({ children }) {
 				dispatchFetchKey,
 				contentfulApi,
 				dispatchContentfulApi,
+				offline,
+				setOffline,
 			}}
 		>
 			{children}

@@ -75,7 +75,7 @@ export default function () {
 					}
 				})
 				.catch((err) => {
-					console.error(err);
+					console.warn(err);
 				})
 				.finally(() => {
 					setLoginCheck(true);
