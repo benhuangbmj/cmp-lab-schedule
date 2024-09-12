@@ -103,9 +103,6 @@ export default function CheckInWithID() {
 	};
 	return (
 		<>
-			<div style={{ backgroundColor: "red", color: "white" }}>
-				This is a front-end demo.
-			</div>
 			<div className="centered" style={{ margin: "0.25em auto" }}>
 				<Button onClick={handleStreamControl}>
 					{streamStopped ? "Resume" : "Stop"}

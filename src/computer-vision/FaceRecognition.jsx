@@ -61,15 +61,6 @@ export default function FaceRecognition() {
 	return (
 		<>
 			<div
-				style={{
-					backgroundColor: "red",
-					color: "white",
-					marginBottom: "0.25em",
-				}}
-			>
-				This is a front-end demo.
-			</div>
-			<div
 				className="flexbox-row"
 				style={{ justifyContent: "center", gap: "1em 2em" }}
 			>
