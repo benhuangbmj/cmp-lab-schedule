@@ -54,9 +54,13 @@ export default function Charts() {
   useEffect(() => {
     (async () => {
       const url = new URL("usage", base);
-      let usageData = await fetch(url);
-      usageData = await usageData.json();
-      if (usageData) {
+      let usageData = [];
+      try {
+        usageData = await fetch(url);
+        if (usageData.ok) usageData = await usageData.json();
+      } catch (err) {
+        console.warn(err);
+      } finally {
         usageData = new Customers(usageData);
         setFullData(usageData);
       }
