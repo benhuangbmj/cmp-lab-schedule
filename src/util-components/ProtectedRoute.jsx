@@ -13,12 +13,15 @@ export default function ProtectedRoute({ children, role }) {
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
-    if (activeUser && role && userData)
-      setActiveRole(userData[activeUser].roles[role]);
+    setActiveRole(userData?.[activeUser]?.roles?.[role]);
   }, [activeUser, role, userData]);
 
-  if (!(loaded && userData)) {
-    return <p>Loading</p>;
+  console.log("active role", activeRole, false === undefined);
+
+  if (!userData) {
+    return <p>Loading user data... </p>;
+  } else if (!loaded) {
+    return <p>Unauthorised</p>;
   } else {
     if (!activeUser) {
       return <Navigate to="/" state={{ from: location }} replace />;
