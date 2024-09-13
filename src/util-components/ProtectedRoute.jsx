@@ -16,8 +16,6 @@ export default function ProtectedRoute({ children, role }) {
     setActiveRole(userData?.[activeUser]?.roles?.[role]);
   }, [activeUser, role, userData]);
 
-  console.log("active role", activeRole, false === undefined);
-
   if (!userData) {
     return <p>Loading user data... </p>;
   } else if (!loaded) {
