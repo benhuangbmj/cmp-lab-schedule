@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Schedule from "/src/Schedule";
 import Profile from "/src/profile/Profile";
 import FrontendLab from "/src/FrontendLab";
@@ -11,14 +12,27 @@ import Dashboard from "/src/dashboard/Dashboard";
 import CheckInWithID from "/src/checkInWithID/CheckInWithID";
 import CheckInWithFace from "/src/checkInWithFace/CheckInWithFace";
 import Reroute from "/src/routes/components/Reroute";
+import Banner from "/src/util-components/Banner";
 import { AppContext } from "/src/contexts/AppContext";
 
 export default function () {
+	const userData = useSelector((state) => state.userData.items);
+	const activeUser = useSelector((state) => state.active.user);
 	const { basePath } = React.useContext(AppContext);
 	return (
 		<Routes>
 			<Route path={basePath} element={<Outlet />}>
-				<Route path="" element={<Schedule />} />
+				<Route
+					path=""
+					element={
+						basePath == "/dept/demo" ||
+						userData?.[activeUser]?.roles?.admin == true ? (
+							<Schedule />
+						) : (
+							<Banner text={import.meta.env.VITE_SITE_NOTICE} />
+						)
+					}
+				/>
 				<Route
 					path="profile"
 					element={
@@ -63,7 +77,10 @@ export default function () {
 					}
 				/>
 			</Route>
-			<Route path="*" element={<Schedule />} />
+			<Route
+				path="*"
+				element={<Banner text={import.meta.env.VITE_SITE_NOTICE} />}
+			/>
 		</Routes>
 	);
 }
