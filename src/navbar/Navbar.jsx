@@ -12,9 +12,13 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
 import { AppContext } from "/src/contexts/AppContext";
-export default function () {
+import { useSelector } from "react-redux";
+import { selectActive } from "/src/reducers/activeReducer.js";
+
+export default function Main() {
 	const { refNav, refBrand, setNavHeight } = useContext(AppContext);
 	const [didMount, setDidMount] = useState(false);
+	const active = useSelector(selectActive);
 	const observer = new MutationObserver(() =>
 		setNavHeight(refNav.current.offsetHeight),
 	);
@@ -58,7 +62,7 @@ export default function () {
 						}}
 					>
 						<NavbarBrand ref={refBrand} />
-						<NavbarToggle />
+						{active.user && <NavbarToggle />}
 					</Nav>
 				</Nav>
 			</Navbar>

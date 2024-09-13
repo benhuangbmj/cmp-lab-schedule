@@ -3,24 +3,15 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
 import { capitalize } from "lodash";
-import { useSelector } from "react-redux";
-import { selectActive } from "/src/reducers/activeReducer.js";
 import { useNormalizedBasePath } from "/src/hooks/customHooks";
 
 const routes = ["profile", "admin", "progress", "experimental", "dashboard"];
 export default function NavbarToggle() {
 	const basePath = useNormalizedBasePath();
 	const refNavCollapse = useRef();
-	const active = useSelector(selectActive);
 	const DefaultItems = useCallback(
 		function () {
-			return (
-				<>
-					<NavLink className="nav-link" to={basePath}>
-						Schedule
-					</NavLink>
-				</>
-			);
+			return <></>;
 		},
 		[basePath],
 	);
@@ -41,16 +32,18 @@ export default function NavbarToggle() {
 			<Navbar.Collapse style={{ width: "0px" }}>
 				<Nav ref={refNavCollapse}>
 					<DefaultItems />
-					{active.user &&
-						routes.map((route) => (
-							<NavLink
-								key={route}
-								className="nav-link"
-								to={`${basePath}${route}`}
-							>
-								{capitalize(route)}
-							</NavLink>
-						))}
+					<NavLink className="nav-link" to={basePath}>
+						Schedule
+					</NavLink>
+					{routes.map((route) => (
+						<NavLink
+							key={route}
+							className="nav-link"
+							to={`${basePath}${route}`}
+						>
+							{capitalize(route)}
+						</NavLink>
+					))}
 				</Nav>
 			</Navbar.Collapse>
 		</>
