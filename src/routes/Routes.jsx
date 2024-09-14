@@ -25,6 +25,7 @@ export default function () {
 				<Route
 					path=""
 					element={
+						!import.meta.env.PROD ||
 						basePath == "/dept/demo" ||
 						userData?.[activeUser]?.roles?.admin == true ? (
 							<Schedule />

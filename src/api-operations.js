@@ -82,10 +82,14 @@ export const fetchInfo = (
       const courseMap = new Map();
       const aliasMap = new Map();
       Object.keys(tutorInfo)
-        .filter(
-          (username) => !tutorInfo[username].inactive, // && !tutorInfo[username].permission,
+        .filter((username) =>
+          myEnv.PROD
+            ? !tutorInfo[username].inactive
+            : !tutorInfo[username].permission && !tutorInfo[username].inactive,
         )
-        .forEach((username, i) => aliasMap.set(username, `Tutor ${i + 1}`));
+        .forEach((username, i) => {
+          aliasMap.set(username, `Tutor ${i + 1}`);
+        });
       for (let student in tutorInfo) {
         const currInfo = tutorInfo[student];
         if (currInfo.inactive) continue;
