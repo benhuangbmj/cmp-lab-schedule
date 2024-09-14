@@ -106,7 +106,7 @@ export const fetchInfo = (
           const day = currInfo.day[i];
           const index = days.indexOf(day);
           shift[index][0].push(
-            `${tutorName} (${currInfo.subject})` + "\n" + currInfo.time[i],
+            `${tutorName}\n (${currInfo.subject})` + "\n" + currInfo.time[i],
           );
           shift[index][1].push(profilePic);
         }
