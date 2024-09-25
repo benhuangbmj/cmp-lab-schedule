@@ -13,10 +13,7 @@ export default function ImageGallery({ collection = [], captions = [] }) {
 			}}
 		>
 			{collection.map((src, i, arr) => (
-				<figure
-					key={i}
-					className={i == arr.length - 1 ? "animation-fade-in" : ""}
-				>
+				<figure key={i} className="animation-fade-in">
 					<img
 						src={src}
 						style={{
