@@ -7,3 +7,4 @@ tests
 *.sh
 vite.config.js.timestamp*.*
 package-lock.json
+public/models
