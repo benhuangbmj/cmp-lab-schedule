@@ -5,6 +5,7 @@ export default function Banner({ text, checkOffline }) {
 	return (
 		(!checkOffline || offline) && (
 			<div
+				className="hide-on-print"
 				style={{
 					backgroundColor: "red",
 					color: "white",

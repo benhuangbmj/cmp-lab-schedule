@@ -78,7 +78,9 @@ export const fetchInfo = (
       const tutorInfo = res.data.tutorsCollection.items.find(
         (e, i) => e.sys.id == userInfoId,
       ).tutorInfo;
-      const shift = Array.from(Array(4), () => Array.from(Array(2), () => []));
+      const shift = Array.from(Array(days.length), () =>
+        Array.from(Array(2), () => []),
+      );
       const courseMap = new Map();
       const aliasMap = new Map();
       Object.keys(tutorInfo)

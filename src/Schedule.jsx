@@ -67,13 +67,13 @@ export default function Schedule() {
             <img className="qr-code" src="/img/qr-code.png" />
           </h1>
         </div>
-        <div>
+        <div style={{ width: "100%" }}>
           <Table bordered striped="columns" className="table-schedule">
             <thead>
               <tr>
                 {days.map((e) => {
                   return (
-                    <th key={e}>
+                    <th key={e} style={{ width: "20%" }}>
                       <span className="institutional-navy">{e}</span>
                     </th>
                   );
@@ -99,7 +99,7 @@ function Tutor({ user }) {
     return subject;
   }
   return (
-    <div className="flexbox-row schedule-cell">
+    <div className="flexbox-row schedule-cell" style={{ gap: "0em" }}>
       <div className="profile-pic-small">
         <img
           className="profilePic"

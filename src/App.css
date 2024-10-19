@@ -185,12 +185,10 @@ td {
   font-family: Aptifer-Slab, Monospace;
   display: inline-block;
   text-align: left;
-  font-size: 0.6em;
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
-  word-wrap: break-word;
 }
 
 .qr-code {
@@ -360,8 +358,9 @@ label {
 }
 
 .table-schedule {
-  border: 0.2em solid var(--institutional-navy);
-  font-size: 1em;
+  box-sizing: border-box;
+  border: 0.1em solid var(--institutional-navy);
+  width: 100%;
 }
 
 .sticky-top {
@@ -395,11 +394,14 @@ label {
 .schedule-cell {
   margin-top: 0.5em;
   margin-bottom: 0.5em;
-  width: 175px;
+  width: 100%;
 }
 
 .shift {
   text-align: right;
+  max-width: 65%;
+  font-size: 45%;
+  text-wrap: pretty;
 }
 
 .schedule-title {
@@ -487,15 +489,16 @@ label {
   }
   .preformatted {
     display: block;
-    font-size: 50%;
   }
   .schedule-cell {
-    width: 19.5vw;
     display: block;
     text-align: center;
   }
   .shift {
+    margin-top: 1em;
     text-align: center;
+    max-width: initial;
+    font-size: 0.5em;
   }
   .profile-pic-small {
     width: 3em;
